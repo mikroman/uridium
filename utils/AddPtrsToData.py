@@ -6,12 +6,12 @@ from RangeMap import RangeMap
 def writeBytes(p, bs):
     if len(bs) == 0:
         return ''
-    return (p + ".BYTE " +  ','.join(bs) + '\n')
+    return (p + ".byte " +  ','.join(bs) + '\n')
 
 
 def getAllBytes(l):
     bytes = []
-    i = l.find(".BYTE")
+    i = l.find(".byte")
     if i == -1:
         return []
     bytes += list(filter(None, l[i+5:].strip().split(',')))
@@ -66,7 +66,7 @@ for l in ls:
         o.write(l)
         continue
 
-    is_byteline = ".BYTE" in l
+    is_byteline = ".byte" in l
     if not is_byteline:
         if ptrs and offset == ptrs[0]:
             ptrs.pop(0)
@@ -78,7 +78,7 @@ for l in ls:
         o.write(l)
         continue
 
-    p = (l[:l.find(".BYTE")] if "BYTE" in l else l)
+    p = (l[:l.find(".byte")] if "BYTE" in l else l)
     bs = []
     for i, b in enumerate(bytes):
         if ptrs and offset == ptrs[0]:

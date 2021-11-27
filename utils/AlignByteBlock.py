@@ -9,10 +9,10 @@ bs = [b for b in ls if "$" in b]
 o = []
 for i, b in enumerate(bs):
     if i and i % 8 == 0:
-        print(" " * 8 + ".BYTE " + ','.join(o))
+        print(" " * 8 + ".byte " + ','.join(o))
         o = []
     o += [b]
 
-print(" " * 8 + ".BYTE " + ','.join(o))
+print(" " * 8 + ".byte " + ','.join(o))
 
 

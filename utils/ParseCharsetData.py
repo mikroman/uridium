@@ -22,11 +22,11 @@ def addSequence(cur, i):
 def writeBytes(buf):
     if not len(buf):
         return
-    raw_bytes = (" " * 8) + ".BYTE " + ','.join(buf)
+    raw_bytes = (" " * 8) + ".byte " + ','.join(buf)
     o.write(raw_bytes)
 
 def writeChar(cur, cur_raw, char_count, cur_byte):
-    raw_bytes = ".BYTE " + ','.join(cur_raw)
+    raw_bytes = ".byte " + ','.join(cur_raw)
 
     buf = []
     for i in range(0, len(cur_raw)):
@@ -43,7 +43,7 @@ def writeChar(cur, cur_raw, char_count, cur_byte):
             buf = []
     writeBytes(buf)
 
-    o.write(" " * (38 - len(raw_bytes)) + "  ;.BYTE " + ','.join(cur[:8]) + '\n')
+    o.write(" " * (38 - len(raw_bytes)) + "  ;.byte " + ','.join(cur[:8]) + '\n')
 
     h = ("0" + format(char_count, 'x'))[-2:]
     o.write((" " * 48) + "; CHARACTER $" + h + '\n')

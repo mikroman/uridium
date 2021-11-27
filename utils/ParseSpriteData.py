@@ -22,7 +22,7 @@ def addSequence(cur, i):
 def writeBytes(buf):
     if not len(buf):
         return
-    raw_bytes = (" " * 8) + ".BYTE " + ','.join(buf)
+    raw_bytes = (" " * 8) + ".byte " + ','.join(buf)
     o.write(raw_bytes)
     o.write('\n')
 
