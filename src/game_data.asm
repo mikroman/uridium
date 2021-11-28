@@ -1880,10 +1880,11 @@ pa240:  .byte $01,$04,$06,$03,$05,$00,$9c,$9c
         .byte $9c,$9c,$cc,$00,$08,$80,$0b,$00
         .byte $19,$18,$17,$1a,$1b,$00,$6c,$84
         .byte $9c,$b4,$cc,$00,$08,$80,$09,$00
-aa401:
 
 somedatahiptrarray:
-        .byte $02,$1c,$02,$1c,$00,$00,$9c,$9c
+        .byte $02
+aa401:
+        .byte $1c,$02,$1c,$00,$00,$9c,$9c
         .byte $9c,$9c,$00,$00,$06,$80,$0e,$00
 somedataloptrarray:
         .byte $02,$02,$1c,$1c,$17,$00,$84,$84
@@ -2258,11 +2259,11 @@ screenlineloptrarray:
         .byte $2e,$30,$00,$00,$ff,$fd,$fb,$df
         .byte $df,$f7,$ef,$20,$20,$80,$10,$20
         .byte $80,$53,$46,$9d,$1d,$91,$11
- 
+.label volumetens = *+$09
+.label volumeones = *+$0A
+
 volumetext:
         .byte $00,$0f
-volumetens:
-volumeones:
         .text "volume 05"
         .byte $ff
         .byte $20,$44,$b5,$85,$bd,$c9

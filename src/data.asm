@@ -1026,4 +1026,5 @@ afffa:   .byte $d6
 afffb:   .byte $3f
 afffc:   .byte $9d
 afffd:   .byte $09
+.label affff = *+$01
 afffe:   .byte $93,$3f 
