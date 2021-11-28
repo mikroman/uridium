@@ -1,4 +1,5 @@
 # Uridium (1986) by Andrew Braybrook
+This is the original readme from the Uridium repo below. Please see 'mikroman_readme.txt'
 <img src="https://www.mobygames.com/images/covers/l/213927-uridium-commodore-64-front-cover.jpg" height=300><img src="https://t.gamesnostalgia.com/screenshots/u/r/uridium/main_small.jpg" height=300>
 
 
