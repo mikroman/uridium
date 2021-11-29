@@ -5488,26 +5488,39 @@
          .byte $00,$90,$98,$a0,$a8,$b0,$b8,$c0,$c4,$c8,$cc,$d0,$d4,$d8,$dc,$e0
 
     L_311a:
-        .byte $e4,$e8,$ec,$f0,$fe,$fd,$fb,$f7,$ef,$df,$bf,$7f,$00,$01,$49,$15
+        .byte $e4,$e8,$ec,$f0
+        .byte $fe,$fd,$fb,$f7,$ef,$df,$bf,$7f
+        .byte $00,$01
+        .byte $49,$15   //player1
 
     L_312a:
-        .byte $0a,$22,$0e,$1b,$01,$ff,$00,$1f,$49,$15,$0a,$22,$0e,$1b,$02,$ff
+        .byte $0a,$22,$0e,$1b,$01
+        .byte $ff,$00,$1f
+        .byte $49,$15,$0a,$22,$0e,$1b,$02   //player2
+        .byte $ff
 
     L_313a:
-        .byte $00,$01,$01,$1e,$19,$30,$7a,$7b,$30,$03,$ff,$00,$1f,$7a,$7b,$30
+        .byte $00,$01
+        .byte $01,$1e,$19,$30   //'1UP '
+        .byte $7a,$7b
+        .byte $30
+        .byte $03,$ff
+        .byte $00,$1f
+        .byte $7a,$7b
+        .byte $30
 
     L_314a:
-        .byte $03,$30,$02,$1e,$19,$ff,$00,$0f
-
-        bmi L_317e + $6
-        bmi L_317e + $8
-        bmi L_317e + $a
-        bmi L_317e + $c
-        bmi L_317e + $e
-        bmi $315d
+        .byte $03,$30,$02,$1e,$19//' 3 2UP'
+        .byte $ff
+        .byte $00,$0f
+        .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30   //spaces
+        .byte $ff
 
     L_315e:
-         .byte $00,$0f,$45,$0a,$17,$0d,$30,$17,$18,$54,$25,$ff,$0e,$0e,$0e,$0e
+         .byte $00,$0f
+         .byte $45,$0a,$17,$0d,$30,$17,$18,$54,$25  //land now!
+         .byte $ff
+         .byte $0e,$0e,$0e,$0e
         .byte $0e,$0e,$0e,$0e,$0e,$0e,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a,$0a
 
     L_317e:
@@ -5643,7 +5656,9 @@
         bmi L_34c4 + $1
 
     L_34c4:
-         .byte $02,$00,$00,$00,$30,$3a,$3e,$3b,$ff,$ff,$ff,$ff,$00,$0f
+         .byte $02,$00,$00,$00,$30,$3a,$3e,$3b  //' 12000 aeb'
+         .byte $ff,$ff,$ff,$ff
+         .byte $00,$0f
 
         bmi L_3501 + $3
         eor $55,x

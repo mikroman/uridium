@@ -5798,15 +5798,18 @@ f311e:   .byte $fe,$fd,$fb,$f7,$ef,$df,$bf,$7f
 
 player1text:
         .byte $00,$01
-        .text "player1"
+//        .text "player1"
+        .byte $49,$15,$0a,$22,$0e,$1b,$01
         .byte $ff
 player2text:
         .byte $00,$1f
-        .text "player2"
+//        .text "player2"
+       .byte $49,$15,$0a,$22,$0e,$1b,$02
         .byte $ff
 oneuptext:
         .byte $00,$01
-        .text "1up "
+//        .text "1up "
+        .byte $01,$1e,$19,$30
         .byte $7a, $7b
 a3142:   .byte $30
 a3143:   .byte $03,$ff
@@ -5815,17 +5818,19 @@ a3143:   .byte $03,$ff
 .label a314a =*+$05
 twouptext:
         .byte $00,$1f
-//        .text ""
         .byte $7a, $7b
-        .text " 3 2up"
+//        .text " 3 2up"
+        .byte $30,$03,$30,$02,$1e,$19
         .byte $ff
 spaces:
         .byte $00,$0f
-        .text "           "
+//        .text "           "
+        .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
         .byte $ff
 landnowtext:
         .byte $00,$0f
-        .text "land now!"
+//        .text "land now!"
+        .byte $45,$0a,$17,$0d,$30,$17,$18,$54,$25
         .byte $ff
 
 playerlinescolorscheme1:   
@@ -5955,31 +5960,42 @@ f349f:  .byte $4e,$1b,$12,$0d,$12,$1e,$42,$30
         .byte $18,$18,$14,$28,$30,$41,$12,$10
         .byte $11,$30,$2e
 .label f34c3 =*+$01
-hiscoreforscrollingbanner:   .text " 12000 aeb"
+hiscoreforscrollingbanner:
+//        .text " 12000 aeb"
+        .byte $30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
         .byte $ff, $ff, $ff, $ff
 player1symbol:
         .byte $00,$0f
-        .text "  "
+//        .text "  "
+        .byte $30,$30
         .byte $55, $55
-        .text " "
+//        .text " "
+        .byte $30
         .byte$56
-        .text "  "
+//        .text "  "
+        .byte $30,$30
         .byte $ff
 player2symbol:
         .byte $00,$0f
-        .text " "
+//        .text " "
+        .byte $30
         .byte $55, $55
-        .text " "
+//        .text " "
+        .byte $30
         .byte$56, $56
-        .text " "
+//        .text " "
+        .byte $30        
         .byte$ff
 playerandjoysticksymbol:
         .byte $00,$0f
-        .text "   "
+//        .text "   "
+        .byte $30,$30,$30
         .byte $55
-        .text " "
+//        .text " "
+        .byte $30        
         .byte $56
-        .text "   "
+//        .text "   "
+        .byte $30,$30,$30
         .byte $ff
 arrowkeyssymbol:
         .byte $02,$0a,$57,$ff
@@ -5992,115 +6008,139 @@ uridiumdecal:
         .byte $30,$30,$30,$30,$ff
 hiscorelabel:
         .byte $02,$0a
-        .text "     hi-score      "
+//        .text "     hi-score      "
+        .byte $30,$30,$30,$30,$30,$41,$12,$2e,$1c,$0c,$18,$1b,$0e,$30,$30,$30,$30,$30,$30
         .byte $ff
 .label ingamehiscoredisplay =*+$04
 ingamebanner:
         .byte $02,$0a
-        .text "     12000 aeb   "
+//        .text "     12000 aeb   "
+        .byte $30,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b,$30,$30,$30
         .byte $ff
-        .text "2c    "
-        .text " "
+//        .text "2c    "
+//        .text " "
+        .byte $02,$0c,$30,$30,$30,$30,$30
         .byte $55, $55
-        .text "     "
-        .byte $56, $56, $ff
-        .text "2c     "
+//        .text "     "
+        .byte $30,$30,$30,$30,$30
+        .byte $56,$56,$ff
+//        .text "2c     "
+        .byte $02,$0c,$30,$30,$30,$30,$30
         .byte $55
-        .text " "
-        .text "        "
+//        .text "         "
+        .byte $30,$30,$30,$30,$30,$30,$30,$30,$30
         .byte $56, $ff
-        .text "2c     "
+//        .text "2c     "
+        .byte $02,$0c,$30,$30,$30,$30,$30
         .byte $55, $55
-        .text " "
-        .text "      "
+//        .text "       "
+        .byte $30,$30,$30,$30,$30,$30,$30
         .byte $56, $ff
-scrollingtitlescreendataloptrarray:   .byte $3a,$4b,$5e
+scrollingtitlescreendataloptrarray:   .byte $3a,$4b,$5e//$3570
 scrollingtitlescreendatahiptrarray:   .byte $35,$35,$35
 
 hewson:
         .byte $06,$0e
-        .text "hewson"
+//        .text "hewson"
+        .byte $41,$3e,$50,$4c,$48,$47
         .byte $ff
 presents:
         .byte $09,$10
-        .text "presents"
+//        .text "presents"
+        .byte $19,$1b,$0e,$1c,$0e,$17,$1d,$1c
         .byte $ff
 uridiumtitleplaceholder:
         .byte $0c,$0f
-        .text ""
-        .byte $31,  $32,  $33,  $34,  $35,  $36,  $37,  $38,  $39,  $7d,  $ff
+//        .text ""
+        .byte $31,$32,$33,$34,$35,$36,$37,$38,$39,$7d,$ff
 graftgoldltd:
         .byte $0f,$07
-        .text ""
+//        .text ""
         .byte $59
-        .text " graftgold ltd. 1986."
+//        .text " graftgold ltd. 1986."
+        .byte $30,$40,$1b,$0a,$0f,$1d,$10,$18,$15,$0d,$30,$45,$1d,$0d,$28,$30,$01,$09,$08,$06,$28
         .byte $ff
 designedandprogrammedby:
         .byte $12,$05
-        .text "designed and programmed by"
+//        .text "designed and programmed by"
+        .byte $3d, $0e, $1c, $12, $10, $17, $0e, $0d, $30, $0a, $17
+        .byte $0d, $30, $19, $1b, $18, $10, $1b, $0a, $42, $42, $0e, $0d, $30, $0b, $22
         .byte $ff
 andrewbraybrook:
         .byte $15,$0b
-        .text "andrew braybrook."
+//        .text "andrew braybrook."
+        .byte $3a, $17, $0d, $1b, $0e, $54, $30, $3b
+        .byte $1b, $0a, $22, $0b, $1b, $18, $18, $14, $28
         .byte $ff
-halloffame:
+halloffame://$35E1
         .byte $06,$0c
-        .text "hall of fame"
+//        .text "hall of fame"
+        .byte $41,$0a,$15,$15,$30,$18,$0f,$30,$3f,$0a,$42,$0e
         .byte $ff
 
 .label currenthighestscore =*+$05
 firstinhalloffame:
         .byte $09,$0b
-        .text "1.    12000 aeb"
+//        .text "1.    12000 aeb"
+        .byte $01,$28,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
         .byte $ff
-        .byte $00,$01,$20
-        .byte $00
+        .byte $00,$01,$20,$00
 secondinhalloffame:
         .byte $0b,$0b
-        .text "2.    11000    "
+//        .text "2.    11000    "
+        .byte $02,$28,$30,$30,$30,$30,$01,$01,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$01,$10,$00
 thirdinhalloffame:
         .byte $0d,$0b
-        .text "3.    10000    "
+//        .text "3.    10000    "
+        .byte $03,$28,$30,$30,$30,$30,$01,$00,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$01,$00,$00
 fourthinhalloffame:
         .byte $0f,$0b
-        .text "4.     9000    "
+//        .text "4.     9000    "
+        .byte $04,$28,$30,$30,$30,$30,$30,$09,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$90,$00
 fifthinhalloffame:
         .byte $11,$0b
-        .text "5.     8000    "
+//        .text "5.     8000    "
+        .byte $05,$28,$30,$30,$30,$30,$30,$08,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$80,$00
 sixthinhalloffame:
         .byte $13,$0b
-        .text "6.     7000    "
+//        .text "6.     7000    "
+        .byte $06,$28,$30,$30,$30,$30,$30,$07,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$70,$00
 seventhinhalloffame:
         .byte $15,$0b
-        .text "7.     6000    "
+//        .text "7.     6000    "
+        .byte $07,$28,$30,$30,$30,$30,$30,$06,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$60,$00
 eighthinhalloffame:
         .byte $17,$0b
-        .text "8.     5000    "
+//        .text "8.     5000    "
+        .byte $08,$28,$30,$30,$30,$30,$30,$05,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$50,$00
 colorlabel:
         .byte $00,$0f
-        .text "  colour  "
+//        .text "  colour  "
+        .byte $30,$30,$3c,$18,$15,$18,$1e,$1b,$30,$30
         .byte $ff
 blckwhitelabel:
         .byte $00,$0f
-        .text "blck-whte"
+//        .text "blck-whte"
+        .byte $3b, $15, $0c, $14, $2e, $50, $11, $1d, $0e 
         .byte $ff
 demolabel:
         .byte $00,$0f
-        .text "  demo   "
+//        .text "  demo   "
+        .byte $30,$30,$3d, $0e, $42, $18, $30, $30, $30
         .byte $ff
 currentcolorvaluearray:  .byte m_ltblue,m_gray2,m_gray1,m_ltgreen,m_gray3,m_ltgreen,m_gray1,m_gray2
 
@@ -6166,42 +6206,49 @@ p37cd:   .byte m_cyan,m_ltgreen,m_black,m_ltgreen,m_green,m_black,m_black,m_blac
 
 player1:
         .byte $0a,$0f
-        .text "player 1"
+//        .text "player 1"
+        .byte $49, $15, $0a, $22, $0e, $1b, $30, $01
         .byte $ff
 player2:
         .byte $0a,$0f
-        .text "player 2"
+//        .text "player 2"
+        .byte $49, $15, $0a, $22, $0e, $1b, $30, $02
         .byte $ff
 gameon:
         .byte $0d,$0e
-        .text "game on!"
+//        .text "game on!"
+        .byte $40, $0a, $42, $0e, $30, $48, $17, $25
         .byte $ff
 
 .label tenslivesleftdisplayed =*+$02
 .label livesleftdisplayed =*+$03
 liveslefttext:
         .byte $10,$0e
-        .text " 3     left."
+//        .text " 3     left."
+        .byte $30,$03,$30,$30,$30,$30,$30,$15,$0e,$0f,$1d,$28
         .byte $ff
 gameover:
         .byte $0d,$0d
-        .text "game over!"
+//        .text "game over!"
+        .byte $40,$0a,$42,$0e,$30,$48,$1f,$0e,$1b,$25
         .byte $ff
 
 destructsequenceprimed:
         .byte $07,$07
-        .text "destruct sequence pr"
-        .text "imed!"
-        .byte $ff
+//        .text "destruct sequence primed!"
+        .byte $3d,$0e,$1c,$1d,$1b,$1e,$0c,$1d,$30,$1c,$0e,$1a,$1e,$0e
+        .byte $17,$0c,$0e,$30,$19,$1b,$12,$42,$0e,$0d,$25
 formationannihilationbonus:
         .byte $0a,$05
-        .text "formation annihilati"
-        .text "on bonus:"
+//        .text "formation annihilation bonus:"
+        .byte $3f,$18,$1b,$42,$0a,$1d,$12,$18,$17,$30,$0a,$17,$17,$12,$11
+        .byte $12,$15,$0a,$1d,$12,$18,$17,$30,$0b,$18,$17,$1e,$1c,$2a
         .byte $ff
 shipdestructbonus:
         .byte $10,$0a
-        .text "ship destruct bonus:"
-        .text ""
+//        .text "ship destruct bonus:"
+//        .text ""
+        .byte $4c,$11,$12,$19,$30,$0d,$0e,$1c,$1d,$1b,$1e,$0c,$1d,$30,$0b,$18,$17,$1e,$1c,$2a
         .byte $ff
 
 .label a3870 =*+$08
@@ -6210,22 +6257,26 @@ shipdestructbonus:
 .label a3876 =*+$0e
 scorebonus:
         .byte $0d,$0d
-        .text "100 x 00 = 0000"
+//        .text "100 x 00 = 0000"
+        .byte $01,$00,$00,$30,$51,$30,$00,$00,$30,$2f,$30,$00,$00,$00,$00
         .byte $ff
 youveamassedahighscore:
         .byte $0d,$04
-        .text "you have amassed a great score!"
+//        .text "you have amassed a great score!"
+        .byte $52, $18, $1e, $30, $11, $0a, $1f, $0e, $30, $0a, $42, $0a, $1c, $1c, $0e, $0d
+        .byte $30, $0a, $30, $10, $1b, $0e, $0a, $1d, $30, $1c, $0c, $18, $1b, $0e, $25
         .byte $ff
 pleaseenteryourinitials:
         .byte $10,$06
-        .text "please enter your initials."
-        .byte $ff
+//        .text "please enter your initials."
+        .byte $49,$15,$0e,$0a,$1c,$0e,$30,$0e,$17,$1d,$0e,$1b,$30,$22,$18,$1e,$1b,$30,$12,$17,$12,$1d,$12,$0a,$15,$1c,$28,$ff
 .label initialone =*+$02
 .label initial2 =*+$03
 .label initial3 =*+$04
 initialsinputfield:
         .byte $13,$11
-        .text "a..   "
+//        .text "a..   "
+        .byte $3a,$28,$28,$30,$30,$30
         .byte $ff
 f38c3:   .byte $3a,$3b,$3c,$3d,$3e,$3f,$40,$41
         .byte $16,$43,$44,$45,$46,$47,$48,$49
@@ -6915,7 +6966,8 @@ bb25a:   lda a94
 
 pausetext:
         .byte $00,$0f
-        .text "  pause   "
+//        .text "  pause   "
+        .byte $30,$30,$49,$0a,$1e,$1c,$0e,$30,$30,$30
         .byte $ff
 //-------------------------------------------------------------------
 // spinwaitingforjoystickinput
