@@ -6237,7 +6237,7 @@ destructsequenceprimed:
         .byte $07,$07
 //        .text "destruct sequence primed!"
         .byte $3d,$0e,$1c,$1d,$1b,$1e,$0c,$1d,$30,$1c,$0e,$1a,$1e,$0e
-        .byte $17,$0c,$0e,$30,$19,$1b,$12,$42,$0e,$0d,$25
+        .byte $17,$0c,$0e,$30,$19,$1b,$12,$42,$0e,$0d,$25,$ff
 formationannihilationbonus:
         .byte $0a,$05
 //        .text "formation annihilation bonus:"
