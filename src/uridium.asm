@@ -1,5 +1,5 @@
-//This is the KICKASS version of Uridium. See credits below.
-//This Kick version was rebuilt by mikroman
+//          KICKASS version of Uridium converted by mikroman.
+// Original Comments follow:
 // this is the reverse-engineered source code for the game 'uridium'
 // written by andrew braybrook in 1986.
 //
@@ -14,10 +14,6 @@
 //    may you do good and not evil.
 //    may you find forgiveness for yourself and forgive others.
 //    may you share freely, never taking more than you give.
-//
-
-//
-// **** zp fields **** 
 //
 
 BasicUpstart2(launchuridium)
@@ -44,11 +40,13 @@ launchuridium:
 
         ldy #$fe
         lda #$00
-b0916:   sta .a f0001,y
+b0916:
+        sta .a f0001,y
         dey 
         bne b0916
 
-b091c:   ldx #<p8000
+b091c:
+        ldx #<p8000
         ldy #>p8000
         stx temploptrcopyfrom
         sty temphiptrcopyfrom
@@ -203,7 +201,8 @@ preparetitlescreen:
         sty joystick2hiptr
 
         ldy #$26
-b0a3d:   lda playerlinescolorscheme1,y
+b0a3d:
+        lda playerlinescolorscheme1,y
         sta color_ram + $0000,y
         and #$f7
         sta color_ram + $0028,y
@@ -230,7 +229,7 @@ b0a3d:   lda playerlinescolorscheme1,y
 //--------------------------------------------------------------------
 // titlescreenloop   
 //--------------------------------------------------------------------
-titlescreenloop:   
+titlescreenloop:
         jsr setinterrupttoirqinterrupt1
 
         lda #$00
@@ -287,7 +286,7 @@ titlescreenloop:
 //--------------------------------------------------------------------
 // preparelargescrollingcreditandhiscore   
 //--------------------------------------------------------------------
-preparelargescrollingcreditandhiscore:   
+preparelargescrollingcreditandhiscore:
         lda #$00
         sta indextocurrentleveltexturedata
         lda #$0f
@@ -303,7 +302,7 @@ preparelargescrollingcreditandhiscore:
 //--------------------------------------------------------------------
 // drawhiscorescreen   
 //--------------------------------------------------------------------
-drawhiscorescreen:   
+drawhiscorescreen:
         jsr setinterrupttoirqinterrupt1
         lda #$30
         jsr write21linesofaccumulatorvaltoscreen
@@ -364,9 +363,10 @@ drawhiscorescreen:
 //--------------------------------------------------------------------
 // drawenterlevelsequence   
 //--------------------------------------------------------------------
-drawenterlevelsequence:  
+drawenterlevelsequence:
         ldx #$08
-b0b67:   lda f3496,x
+b0b67:
+        lda f3496,x
         sta $0250,x
         sta $0260,x
         sta playerscore,x
@@ -395,7 +395,7 @@ b0b67:   lda f3496,x
 //--------------------------------------------------------------------
 // restartlevel   
 //--------------------------------------------------------------------
-restartlevel:   
+restartlevel:
         ldx #$08
         lda a5c
         cmp #$01
@@ -403,7 +403,8 @@ restartlevel:
         lda currentplayer
         cmp #$01
         beq b0bcc
-b0baf:   lda $0260,x
+b0baf:
+        lda $0260,x
         sta playerscore,x
         dex 
         bpl b0baf
@@ -415,9 +416,10 @@ b0baf:   lda $0260,x
         dec currentplayer
         lda $0255
         bne b0bcc
-        jmp jc909
+        jmp preparetitlescreen               //DIFF c909-0a20
 
-b0bcc:   lda $0250,x
+b0bcc:
+        lda $0250,x
         sta playerscore,x
         dex 
         bpl b0bcc
@@ -429,14 +431,17 @@ b0bcc:   lda $0250,x
         lda a5c
         cmp #$01
         bne b0be8
-        jmp jc909
+        jmp preparetitlescreen               //DIFF c909-0a20
+//        jmp jc909               //DIFF c909-0a20
 
-b0be8:   inc currentplayer
+b0be8:
+        inc currentplayer
         lda $0265
         bne b0baf
-        jmp jc909
+        jmp preparetitlescreen               //DIFF c909-0a20
 
-b0bf2:   lda a5c
+b0bf2:
+        lda a5c
         bne enternewlevel
         lda currentplayer
         cmp #$01
@@ -447,17 +452,19 @@ b0bf2:   lda a5c
         sty joystick1hiptr
         jmp j0c13
 
-b0c09:   ldx #<$dc01
+b0c09:
+        ldx #<$dc01
         ldy #>$dc01
         stx joystick1loptr
         sty joystick1hiptr
-j0c13:   stx joystick2loptr
+j0c13:
+        stx joystick2loptr
         sty joystick2hiptr
 
 //--------------------------------------------------------------------
 // enternewlevel   
 //--------------------------------------------------------------------
-enternewlevel:   
+enternewlevel:
         jsr setinterrupttoirqinterrupt1
         ldx #<spaces
         ldy #>spaces
@@ -491,10 +498,12 @@ enternewlevel:
         jsr writetoscreen
         jmp j0c66
 
-b0c5f:   ldx #<player1
+b0c5f:
+        ldx #<player1
         ldy #>player1
         jsr writetoscreen
-j0c66:   lda a25
+j0c66:
+        lda a25
         ldx #$30
         lsr 
         lsr 
@@ -502,7 +511,8 @@ j0c66:   lda a25
         lsr 
         beq b0c71
         tax 
-b0c71:   stx tenslivesleftdisplayed
+b0c71:
+        stx tenslivesleftdisplayed
         lda a25
         and #$0f
         sta livesleftdisplayed
@@ -547,12 +557,14 @@ spinningshipanimationloop:
         bcc b0cd1
         lda #$40
         sta currentspritevalue
-b0cd1:   jsr updatespritecontentandposition
+b0cd1:
+        jsr updatespritecontentandposition
         jmp spinningshipanimationloop
 
         // the spinning ship sequence is over, or the user has pressed
         // fire so start the ship deployment sequence.
-b0cd7:   lda #$12
+b0cd7:
+        lda #$12
         sta a90
         sei 
         jsr playtitletune
@@ -564,7 +576,8 @@ b0cd7:   lda #$12
         lda a4b
         sta $d02e    //sprite 7 color
         ldy #$07
-b0cf0:   lda f32ed,y
+b0cf0:
+        lda f32ed,y
         sta .a f0035,y
         dey 
         bpl b0cf0
@@ -572,7 +585,7 @@ b0cf0:   lda f32ed,y
 //--------------------------------------------------------------------
 // maingameloop   
 //--------------------------------------------------------------------
-maingameloop:   
+maingameloop:
         lda shouldwaituntilready
         bne maingameloop
 
@@ -601,18 +614,20 @@ maingameloop:
         jsr s2635
         jsr s268c
         jsr s2713
-        jsr checklandnowwarning
+//        jsr checklandnowwarning         //DIFF should be 166d maybedisplaylandnowwarning
+        jsr maybedisplaylandnowwarning         //DIFF should be 166d maybedisplaylandnowwarning
         lda a85
         bpl b0d41
         jmp startlandingsequence
 
-b0d41:   lda a32
+b0d41:
+        lda a32
         beq maingameloop
 
 //--------------------------------------------------------------------
 // maybestartnewlevel   
 //--------------------------------------------------------------------
-maybestartnewlevel:   
+maybestartnewlevel:
         lda a27
         cmp indextocurrentleveltexturedata
         beq b0d69
@@ -628,17 +643,20 @@ maybestartnewlevel:
         cmp #$40
         bcs b0d62
         sta a28
-b0d62:   lda #$00
+b0d62:
+        lda #$00
         sta a24
         jmp enternewlevel
 
-b0d69:   jsr shiphasbeenhit
+b0d69:
+        jsr shiphasbeenhit
         lda a24
         sec 
         sbc #$04
         bpl b0d75
         lda #$00
-b0d75:   sta a24
+b0d75:
+        sta a24
         sed 
         sec 
         lda a25
@@ -674,7 +692,7 @@ b0d75:   sta a24
 //--------------------------------------------------------------------
 // updateplayeranddrawgameoverscreen   
 //--------------------------------------------------------------------
-updateplayeranddrawgameoverscreen:   
+updateplayeranddrawgameoverscreen:
         ldx #<player1
         ldy #>player1
         jsr writetoscreen
@@ -683,7 +701,7 @@ updateplayeranddrawgameoverscreen:
 //--------------------------------------------------------------------
 // drawgameoverscreen   
 //--------------------------------------------------------------------
-drawgameoverscreen:   
+drawgameoverscreen:
         ldx #<gameover
         ldy #>gameover
         jsr writetoscreen
@@ -698,19 +716,23 @@ drawgameoverscreen:
         sta a93
         lda #$90
         sta a62
-b0dd7:   jsr checkinputmaybeupdatedecal
+b0dd7:
+        jsr checkinputmaybeupdatedecal
         lda firepressed
         beq b0de2
         lda a62
         bne b0dd7
-b0de2:   jsr spinwaitingforjoystickinput
+b0de2:
+        jsr spinwaitingforjoystickinput
         jsr displayhiscoreinputscreen
-b0de8:   jsr updateoneuportwouptext
+b0de8:
+        jsr updateoneuportwouptext
         ldx #$08
         lda currentplayer
         cmp #$01
         beq b0e02
-b0df3:  lda playerscore,x
+b0df3:
+        lda playerscore,x
         sta $0260,x
         dex 
         bpl b0df3
@@ -718,7 +740,8 @@ b0df3:  lda playerscore,x
         sta currentplayer
         jmp restartlevel
 
-b0e02:   lda playerscore,x
+b0e02:
+        lda playerscore,x
         sta $0250,x
         dex 
         bpl b0e02
@@ -728,7 +751,8 @@ b0e02:   lda playerscore,x
         beq b0e16
         lda #$02
         sta currentplayer
-b0e16:   jmp restartlevel
+b0e16:
+        jmp restartlevel
 
 //--------------------------------------------------------------------
 // startlandingsequence   
@@ -742,22 +766,25 @@ startlandingsequence:
 //-------------------------------------------------------------------
 // playtitletune
 //-------------------------------------------------------------------
-playtitletune:   
+playtitletune:
         lda a90
         beq b0e67
         cmp #$02
         bne b0e2e
         jmp playsomeofthetitletune
 
-b0e2e:   cmp #$01
+b0e2e:
+        cmp #$01
         bne b0e35
         jmp j0e6b
 
-b0e35:   cmp #$03
+b0e35:
+        cmp #$03
         bne b0e3c
         jmp playsomeofthetitletune
 
-b0e3c:   cmp #$11
+b0e3c:
+        cmp #$11
         beq b0e49
         cmp #$12
         beq b0e5f
@@ -765,7 +792,8 @@ b0e3c:   cmp #$11
         beq b0e49
         rts 
 
-b0e49:   jsr playsound
+b0e49:
+        jsr playsound
         lda a95
         sta aef
         lda #$01
@@ -776,26 +804,32 @@ b0e49:   jsr playsound
         sta a3e9a
         rts 
 
-b0e5f:   jsr playsound
+b0e5f:
+        jsr playsound
         lda #$0f
         sta aef
         rts 
 
-b0e67:   jsr playsound
-b0e6a:   rts 
+b0e67:
+        jsr playsound
+b0e6a:
+        rts 
 
-j0e6b:   dec af2
+j0e6b:
+        dec af2
         beq b0e72
         jmp playsomeofthetitletune
 
-b0e72:   lda #$05
+b0e72:
+        lda #$05
         sta af2
         lda a3e9a
         cmp #$ff
         beq b0e6a
         cmp #$fe
         bne b0eb3
-j0e81:   lda a3e99
+j0e81:
+        lda a3e99
         asl 
         clc 
         adc a3e99
@@ -807,7 +841,8 @@ j0e81:   lda a3e99
         bne b0e97
         rts 
 
-b0e97:   lda f3d2c,y
+b0e97:
+        lda f3d2c,y
         sty aa0
         tay 
         lda f3d71,y
@@ -821,14 +856,17 @@ b0e97:   lda f3d2c,y
         inx 
         cpx #$03
         bne b0e97
-b0eb3:   lda #$00
+b0eb3:
+        lda #$00
         sta a9f
-j0eb7:   tax 
+j0eb7:
+        tax 
         dec ff6,x
         beq b0ebf
         jmp j0f51
 
-b0ebf:   lda ffc,x
+b0ebf:
+        lda ffc,x
         sta aa3
         lda ff3,x
         sta aa2
@@ -850,7 +888,8 @@ b0ebf:   lda ffc,x
         lsr 
         lsr 
         sta fa4,x
-b0ee4:   lda (pa2),y
+b0ee4:
+        lda (pa2),y
         cmp #$ff
         bne b0ef5
         ldy #$fe
@@ -858,7 +897,8 @@ b0ee4:   lda (pa2),y
         inc a3e99
         jmp j0e81
 
-b0ef5:   tya 
+b0ef5:
+        tya 
         sec 
         adc ff3,x
         sta ff3,x
@@ -871,11 +911,13 @@ b0ef5:   tya
         lda #$10
         jmp j0f10
 
-b0f0c:   lsr 
+b0f0c:
         lsr 
         lsr 
         lsr 
-j0f10:   sta ff6,x
+        lsr 
+j0f10:
+        sta ff6,x
         lda ff9,x
         tax 
         lda (pa2),y
@@ -884,7 +926,8 @@ j0f10:   sta ff6,x
         lda f3d10,y
         sta af0
         lda f3d00,y
-b0f22:   lsr 
+b0f22:
+        lsr 
         ror af0
         dex 
         bne b0f22
@@ -909,7 +952,8 @@ b0f22:   lsr
         sta (pa2),y
         ldy #$02
         sta (pa2),y
-j0f51:   inc a9f
+j0f51:
+        inc a9f
         lda a9f
         cmp #$03
         beq playsomeofthetitletune
@@ -918,21 +962,24 @@ j0f51:   inc a9f
 //--------------------------------------------------------------------
 // playsomeofthetitletune   
 //--------------------------------------------------------------------
-playsomeofthetitletune:   
+playsomeofthetitletune:
         lda aef
 .label a0f5f =*+$01
         ora #$80
         sta $d418    //select filter mode and volume
         ldy #$00
         sty a9f
-b0f67:   lda .a f0091,y
+b0f67:
+        lda .a f0091,y
         beq b0f78
         bmi b0f72
         ldx f96,y
         bmi b0f78
-b0f72:   sta .a f0096,y
+b0f72:
+        sta .a f0096,y
         jsr s105d
-b0f78:   ldy a9f
+b0f78:
+        ldy a9f
         lda #$00
         sta .a f0091,y
         iny 
@@ -942,13 +989,15 @@ b0f78:   ldy a9f
         ldx #$00
         stx aa0
         stx a9f
-j0f8c:   jsr updatesoundptr
+j0f8c:
+        jsr updatesoundptr
         ldx aa0
         lda fc6,x
         bne b0f98
         jmp j103f
 
-b0f98:   lda fc0,x
+b0f98:
+        lda fc0,x
         clc 
         adc fc2,x
         sta fc0,x
@@ -970,7 +1019,8 @@ b0f98:   lda fc0,x
         beq b0fc6
         cmp #$0f
         bcc b0fd7
-b0fc6:   lda fc9,x
+b0fc6:
+        lda fc9,x
         eor #$ff
         clc 
         adc #$01
@@ -979,7 +1029,8 @@ b0fc6:   lda fc9,x
         eor #$ff
         adc #$00
         sta fca,x
-b0fd7:   ldx a9f
+b0fd7:
+        ldx a9f
         ldy f99,x
         beq b0fed
         dey 
@@ -990,7 +1041,8 @@ b0fd7:   ldx a9f
         and #$fe
         ldy soundptr
         sta $d404,y  //voice 1: control register
-b0fed:   ldx aa0
+b0fed:
+        ldx aa0
         ldy fc4,x
         dey 
         sty fc4,x
@@ -1004,7 +1056,7 @@ b0fed:   ldx aa0
 //--------------------------------------------------------------------
 // p1000   
 //--------------------------------------------------------------------
-p1000:   
+p1000:
         lda fc2,x
         eor #$ff
         clc 
@@ -3980,8 +4032,8 @@ j2508:   lda a5a
         jmp j2518
 
 b2515:   jsr updateplayerscore
-j2518:   dec a59
-        lda a59
+j2518:   dec a59                //DIFF $8f
+        lda a59                 //DIFF $8f
         cmp #$f0
         beq b2523
         jmp j2488

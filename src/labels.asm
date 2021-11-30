@@ -1,4 +1,7 @@
 //labels.asm
+//
+// **** zp fields **** 
+//
 .label playerscore = $20
 .label f52 = $52
 .label f70 = $70
