@@ -1061,7 +1061,8 @@ p1000:
         eor #$ff
         clc 
         adc #$01
-p1007:   sta fc2,x
+p1007:
+        sta fc2,x
         lda fc3,x
         eor #$ff
         adc #$00
@@ -1077,11 +1078,13 @@ p1007:   sta fc2,x
         sta fca,x
         jmp j102d
 
-b1025:   lda fcc,x
+b1025:
+        lda fcc,x
         sta fc0,x
         lda fcd,x
         sta fc1,x
-j102d:   ldy fc6,x
+j102d:
+        ldy fc6,x
         dey 
         sty fc6,x
         bne b104c
@@ -1090,13 +1093,15 @@ j102d:   ldy fc6,x
         beq j103f
         ldx a9f
         sta f91,x
-j103f:   ldx a9f
+j103f:
+        ldx a9f
         lda #$00
         sta f96,x
         cpx #$02
         bne b104c
         jsr playnote
-b104c:   inc a9f
+b104c:
+        inc a9f
         ldy a9f
         cpy #$03
         bcs b105c
@@ -1104,12 +1109,13 @@ b104c:   inc a9f
         sta aa0
         jmp j0f8c
 
-b105c:   rts 
+b105c:
+        rts 
 
 //-------------------------------------------------------------------
 // s105d
 //-------------------------------------------------------------------
-s105d:   
+s105d:
         jsr updatesoundptr
         lda #$00
         sta aa3
@@ -1137,7 +1143,8 @@ s105d:
         ldy a9f
         ldx f1147,y
         ldy #$0f
-b1091:   lda (pa2),y
+b1091:
+        lda (pa2),y
         sta fc0,x
         dex 
         dey 
@@ -1147,12 +1154,13 @@ b1091:   lda (pa2),y
         bne b10a4
         lda #$00
         sta a0f5f
-b10a4:   rts 
+b10a4:
+        rts 
 
 //-------------------------------------------------------------------
 // updatesoundsettings
 //-------------------------------------------------------------------
-updatesoundsettings:   
+updatesoundsettings:
         ldy soundptr
         lda #$00
         sta $d406,y  //voice 1: sustain / release cycle control
@@ -1173,14 +1181,16 @@ playsomesound:
         jsr updatesoundsettings
         ldx #$03
         ldy soundptr
-b10c5:  lda f114a,x
+b10c5:
+        lda f114a,x
         sta $d400,y  //voice 1: frequency control - low-byte
         iny 
         dex 
         bpl b10c5
         sty soundptr
         ldx #$03
-b10d3:   ldy aa0
+b10d3:
+        ldy aa0
         lda f3947,y
         inc aa0
         ldy soundptr
@@ -1222,7 +1232,8 @@ playsound:
         sta a90
         ldy #$18
         lda #$00
-b1110:   sta $d400,y  //voice 1: frequency control - low-byte
+b1110:
+        sta $d400,y  //voice 1: frequency control - low-byte
         dey 
         bpl b1110
         sta a96
@@ -1250,10 +1261,14 @@ playnote:
         sta $d412    //voice 3: control register
         rts 
 
-f1141:   .byte $00,$07,$0e
-f1144:   .byte $00,$0f,$1e
-f1147:   .byte $0e,$1d,$2c
-f114a:   .byte $08,$00,$00,$00
+f1141:
+        .byte $00,$07,$0e
+f1144:
+        .byte $00,$0f,$1e
+f1147:
+        .byte $0e,$1d,$2c
+f114a:
+        .byte $08,$00,$00,$00
 //-------------------------------------------------------------------
 // destructsequenceminigame
 //-------------------------------------------------------------------
@@ -1271,9 +1286,11 @@ destructsequenceminigame:
         ldy #>screen_ram_hibank + $00a0
         stx temploptrcopyto
         sty temphiptrcopyto
-b116b:   lda shouldwaituntilready
+b116b:
+        lda shouldwaituntilready
         bne b116b
-b116f:   lda shouldwaituntilready
+b116f:
+        lda shouldwaituntilready
         beq b116f
         ldx #$03
         jsr copydatauntilxiszero
@@ -1297,9 +1314,11 @@ b116f:   lda shouldwaituntilready
         cli 
         lda #$04
         sta initialvalueofy
-b11a0:   lda shouldwaituntilready
+b11a0:
+        lda shouldwaituntilready
         beq b11a0
-b11a4:   lda shouldwaituntilready
+b11a4:
+        lda shouldwaituntilready
         bne b11a4
         jsr maybeshowpausescreen
         ldy initialvalueofy
@@ -1348,9 +1367,11 @@ destructsequenceminigameloop:
         sta anotherrandomnumberbetween0and1
         lda #$01
         sta aa7
-b1205:   lda shouldwaituntilready
+b1205:
+        lda shouldwaituntilready
         beq b1205
-b1209:   lda shouldwaituntilready
+b1209:
+        lda shouldwaituntilready
         bne b1209
         jsr getjoystickinput
         jsr updateminigamedisplay
@@ -1368,10 +1389,12 @@ b1209:   lda shouldwaituntilready
         cpx randomnumberbetween0and1
         bne b1230
         lsr 
-b1230:   sta a3afd
+b1230:
+        sta a3afd
         lda #$16
         sta a92
-b1237:   lda anotherrandomnumberbetween0and1
+b1237:
+        lda anotherrandomnumberbetween0and1
         beq b1284
         ldy aa9
         ldx f3913,y
@@ -1387,7 +1410,8 @@ b1237:   lda anotherrandomnumberbetween0and1
         bcc b125b
         inc somedatahiptr
         inc ramhiptr
-b125b:   jsr s1313
+b125b:
+        jsr s1313
         ldy aa9
         ldx f3905,y
         lda screenlinehiptrarray,x
@@ -1402,10 +1426,12 @@ b125b:   jsr s1313
         bcc b127e
         inc somedatahiptr
         inc ramhiptr
-b127e:   jsr clearloptrs
+b127e:
+        jsr clearloptrs
         jmp j12ca
 
-b1284:   ldy aa9
+b1284:
+        ldy aa9
         ldx f3905,y
         lda screenlinehiptrarray,x
         sta somedatahiptr
@@ -1419,7 +1445,8 @@ b1284:   ldy aa9
         bcc b12a4
         inc somedatahiptr
         inc ramhiptr
-b12a4:   jsr s1313
+b12a4:
+        jsr s1313
         ldy aa9
         ldx f3913,y
         lda screenlinehiptrarray,x
@@ -1434,14 +1461,17 @@ b12a4:   jsr s1313
         bcc b12c7
         inc somedatahiptr
         inc ramhiptr
-b12c7:   jsr clearloptrs
-j12ca:   lda aa8
+b12c7:
+        jsr clearloptrs
+j12ca:
+        lda aa8
         beq b12e6
         lda firepressed
         beq b12d5
         jmp b1205
 
-b12d5:   lda anotherrandomnumberbetween0and1
+b12d5:
+        lda anotherrandomnumberbetween0and1
         cmp randomnumberbetween0and1
         beq b12e6
         lda aaa
@@ -1450,7 +1480,8 @@ b12d5:   lda anotherrandomnumberbetween0and1
         beq b12e6
         jmp destructsequenceminigameloop
 
-b12e6:   ldy #$00
+b12e6:
+        ldy #$00
         jsr wastecyclesusingxandy
         jsr wastecyclesusingxandy
         jsr wastecyclesusingxandy
@@ -1465,28 +1496,33 @@ updatesomedataforminigame:
         sta a3929
         lda aaa
         sec 
-b12fd:   sbc #$0a
+b12fd:
+        sbc #$0a
         bcc b1306
         inc a3928
         bne b12fd
-b1306:   adc #$0a
+b1306:
+        adc #$0a
         sec 
-b1309:   sbc #$01
+b1309:
+        sbc #$01
         bcc b1312
         inc a3929
         bne b1309
-b1312:  rts 
+b1312:
+        rts 
 
 //-------------------------------------------------------------------
 // s1313
 //-------------------------------------------------------------------
-s1313:   
+s1313:
         ldy #$03
         ldx aa9
         lda anotherrandomnumberbetween0and1
         cmp randomnumberbetween0and1
         beq b132b
-b131d:   lda a3928,y
+b131d:
+        lda a3928,y
         sta (somedataloptr),y
         lda f3930,x
         sta (ramloptr),y
@@ -1494,7 +1530,8 @@ b131d:   lda a3928,y
         bpl b131d
         rts 
 
-b132b:   lda f392c,y
+b132b:
+        lda f392c,y
         sta (somedataloptr),y
         lda f3930,x
         sta (ramloptr),y
@@ -1507,7 +1544,8 @@ b132b:   lda f392c,y
 //-------------------------------------------------------------------
 clearloptrs:
         ldy #$03
-b133b:   lda #$20
+b133b:
+        lda #$20
         sta (somedataloptr),y
         lda #$f0
         sta (ramloptr),y
@@ -1521,7 +1559,8 @@ b133b:   lda #$20
 updateminigamedisplay:
         inc a62
         bne b138d
-a134b:  dec aa8
+a134b:
+        dec aa8
         ldy aa8
         lda f3c8b,y
         sta a3aed
@@ -1549,14 +1588,16 @@ a134b:  dec aa8
         sbc #$02
         sta screen_ram_hibank + $0145
         sta screen_ram_hibank + $0163
-b138d:   rts 
+b138d:
+        rts 
 
 //-------------------------------------------------------------------
 // copydatawithin71007800
 //-------------------------------------------------------------------
 copydatawithin71007800:
         ldy #$47
-b1390:   lda surfacetexturecharacterset,y
+b1390:
+        lda surfacetexturecharacterset,y
         sta f7188,y
         lda f7850,y
         sta f7588,y
@@ -1564,7 +1605,8 @@ b1390:   lda surfacetexturecharacterset,y
         bpl b1390
 
         ldy #$07
-b13a1:   lda f7848,y
+b13a1:
+        lda f7848,y
         sta f73e8,y
         lda f7898,y
         sta f77e8,y
@@ -1639,7 +1681,8 @@ landonshipandmayberunminigame:
         sta a91
         lda #>p9392
         sta a92
-b1423:   jsr processgameframe
+b1423:
+        jsr processgameframe
         jsr s2713
         jsr updatespriteandrunfunctionpersprite
         lda a2936
@@ -1647,9 +1690,11 @@ b1423:   jsr processgameframe
         lda a2e
         beq b1437
         bne b143b
-b1437:   lda #$00
+b1437:
+        lda #$00
         sta a5f
-b143b:   lda a62
+b143b:
+        lda a62
         and #$03
         bne b1423
         dec a3d
@@ -1660,7 +1705,8 @@ b143b:   lda a62
         sta a5f
         lda #$a0
         sta a62
-b1451:   jsr processgameframe
+b1451:
+        jsr processgameframe
         jsr s2713
         lda a62
         bne b1451
@@ -1675,7 +1721,8 @@ b1451:   jsr processgameframe
         sta a93
         lda #$06
         sta a92
-b1473:   jsr scrollscreenright
+b1473:
+        jsr scrollscreenright
         jsr scrollscreenleft
         dec a0f
         bne b1473
@@ -1743,12 +1790,14 @@ awardbonuses:
         jsr writebonusvaluetoscreen
         lda #$c0
         sta a62
-b1504:   jsr checkinputmaybeupdatedecal
+b1504:
+        jsr checkinputmaybeupdatedecal
         lda firepressed
         beq b150f
         lda a62
         bmi b1504
-b150f:   lda #$ff
+b150f:
+        lda #$ff
         sta a54
         jsr fetchcurrentsurfacedata
         jsr s173b
@@ -1767,7 +1816,8 @@ b150f:   lda #$ff
         sta a5f
         ldy #$80
         jsr wastecyclesusingxandy
-b153e:   jsr processgameframe
+b153e:
+        jsr processgameframe
         jsr s2713
         lda a2936
         sta a49
@@ -1781,7 +1831,8 @@ b153e:   jsr processgameframe
         jmp b153e
 
         // start ship destruct sequence
-b155a:   jsr processgameframe
+b155a:
+        jsr processgameframe
         jsr s268c
         jsr s2713
         lda a45
@@ -1803,7 +1854,8 @@ shipdestructsequence:
         cmp #$0e
         bcs b1582
         jsr s16d2
-b1582:   lda $d41b    // random number generator
+b1582:
+        lda $d41b    // random number generator
         and #$3f
         bne b1593
         lda a45
@@ -1811,7 +1863,8 @@ b1582:   lda $d41b    // random number generator
         bne b1593
         ora #$80
         sta a46
-b1593:   lda a2e
+b1593:
+        lda a2e
         cmp #$07
         bcc b15a3
         lda #>screen_ram + $0300
@@ -1819,14 +1872,16 @@ b1593:   lda a2e
         lda #<screen_ram + $0300
         sta a2d
         sta a5f
-b15a3:   lda $d41b    // random number generator
+b15a3:
+        lda $d41b    // random number generator
         cmp #$f0
         bcc b15b2
         and #$01
         tay 
         lda #$1a
         sta .a f0091,y
-b15b2:   lda a2a
+b15b2:
+        lda a2a
         cmp #$02
         bcs shipdestructsequence
         // falls through
@@ -1850,7 +1905,8 @@ refreshdisplayandreturn:
         jsr scrollshipsurface
         lda #$c0
         sta $d015    //sprite display enable
-a15d1:   inc a32
+a15d1:
+        inc a32
         rts 
 
 //-------------------------------------------------------------------
@@ -1870,8 +1926,10 @@ scrollscreenright:
 
         lda #$1e
         sta initialvalueofy
-b15ec:   ldy #$01
-b15ee:   lda (srcloptr),y
+b15ec:
+        ldy #$01
+b15ee:
+        lda (srcloptr),y
         dey 
         sta (srcloptr),y
         iny 
@@ -1893,13 +1951,15 @@ b15ee:   lda (srcloptr),y
         sta srcloptr
         bcc b1613
         inc srchiptr
-b1613:   clc 
+b1613:
+        clc 
         lda a12
         adc #$28
         sta a12
         bcc b161e
         inc a13
-b161e:   dec initialvalueofy
+b161e:
+        dec initialvalueofy
         lda initialvalueofy
         cmp #$09
         bcs b15ec
@@ -1919,8 +1979,10 @@ scrollscreenleft:
         sty a13
         lda #$1d
         sta initialvalueofy
-b163b:   ldy #$26
-b163d:   lda (srcloptr),y
+b163b:
+        ldy #$26
+b163d:
+        lda (srcloptr),y
         iny 
         sta (srcloptr),y
         dey 
@@ -1937,13 +1999,15 @@ b163d:   lda (srcloptr),y
         sta srcloptr
         bcc b1659
         inc srchiptr
-b1659:   clc 
+b1659:
+        clc 
         lda a12
         adc #$28
         sta a12
         bcc b1664
         inc a13
-b1664:   dec initialvalueofy
+b1664:
+        dec initialvalueofy
         lda initialvalueofy
         cmp #$09
         bcs b163b
@@ -1957,9 +2021,11 @@ maybedisplaylandnowwarning:
         beq b1676
         cmp #$01
         beq b1683
-b1675:   rts 
+b1675:
+        rts 
 
-b1676:   ldy a24
+b1676:
+        ldy a24
         lda (p6d),y
         cmp #$ff
         bne b1675
@@ -1967,7 +2033,8 @@ b1676:   ldy a24
         sta a85
         rts 
 
-b1683:   lda a86
+b1683:
+        lda a86
         cmp #$6f
         bne b16bc
         lda a45
@@ -1978,15 +2045,18 @@ b1683:   lda a86
         lda a2936
         sta a49
         ldy #$05
-b169a:   lda indextofunctionptrarray,y
+b169a:
+        lda indextofunctionptrarray,y
         beq b16a9
         lda #$06
         sta indextofunctionptrarray,y
         lda #$14
         sta sprite0ptr,y
-b16a9:   dey 
+b16a9:
+        dey 
         bpl b169a
-b16ac:   ldx #<spaces
+b16ac:  
+        ldx #<spaces
         ldy #>spaces
         jsr writetoscreen
         rts 
@@ -1995,7 +2065,8 @@ b16ac:   ldx #<spaces
         bne b16bc
         lda #$ff
         sta a88
-b16bc:   lda a62
+b16bc:
+        lda a62
         and #$1f
         beq b16ac
         cmp #$10
@@ -2010,7 +2081,7 @@ b16bc:   lda a62
 //-------------------------------------------------------------------
 // s16d2
 //-------------------------------------------------------------------
-s16d2:   
+s16d2:
         lda a89
         sta a12
         lda a8a
@@ -2020,8 +2091,10 @@ s16d2:
         lda a89
         cmp #$20
         bcc b173a
-b16e4:   ldx #$11
-b16e6:   ldy fa4d0,x
+b16e4:
+        ldx #$11
+b16e6:
+        ldy fa4d0,x
         lda (p12),y
         cmp #$20
         beq b16f9
@@ -2030,7 +2103,8 @@ b16e6:   ldy fa4d0,x
         clc 
         adc #$f9
         sta (p12),y
-b16f9:   iny 
+b16f9:
+        iny 
         lda (p12),y
         cmp #$20
         beq b170a
@@ -2039,7 +2113,8 @@ b16f9:   iny
         clc 
         adc #$fb
         sta (p12),y
-b170a:   iny 
+b170a:
+        iny 
         lda (p12),y
         cmp #$20
         beq b171b
@@ -2048,7 +2123,8 @@ b170a:   iny
         clc 
         adc #$fd
         sta (p12),y
-b171b:   iny 
+b171b:
+        iny 
         lda #$20
         sta (p12),y
         iny 
@@ -2066,12 +2142,13 @@ b171b:   iny
         lda a8a
         sbc #$00
         sta a8a
-b173a:   rts 
+b173a:
+        rts 
 
 //-------------------------------------------------------------------
 // s173b
 //-------------------------------------------------------------------
-s173b:   
+s173b:
         ldx #<p83e0
         ldy #>p83e0
         stx a89
@@ -2079,7 +2156,8 @@ s173b:
         ldx #$11
         lda #$08
         sta a0f
-b1749:   lda $d41b    // random number generator
+b1749:
+        lda $d41b    // random number generator
         cmp #$55
         bcc b1765
         cmp #$aa
@@ -2089,11 +2167,13 @@ b1749:   lda $d41b    // random number generator
         dec a0f
         jmp b1765
 
-b175d:   lda a0f
+b175d:
+        lda a0f
         cmp #$10
         bcs b1765
         inc a0f
-b1765:   lda a0f
+b1765:
+        lda a0f
         sta fa4d0,x
         dex 
         bne b1749
@@ -2109,23 +2189,27 @@ writebonusvaluetoscreen:
         sta a3875
         sta a3876
         lda initialvalueofy
-j177e:   sec 
+j177e:
+        sec 
         sbc #$0a
         bcc b178c
         inc a3870
         inc a3875
         jmp j177e
 
-b178c:   clc 
+b178c:
+        clc 
         adc #$0a
-j178f:   sec 
+j178f:
+        sec 
         sbc #$01
         bcc b179d
         inc a3871
         inc a3876
         jmp j178f
 
-b179d:   ldx #<scorebonus
+b179d:
+        ldx #<scorebonus
         ldy #>scorebonus
         jsr writetoscreen
         lda a59
@@ -2134,7 +2218,8 @@ b179d:   ldx #<scorebonus
         jsr wastecyclesusingxandy
         jsr wastecyclesusingxandy
         jsr wastecyclesusingxandy
-b17b3:   inc a59
+b17b3:
+        inc a59
         lda initialvalueofy
         beq b17cb
         ldy #$04
@@ -2145,7 +2230,8 @@ b17b3:   inc a59
         dec initialvalueofy
         jmp writebonusvaluetoscreen
 
-b17cb:   rts 
+b17cb:
+        rts 
 
 //-------------------------------------------------------------------
 // setinterrupttoirqinterrupt1
@@ -2193,18 +2279,23 @@ displayhiscoreinputscreen:
         ldy #>somedatahiptrarray
         stx somedataloptr
         sty somedatahiptr
-j180c:   ldy #$12
-b180e:   lda (srcloptr),y
+j180c:
+        ldy #$12
+b180e:
+        lda (srcloptr),y
         cmp .a f000e,y
         bcc b181f
         beq b181a
         jmp j184a
 
-b181a:   iny 
+b181a:
+        iny 
         cmp #$16
         bcc b180e
-b181f:   ldy #$05
-b1821:   lda (srcloptr),y
+b181f:
+        ldy #$05
+b1821:
+        lda (srcloptr),y
         sta (somedataloptr),y
         iny 
         cpy #$16
@@ -2226,12 +2317,14 @@ b1821:   lda (srcloptr),y
         beq b1851
         jmp j180c
 
-j184a:   lda a85
+j184a:
+        lda a85
         cmp #$09
         bne b1851
         rts 
 
-b1851:   ldx #$00
+b1851:
+        ldx #$00
         stx a10
         lda #$28
         sta initial2
@@ -2259,7 +2352,8 @@ b1851:   ldx #$00
         jsr checkinitialsinput
         ldx #$02
         ldy #$0e
-b1891:   lda initialsinputfield,x
+b1891:
+        lda initialsinputfield,x
         sta (somedataloptr),y
         iny 
         inx 
@@ -2267,7 +2361,8 @@ b1891:   lda initialsinputfield,x
         bcc b1891
         ldx #$03
         ldy #$15
-b18a0:   lda playerscore,x
+b18a0:
+        lda playerscore,x
         sta (somedataloptr),y
         dey 
         dex 
@@ -2277,7 +2372,8 @@ b18a0:   lda playerscore,x
         sta a0f
         ldx #>p30
         stx a10
-b18b2:   ldx a10
+b18b2:
+        ldx a10
         lda playerscore,x
         lsr 
         lsr 
@@ -2285,14 +2381,16 @@ b18b2:   ldx a10
         lsr 
         bne b18d9
         lda a0f
-j18be:   sta (somedataloptr),y
+j18be:
+        sta (somedataloptr),y
         iny 
         ldx a10
         lda playerscore,x
         and #$0f
         bne b18e0
         lda a0f
-j18cb:   sta (somedataloptr),y
+j18cb:
+        sta (somedataloptr),y
         iny 
         inc a10
         ldx a10
@@ -2300,35 +2398,43 @@ j18cb:   sta (somedataloptr),y
         bne b18b2
         jmp j18e7
 
-b18d9:   ldx #$00
+b18d9:
+        ldx #$00
         stx a0f
         jmp j18be
 
-b18e0:   ldx #$00
+b18e0:
+        ldx #$00
         stx a0f
         jmp j18cb
 
-j18e7:   lda a85
+j18e7:
+        lda a85
         cmp #$01
         beq b18ee
         rts 
 
-b18ee:   ldx #$0c
-b18f0:   lda currenthighestscore,x
+b18ee:
+        ldx #$0c
+b18f0:
+        lda currenthighestscore,x
         sta ingamehiscoredisplay,x
         dex 
         bpl b18f0
         ldx #$00
         ldy #$00
-b18fd:   lda currenthighestscore,x
+b18fd:
+        lda currenthighestscore,x
         cmp #$30
         beq b1908
         sta f34c3,y
         iny 
-b1908:   inx 
+b1908:
+        inx 
         cpx #$07
         bcc b18fd
-b190d:   lda currenthighestscore,x
+b190d:
+        lda currenthighestscore,x
         sta f34c3,y
         iny 
         inx 
@@ -2344,7 +2450,8 @@ checkinitialsinput:
         beq b1973
         ldy #$00
         sty a11
-b1922:   jsr checkinputmaybeupdatedecal
+b1922:
+        jsr checkinputmaybeupdatedecal
         jsr checkinputmaybeupdatedecal
         jsr updatecolorsofinitials
         lda a16
@@ -2356,8 +2463,10 @@ b1922:   jsr checkinputmaybeupdatedecal
         bcc b193e
         lda #$00
         beq b193e
-b193c:   lda #$1a
-b193e:   sta a11
+b193c:
+        lda #$1a
+b193e:
+        sta a11
         tay 
         lda f38c3,y
         ldx a10
@@ -2369,19 +2478,23 @@ b193e:   sta a11
         bne b1958
         dec a59
         beq b1973
-b1958:   lda firepressed
+b1958:
+        lda firepressed
         bne b1922
-b195c:   jsr checkinputmaybeupdatedecal
+b195c:
+        jsr checkinputmaybeupdatedecal
         jsr checkinputmaybeupdatedecal
         jsr updatecolorsofinitials
         lda a62
         bne b196d
         dec a59
         beq b1973
-b196d:   lda firepressed
+b196d:
+        lda firepressed
         beq b195c
         inc a10
-b1973:   rts 
+b1973:
+        rts 
 
 //-------------------------------------------------------------------
 // updatecolorsofinitials
@@ -2431,7 +2544,8 @@ updateoneuportwouptext:
         lsr 
         beq b19c8
         tax 
-b19c8:   stx a3142
+b19c8:
+        stx a3142
         lda a25
         and #$0f
         sta a3143
@@ -2440,14 +2554,16 @@ b19c8:   stx a3142
         jsr writetoscreen
         rts 
 
-b19da:   lda a25
+b19da:
+        lda a25
         lsr 
         lsr 
         lsr 
         lsr 
         beq b19e3
         tax 
-b19e3:   stx a3149
+b19e3:
+        stx a3149
         lda a25
         and #$0f
         sta a314a
@@ -2485,7 +2601,8 @@ maybeupdateoneuportwouptext:
         cld 
         rts 
 
-b1a21:   plp 
+b1a21:
+        plp 
         bcc b1a36
         clc 
         lda a25
@@ -2498,7 +2615,8 @@ b1a21:   plp
         sta a91
         rts 
 
-b1a36:   cld 
+b1a36:
+        cld 
         rts 
 
 //-------------------------------------------------------------------
@@ -2561,11 +2679,14 @@ updateanddisplaysomesprites:
         lda a68
         bne b1a93
         inc a87
-b1a93:   lda #$00
+b1a93:
+        lda #$00
         sta a88
-b1a97:   rts 
+b1a97:
+        rts 
 
-b1a98:   lda #$00
+b1a98:
+        lda #$00
         sta srchiptr
         lda #$80
         sta a6c
@@ -2582,10 +2703,12 @@ b1a98:   lda #$00
         sta a68
         jmp j1abf
 
-b1ab9:   inc a24
+b1ab9:
+        inc a24
         ldx #$00
         stx a68
-j1abf:  asl 
+j1abf:
+        asl 
         rol srchiptr
         asl 
         rol srchiptr
@@ -2646,7 +2769,8 @@ j1abf:  asl
         beq b1b36
         lda $d41b    // random number generator
         bpl b1b45
-b1b36:   lda a2e
+b1b36:
+        lda a2e
         eor #$ff
         clc 
         adc #$01
@@ -2654,11 +2778,13 @@ b1b36:   lda a2e
         lda a2e
         bmi b1b4d
         bpl b1b5b
-b1b45:   lda #$00
+b1b45:
+        lda #$00
         sta a84
         lda a2e
         bmi b1b5b
-b1b4d:   lda #$a4
+b1b4d:
+        lda #$a4
         sta currentspritexpos
         lda a7e
         clc 
@@ -2666,7 +2792,8 @@ b1b4d:   lda #$a4
         sta currentspritevalue
         jmp j1b83
 
-b1b5b:   lda #$a2
+b1b5b:
+        lda #$a2
         sta currentspritexpos
         lda a7e
         clc 
@@ -2687,7 +2814,8 @@ b1b5b:   lda #$a2
         sta a65
         lda #$ff
         sta a6b
-j1b83:   ldy #$0c
+j1b83:
+        ldy #$0c
         lda (srcloptr),y
         sta a7c
         lda #$00
@@ -2696,7 +2824,8 @@ j1b83:   ldy #$0c
         sty a11
         ldx #<screen_ram + $010a
         stx a10
-b1b95:   ldy a11
+b1b95:
+        ldy a11
         sty spriteindex
         lda (srcloptr),y
         beq b1bc0
@@ -2717,14 +2846,16 @@ b1b95:   ldy a11
         clc 
         adc a7c
         sta a7d
-b1bc0:   tya 
+b1bc0:
+        tya 
         clc 
         adc #$06
         tay 
         lda (srcloptr),y
         bne b1bcb
         lda a33
-b1bcb:   sta currentspriteypos
+b1bcb:
+        sta currentspriteypos
         jsr updatespritesizecolorandpriority
         ldy a11
         lda a6b
@@ -2740,7 +2871,8 @@ b1bcb:   sta currentspriteypos
         bpl b1bf4
         lda #$ff
         sta fa4a8,y
-b1bf4:   dec a10
+b1bf4:
+        dec a10
         dec a10
         dec a11
         bpl b1b95
@@ -2759,7 +2891,8 @@ updatespriteandrunfunctionpersprite:
         sta currentspritedisplayenable
         lda #$00
         sta currentspritebackgrounddisplaypriority
-b1c0e:   ldy a11
+b1c0e:
+        ldy a11
         sty spriteindex
         lda indextofunctionptrarray,y
         and #$0e
@@ -2777,7 +2910,8 @@ b1c0e:   ldy a11
 .label functionloptr =*+$02
         jsr performdetailedupdateforsprite
 
-b1c2e:   dec a10
+b1c2e:
+        dec a10
         dec a10
         dec a11
         bpl b1c0e
@@ -2803,7 +2937,8 @@ updatespritepositionvalueandfunctionptrindex:
         jsr updatespritecontentandposition
         rts 
 
-b1c57:   jmp detectspriteleavingscreen
+b1c57:
+        jmp detectspriteleavingscreen
 
 //-------------------------------------------------------------------
 // incrementspritexpos
@@ -2816,9 +2951,11 @@ incrementspritexpos:
         sta currentspritexpos
         bcc b1c67
         inc a06
-b1c67:   rts 
+b1c67:
+        rts 
 
-b1c68:  adc currentspritexpos
+b1c68:
+        adc currentspritexpos
         sta currentspritexpos
         lda a06
         adc #$ff
@@ -2840,7 +2977,8 @@ performdetailedupdateforsprite:
         inc f70,x
         bne b1c8c
         inc f71,x
-b1c8c:   pha 
+b1c8c:
+         pha 
         and #$7f
         sta fa4b8,y
         pla 
@@ -2848,12 +2986,14 @@ b1c8c:   pha
         lda #$01
         sta fa4b0,y
         bne b1ca7
-b1c9c:   lda (p70,x)
+b1c9c:
+        lda (p70,x)
         sta fa4b0,y
         inc f70,x
         bne b1ca7
         inc f71,x
-b1ca7:   lda fa4b0,y
+b1ca7:
+        lda fa4b0,y
         sec 
         sbc #$01
         sta fa4b0,y
@@ -2862,7 +3002,8 @@ b1ca7:   lda fa4b0,y
         bne b1cba
         jmp j1db0
 
-b1cba:   and #$0f
+b1cba:
+        and #$0f
         beq b1d31
         and #$01
         beq b1cde
@@ -2878,7 +3019,8 @@ b1cba:   and #$0f
         sta fa4a8,y
         jmp j1cfd
 
-b1cde:   lda a6f
+b1cde:
+        lda a6f
         and #$02
         beq j1cfd
         lda fa4c0,y
@@ -2891,7 +3033,8 @@ b1cde:   lda a6f
         lda fa4a8,y
         adc a67
         sta fa4a8,y
-j1cfd:  lda a6f
+j1cfd:  
+        lda a6f
         and #$04
         beq b1d17
         lda fa4c8,y
@@ -2903,7 +3046,8 @@ j1cfd:  lda a6f
         sta fa4a0,y
         jmp j1db0
 
-b1d17:   lda a6f
+b1d17:
+        lda a6f
         and #$08
 .label p1d1c =*+$01
         beq b1d2e
@@ -2915,18 +3059,22 @@ b1d17:   lda a6f
         lda fa4a0,y
         adc a81
         sta fa4a0,y
-b1d2e:   jmp j1db0
+b1d2e:
+        jmp j1db0
 
-b1d31:   lda a6f
+b1d31:
+        lda a6f
         and #$10
         beq b1d44
         lda fa4e8,y
         cmp #$80
         bne b1d41
         jsr maybefireenemyshipbullet
-b1d41:   jmp j1dcb
+b1d41:
+        jmp j1dcb
 
-b1d44:   lda a6f
+b1d44:
+        lda a6f
         and #$20
         beq b1d5e
         lda #$00
@@ -2937,7 +3085,8 @@ b1d44:   lda a6f
         sta fa4a0,y
         jmp j1dcb
 
-b1d5e:   lda a6f
+b1d5e:
+        lda a6f
         and #$40
         beq j1db0
         lda currentspriteypos
@@ -2949,7 +3098,8 @@ b1d5e:   lda a6f
         bpl b1da8
         cmp #$fc
         bcc j1db0
-b1d77:   lda fa4c8,y
+b1d77:
+        lda fa4c8,y
         clc 
         adc a80
         sta fa4c8,y
@@ -2958,7 +3108,8 @@ b1d77:   lda fa4c8,y
         sta fa4a0,y
         jmp j1db0
 
-b1d8b:   lda fa4a0,y
+b1d8b:
+        lda fa4a0,y
         bmi b1da8
         cmp #$05
         bcs j1db0
@@ -2971,10 +3122,12 @@ b1d8b:   lda fa4a0,y
         sta fa4a0,y
         jmp j1db0
 
-b1da8:   lda #$00
+b1da8:
+        lda #$00
         sta fa4c8,y
         sta fa4a0,y
-j1db0:   lda a62
+j1db0:
+        lda a62
         and #$07
         cmp spriteindex
         bne j1dcb
@@ -2986,7 +3139,8 @@ j1db0:   lda a62
         cmp $d41b    // random number generator
         bcc j1dcb
         jsr maybefireenemyshipbullet
-j1dcb:   lda a06
+j1dcb:
+        lda a06
         ror 
         lda currentspritexpos
         ror 
@@ -2998,7 +3152,8 @@ j1dcb:   lda a06
         bcc b1ddd
         jmp animateenemyships
 
-b1ddd:   sta a0f
+b1ddd:
+        sta a0f
         lda #$80
         sta fa4e8,y
         lda currentspriteypos
@@ -3011,11 +3166,13 @@ b1ddd:   sta a0f
         bcc b1df3
         jmp j1ea2
 
-b1df3:   cmp #$06
+b1df3:
+        cmp #$06
         bcs b1dfa
         jmp j1ea2
 
-b1dfa:   tax 
+b1dfa:
+        tax 
         lda screenlinehiptrarray,x
         sta srchiptr
         lda screenlineloptrarray,x
@@ -3024,7 +3181,8 @@ b1dfa:   tax
         sta srcloptr
         bcc b1e0c
         inc srchiptr
-b1e0c:   ldy #$00
+b1e0c:
+        ldy #$00
         lda (srcloptr),y
         cmp #$20
         bcc b1e2d
@@ -3042,7 +3200,8 @@ b1e0c:   ldy #$00
         bcc b1e2d
         jmp j1ea2
 
-b1e2d:   and #$0f
+b1e2d:
+        and #$0f
         tax 
         lda fa460,x
         beq b1e4b
@@ -3055,11 +3214,13 @@ b1e2d:   and #$0f
         sta (ramloptr),y
         lda #$00
         sta fa460,x
-b1e4b:   lda a68
+b1e4b:
+        lda a68
         bne b1e54
         ldy a7f
         jsr maybeupdateoneuportwouptext
-b1e54:   lda #$26
+b1e54:
+        lda #$26
         sta a92
         ldy a11
         lda #$06
@@ -3084,23 +3245,28 @@ animateenemyships:
         lda #$ff
         sta fa4e8,y
         bne j1ea2
-b1e80:   lda #$00
+b1e80:
+        lda #$00
         sta fa4e8,y
         beq j1ea2
-b1e87:   cmp #$ff
+b1e87:
+        cmp #$ff
         bne b1e93
         lda currentspritexpos
         cmp #$e8
         bcc j1ea2
         bcs b1e99
-b1e93:   lda currentspritexpos
+b1e93:
+        lda currentspritexpos
         cmp #$78
         bcs j1ea2
-b1e99:   lda #$00
+b1e99:
+        lda #$00
         sta currentspritedisplayenable
         sta indextofunctionptrarray,y
         dec a6c
-j1ea2:   jsr updatespritecontentandposition
+j1ea2:
+        jsr updatespritecontentandposition
         rts 
 
 //--------------------------------------------------------------------
@@ -3119,7 +3285,8 @@ detectspriteleavingscreen:
         sta currentspritedisplayenable
         sta indextofunctionptrarray,y
         dec a6c
-b1ebf:  jsr updatespritecontentandposition
+b1ebf:
+        jsr updatespritecontentandposition
         rts 
 
 //--------------------------------------------------------------------
@@ -3138,8 +3305,10 @@ maybeanimateenemybullet:
         lda a3d
         cmp #$14
         bcs b1ee1
-a1edf:   inc a32
-b1ee1:   jmp detectspriteleavingscreen
+a1edf:
+        inc a32
+b1ee1:
+        jmp detectspriteleavingscreen
         // returns
 
 //--------------------------------------------------------------------
@@ -3178,7 +3347,8 @@ calculatespritexypos:
 //-------------------------------------------------------------------
 maybefireenemyshipbullet:
         ldy #$05
-b1f11:   lda indextofunctionptrarray,y
+b1f11:
+        lda indextofunctionptrarray,y
         beq firebulletfromenemyship
         dey 
         bpl b1f11
@@ -3239,7 +3409,8 @@ maybeanimateminecreation:
         sta indextofunctionptrarray,y
         lda #$11
         sta currentspritevalue
-b1f7c:   jmp detectspriteleavingscreen
+b1f7c:
+        jmp detectspriteleavingscreen
 
 //--------------------------------------------------------------------
 // maybelaunchmine   
@@ -3255,24 +3426,28 @@ maybelaunchmine:
         bcc b1f9a
         ldx a54
         bmi b1f9a
-b1f92:   lda $0240,x
+b1f92:
+        lda $0240,x
         bpl launchmine
         dex 
         bpl b1f92
-b1f9a:   rts 
+b1f9a:
+        rts 
 
 //--------------------------------------------------------------------
 // launchmine   
 //--------------------------------------------------------------------
 launchmine:
         ldy #$05
-b1f9d:   lda indextofunctionptrarray,y
+b1f9d:
+        lda indextofunctionptrarray,y
         beq b1fa6
         dey 
         bpl b1f9d
         rts 
 
-b1fa6:   sty spriteindex
+b1fa6:
+        sty spriteindex
         lda #$ff
         sta currentspritedisplayenable
         lda #$1d
@@ -3343,7 +3518,8 @@ animateenemybullet:
         sec 
         rts 
 
-b201f:   clc 
+b201f:
+        clc 
         rts 
 
 //--------------------------------------------------------------------
@@ -3363,15 +3539,19 @@ maybemineexplodes:
         bne b203f
         lda #$0e
         sta a92
-b203f:   jsr animateenemybullet
+b203f:
+        jsr animateenemybullet
         bcc b204c
         lda a3d
         cmp #$14
         bcs b204c
-a204a:   inc a32
-b204c:   jmp detectspriteleavingscreen
+a204a:
+        inc a32
+b204c:
+        jmp detectspriteleavingscreen
 
-b204f:   lda #$14
+b204f:
+        lda #$14
         sta currentspritevalue
         lda #$06
         sta indextofunctionptrarray,y
@@ -3394,10 +3574,12 @@ animateminemovememnt:
         sbc #$01
         jmp j207a
 
-b2074:   lda fa4a0,y
+b2074:
+        lda fa4a0,y
         clc 
         adc #$01
-j207a:   sta fa4a0,y
+j207a:
+        sta fa4a0,y
         lda a06
         and #$01
         bne b208b
@@ -3405,10 +3587,12 @@ j207a:   sta fa4a0,y
         cmp #$aa
         bcc b2091
         bcs b20a5
-b208b:   lda currentspritexpos
+b208b:
+        lda currentspritexpos
         cmp #$a0
         bcc b20a5
-b2091:   lda fa498,y
+b2091:
+        lda fa498,y
         clc 
         adc #$01
         sta fa498,y
@@ -3417,33 +3601,39 @@ b2091:   lda fa498,y
         sta fa4a8,y
         jmp j20b6
 
-b20a5:   lda fa498,y
+b20a5:
+        lda fa498,y
         clc 
         adc #$ff
         sta fa498,y
         lda fa4a8,y
         adc #$ff
         sta fa4a8,y
-j20b6:   bpl b20de
+j20b6:
+        bpl b20de
         lda fa498,y
         cmp #$fa
         bcs b20c4
         lda #$fa
         sta fa498,y
-b20c4:   lda fa4a0,y
+b20c4:
+        lda fa4a0,y
         bpl b20d3
         cmp #$fc
         bcs b20d2
         lda #$fc
         sta fa4a0,y
-b20d2:   rts 
+b20d2:
+        rts 
 
-b20d3:   cmp #$04
+b20d3:
+        cmp #$04
         bcc b20d2
         lda #$04
         sta fa4a0,y
         bne b20d2
-b20de:   lda fa498,y
+b20de:
+        lda fa498,y
         cmp #$06
         bcc b20c4
         lda #$06
@@ -3507,7 +3697,8 @@ titlescreenwaitforfiretobepressed:
         sta a59
         lda #$00
         sta a62
-b2158:  jsr getjoystickinput
+b2158:
+        jsr getjoystickinput
         jsr domorewithjoystickinput
         jsr updatevolumesetting
         jsr maybechangetitledecal
@@ -3522,7 +3713,8 @@ b2158:  jsr getjoystickinput
         bne b2158
         dec a59
         bne b2158
-b217d:   rts 
+b217d:
+        rts 
 
 //-------------------------------------------------------------------
 // showlargescrollingcreditandhiscore
@@ -3530,7 +3722,8 @@ b217d:   rts
 showlargescrollingcreditandhiscore:
         lda #$00
         sta a62
-b2182:   lda shouldwaituntilready
+b2182:
+        lda shouldwaituntilready
         bne b2182
         jsr s2b40
         jsr scrollshipsurface
@@ -3550,7 +3743,8 @@ b2182:   lda shouldwaituntilready
         bcc b2182
         lda a29
         bpl b2182
-b21b4:   rts 
+b21b4:
+        rts 
 
 //-------------------------------------------------------------------
 // enterdemomodeuntildeadorplayerpressesfire
@@ -3596,11 +3790,13 @@ enterdemomodeuntildeadorplayerpressesfire:
         lda #$ff
         sta currentcolorvalue
         ldy #$07
-b220d:   lda f32ed,y
+b220d:
+        lda f32ed,y
         sta .a f0035,y
         dey 
         bpl b220d
-b2216:   lda shouldwaituntilready
+b2216:
+        lda shouldwaituntilready
         bne b2216
         jsr s2a17
         jsr s2b40
@@ -3627,6 +3823,7 @@ b2216:   lda shouldwaituntilready
 
 .label a2254 =*+$01
 .label a2255 =*+$02
+
         jsr maybechangetitledecal
         jsr randomlymanipulatejoystick
         jsr maybefirebullets
@@ -3643,9 +3840,11 @@ b2216:   lda shouldwaituntilready
         lda #$10
         sta firepressed
         jsr generaterandomdatafromrng
-b227b:   rts 
+b227b:
+        rts 
 
-b227c:   lda #$10
+b227c:
+        lda #$10
         sta firepressed
         jsr shiphasbeenhit
         jsr generaterandomdatafromrng
@@ -3664,7 +3863,8 @@ randomlymanipulatejoystick:
         eor #$10
         sta firepressed
         sta a8e
-b229a:   lda a5e
+b229a:
+        lda a5e
         sta a16
         lda $d41b    // random number generator
         cmp #$b4
@@ -3677,9 +3877,11 @@ b229a:   lda a5e
         bcc b22b2
         dey 
         dey 
-b22b2:   sty a16
+b22b2:
+        sty a16
         sty a5e
-b22b6:   lda a5f
+b22b6:
+        lda a5f
         sta a17
         lda $d41b    // random number generator
         cmp #$b4
@@ -3692,9 +3894,11 @@ b22b6:   lda a5f
         bcc b22ce
         dey 
         dey 
-b22ce:   sty a17
+b22ce:
+        sty a17
         sty a5f
-b22d2:   rts 
+b22d2:
+        rts 
 
 //-------------------------------------------------------------------
 // maybechangetitledecal
@@ -3721,7 +3925,8 @@ maybechangetitledecal:
         lda a5a
         cmp #$02
         beq b2335
-b22fc:   lda a5c
+b22fc:
+        lda a5c
         tay 
         lda scrollingtitlescreendatahiptrarray,y
         ldx scrollingtitlescreendataloptrarray,y
@@ -3735,28 +3940,34 @@ b22fc:   lda a5c
         jsr writetoscreen
         rts 
 
-b2315:   ldx #<arrowkeyssymbol
+b2315:
+        ldx #<arrowkeyssymbol
         ldy #>arrowkeyssymbol
         jsr writetoscreen
-b231c:   rts 
+b231c:
+        rts 
 
-b231d:   ldx #$f9
+b231d:
+        ldx #$f9
         ldy #$34
 .label p2322 =*+$01
         jsr writetoscreen
         rts 
 
-b2325:   ldx #<hiscorelabel
+b2325:
+        ldx #<hiscorelabel
         ldy #>hiscorelabel
         jsr writetoscreen
         rts 
 
-b232d:   ldx #<ingamebanner
+b232d:
+        ldx #<ingamebanner
         ldy #>ingamebanner
         jsr writetoscreen
         rts 
 
-b2335:   ldy indextocurrentleveltexturedata
+b2335:
+        ldy indextocurrentleveltexturedata
         ldx $e050,y
         lda $e060,y
         tay 
@@ -3776,7 +3987,8 @@ updateplayerandjoystickdisplay:
         beq b237b
         rts 
 
-b2351:   ldx #<$dc00
+b2351:
+        ldx #<$dc00
         ldy #>$dc00
         stx joystick1loptr
         sty joystick1hiptr
@@ -3791,19 +4003,22 @@ b2351:   ldx #<$dc00
         ldx #<player1symbol
         ldy #>player1symbol
         jsr writetoscreen
-j2374:   lda a5b
+j2374:
+        lda a5b
         cmp #$03
         beq b22fc
         rts 
 
-b237b:   lda #$00
+b237b:
+        lda #$00
         sta a5c
         ldx #<player2symbol
         ldy #>player2symbol
         jsr writetoscreen
         jmp j2374
 
-b2389:   lda #$01
+b2389:
+        lda #$01
         sta a5c
         ldx #<playerandjoysticksymbol
         ldy #>playerandjoysticksymbol
@@ -3827,7 +4042,8 @@ write21linesofaccumulatorvaltoscreen:
 //-------------------------------------------------------------------
 writesourcevaluetoram:
         sty initialvalueofy
-b23a7:   ldy initialvalueofy
+b23a7:
+        ldy initialvalueofy
         lda (srcloptr),y
         ldx #$01
         jsr writetoram
@@ -3855,9 +4071,11 @@ maybeupdatecolorscheme:
         bne b23d6
         jmp b22fc
 
-b23d6:   rts 
+b23d6:
+        rts 
 
-b23d7:   ldx #<blckwhitelabel
+b23d7:
+        ldx #<blckwhitelabel
         ldy #>blckwhitelabel
         jsr writetoscreen
         lda #$ff
@@ -3883,7 +4101,8 @@ paintplayerscorecolors:
         sta color_ram + $0083
         rts 
 
-b2402:   lda #$f2
+b2402:
+        lda #$f2
         sta color_ram + $005a
         sta color_ram + $005b
         lda #<$f6f5
@@ -3899,7 +4118,8 @@ setupsomedata:
         ldx #$00
         stx a10
         stx a11
-b241b:   ldy f349f,x
+b241b:
+        ldy f349f,x
         bmi b244d
         lda pc000,y
         clc 
@@ -3910,11 +4130,13 @@ b241b:   ldy f349f,x
         sta srchiptr
         ldy #$00
         ldx a11
-b2432:   lda (srcloptr),y
+b2432:
+        lda (srcloptr),y
         beq b243a
         sta f8010,x
         inx 
-b243a:   iny 
+b243a:
+        iny 
         cpy #$04
         bcc b2432
         lda #$01
@@ -3925,10 +4147,12 @@ b243a:   iny
         ldx a10
         bpl b241b
 
-b244d:   ldx a11
+b244d:
+        ldx a11
         ldy #$03
         lda #$00
-b2453:   sta f8010,x
+b2453:
+        sta f8010,x
         inx 
         dey 
         bpl b2453
@@ -3958,11 +4182,13 @@ shiphasbeenhit:
         lda a33
         sta currentspriteypos
         jsr updatespritecontentandposition
-j2488:   lda a32
+j2488:
+        lda a32
         bpl b2490
         lda #$00
         sta a2e
-b2490:   lda a59
+b2490:
+        lda a59
         bmi b24bf
         lda #$07
         sta spriteindex
@@ -3985,18 +4211,21 @@ b2490:   lda a59
         adc currentspriteypos
         sta currentspriteypos
         jsr updatespritesizecolorandpriority
-b24bf:   jsr processgameframewithoutcheckingpause
+b24bf:
+        jsr processgameframewithoutcheckingpause
 
         lda #$07
         sta spriteindex
-b24c6:   jsr storeshipspritestate
+b24c6:
+        jsr storeshipspritestate
         inc currentspritevalue
         lda currentspritevalue
         cmp #$3b
         bcc b24d5
         lda #$00
         sta currentspritedisplayenable
-b24d5:   jsr updatespritesizecolorandpriority
+b24d5:
+        jsr updatespritesizecolorandpriority
         dec spriteindex
         bpl b24c6
 
@@ -4015,30 +4244,37 @@ b24d5:   jsr updatespritesizecolorandpriority
         sta a2e
         jmp j2508
 
-b24f8:   clc 
+b24f8:
+        clc 
         lda a2d
         adc #$80
         sta a2d
         bcc b2503
         inc a2e
-b2503:   jmp j2508
+b2503:
+        jmp j2508
 
-b2506:   sta a2d
-j2508:   lda a5a
+b2506:
+        sta a2d
+j2508:
+        lda a5a
         cmp #$02
         beq b2515
         lda firepressed
         beq b2523
         jmp j2518
 
-b2515:   jsr updateplayerscore
-j2518:   dec a59                //DIFF $8f
+b2515:
+        jsr updateplayerscore
+j2518:
+        dec a59                //DIFF $8f
         lda a59                 //DIFF $8f
         cmp #$f0
         beq b2523
         jmp j2488
 
-b2523:   rts 
+b2523:
+        rts 
 
 //--------------------------------------------------------------------
 // updatecurrentcolorvalue   
@@ -4071,7 +4307,8 @@ generatestarfield:
         sta ramloptr
         bcc b254c
         inc ramhiptr
-b254c:   jsr writestufftoscreen
+b254c:
+        jsr writestufftoscreen
         ldx #<screen_ram_hibank + $0398
         ldy #>screen_ram_hibank + $0398
         stx ramloptr
@@ -4083,11 +4320,13 @@ b254c:   jsr writestufftoscreen
         sta ramloptr
         bcc b2565
         inc ramhiptr
-b2565:   jsr writestufftoscreen
+b2565:
+        jsr writestufftoscreen
 
         ldy #$05
         lda #$20
-b256c:   sta screen_ram_hibank + $03ac,y
+b256c:
+        sta screen_ram_hibank + $03ac,y
         sta screen_ram_hibank + $03d4,y
         dey 
         bpl b256c
@@ -4096,10 +4335,11 @@ b256c:   sta screen_ram_hibank + $03ac,y
 //-------------------------------------------------------------------
 // s2576
 //-------------------------------------------------------------------
-s2576:   
+s2576:
         lda a49
         beq b25b0
-b257a:   lda a16
+b257a:
+        lda a16
         beq b259e
         bmi b258f
         inc a34
@@ -4109,9 +4349,11 @@ b257a:   lda a16
         bcc b258e
         lda a36
         sta a34
-b258e:   rts 
+b258e:
+        rts 
 
-b258f:   dec a34
+b258f:
+        dec a34
         lda a34
         bpl b258e
         cmp a35
@@ -4120,7 +4362,8 @@ b258f:   dec a34
         sta a34
         rts 
 
-b259e:  lda a34
+b259e:
+        lda a34
         cmp #$ff
         beq b25ab
         rol 
@@ -4129,16 +4372,19 @@ b259e:  lda a34
         sta a34
         rts 
 
-b25ab:   lda #$00
+b25ab:
+        lda #$00
         sta a34
         rts 
 
-b25b0:   lda a16
+b25b0:
+        lda a16
         bne b25b9
         inc a49
         jmp b259e
 
-b25b9:   lda a3f
+b25b9:
+        lda a3f
         bne b257a
         lda a45
         bmi b257a
@@ -4153,13 +4399,15 @@ b25b9:   lda a3f
         lda a3e
         cmp #$03
         bcc b257a
-b25d6:   lda a45
+b25d6:
+        lda a45
         and #$fc
         ora a0f
         sta a46
         rts 
 
-b25df:   lda #$81
+b25df:
+        lda #$81
         sta a0f
         bne b25d6
         // never falls through
@@ -4177,7 +4425,8 @@ copyshipspritestop5c00:
         stx ramloptr
         sty ramhiptr
         ldy #$00
-b25f7:   lda (srcloptr),y
+b25f7:
+        lda (srcloptr),y
         and #$aa
         lsr 
         sta a0f
@@ -4199,7 +4448,7 @@ b25f7:   lda (srcloptr),y
 //--------------------------------------------------------------------
 // b2617   
 //--------------------------------------------------------------------
-b2617:   
+b2617:
         bmi b2627
         clc 
         adc a2d
@@ -4209,7 +4458,8 @@ b2617:
         bmi b2650
         jmp j2679
 
-b2627:   clc 
+b2627:
+        clc 
         adc a2d
         sta a2d
         lda a2e
@@ -4220,7 +4470,7 @@ b2627:   clc
 //-------------------------------------------------------------------
 // s2635
 //-------------------------------------------------------------------
-s2635:   
+s2635:
         lda a3f
         bne b2617
         lda a45
@@ -4235,14 +4485,17 @@ s2635:
         sta a2d
         lda a2e
         adc #$ff
-b2650:   sta a2e
+b2650:
+        sta a2e
         eor #$ff
         clc 
         adc #$01
         sta a3e
-b2659:   rts 
+b2659:
+        rts 
 
-b265a:   lda a2d
+b265a:
+        lda a2d
         clc 
         adc a3a
         sta a2d
@@ -4250,7 +4503,8 @@ b265a:   lda a2d
         adc #$00
         jmp b2650
 
-b2668:   lda a17
+b2668:
+        lda a17
         beq b2659
         bpl b267e
         lda a2d
@@ -4268,7 +4522,8 @@ j2679:
         sta a3e
         rts 
 
-b267e:   lda a2d
+b267e:
+        lda a2d
         clc 
         adc a3c
         sta a2d
@@ -4286,7 +4541,8 @@ s268c:
         cmp #$62
         bcs b2697
         lda #$62
-b2697:   cmp #$d7
+b2697:
+        cmp #$d7
         bcc b269d
         lda #$d7
 b269d:   sta a33
@@ -4296,7 +4552,8 @@ b269d:   sta a33
         bcc b26ab
         lda a38
         sta a2e
-b26ab:  lda a45
+b26ab:
+        lda a45
         bmi b26eb
         lda a2a
         bne b26ba
@@ -4304,23 +4561,28 @@ b26ab:  lda a45
         sta a3f
         jmp b26eb
 
-b26ba:   cmp #$0e
+b26ba:
+        cmp #$0e
         bcc b26eb
         lda a29
         bpl b26eb
-b26c2:   lda a45
+b26c2:
+        lda a45
         ora #$80
         sta a46
         jmp b26eb
 
-b26cb:   lda a29
+b26cb:
+        lda a29
         bmi b26eb
         bpl b26c2
-b26d1:   cmp a37
+b26d1:
+        cmp a37
         bcs b26d9
         lda a37
         sta a2e
-b26d9:   lda a45
+b26d9:
+        lda a45
         bmi b26eb
         lda a2a
         bmi b26eb
@@ -4329,7 +4591,8 @@ b26d9:   lda a45
         bcc b26eb
         lda #$38
         sta a3f
-b26eb:   lda a3e
+b26eb:
+        lda a3e
         cmp #$03
         bcs b26ff
         cmp #$02
@@ -4339,9 +4602,11 @@ b26eb:   lda a3e
         eor #$04
         ora #$80
         sta a46
-b26ff:   rts 
+b26ff:
+        rts 
 
-b2700:  lda a45
+b2700:
+        lda a45
         bmi b26ff
         and #$03
         cmp #$01
@@ -4375,7 +4640,8 @@ s2713:
         sta spritevalueloptr
         lda spritevalueoffsethiptrarray,x
         sta spritevaluehiptr
-j2737:   ldy #$00
+j2737:
+        ldy #$00
         lda (spritevalueloptr),y
         sta offsetinspritevaluearray
         tay 
@@ -4385,16 +4651,19 @@ j2737:   ldy #$00
         bne b2749
         lda a3f
         bne b274e
-b2749:   iny 
+b2749:
+        iny 
         lda (spritevalueloptr),y
         sta a3f
-b274e:   lda a46
+b274e:
+        lda a46
         sta a45
         lda #$00
         sta a46
         rts 
 
-b2757:   lda a45
+b2757:
+        lda a45
         asl 
         asl 
         asl 
@@ -4410,11 +4679,13 @@ b2757:   lda a45
         sta spritevaluehiptr
         jmp j2737
 
-b2774:   lda a45
+b2774:
+        lda a45
         bmi b277b
         jmp j27a3
 
-b277b:   lda a62
+b277b:
+        lda a62
         and #$01
         bne j27a3
         ldy offsetinspritevaluearray
@@ -4426,7 +4697,8 @@ b277b:   lda a62
         clc 
         adc a3d
         sta a3d
-b2793:   dec offsetinspritevaluearray
+b2793:
+        dec offsetinspritevaluearray
         bne j27a3
         lda a45
         and #$7f
@@ -4434,7 +4706,8 @@ b2793:   dec offsetinspritevaluearray
         lda #$00
         sta a3f
         sta a47
-j27a3:   lda #$06
+j27a3:
+        lda #$06
         sta spriteindex
         jsr storespritecontentcolorandposition
         lda newspritevalue
@@ -4478,7 +4751,8 @@ s27d5:
 .label a27ec =*+$01
         lda #$80
         sta a32
-b27ef:   ldy #$02
+b27ef:
+        ldy #$02
         lda (p52),y
         bpl b27fd
         cmp #$90
@@ -4486,7 +4760,8 @@ b27ef:   ldy #$02
 .label a27fa =*+$01
         lda #$80
         sta a32
-b27fd:   ldy #$01
+b27fd:
+        ldy #$01
         lda (p52),y
         sta a86
         bpl b280d
@@ -4495,7 +4770,8 @@ b27fd:   ldy #$01
 .label a280a =*+$01
         lda #$80
         sta a32
-b280d:   lda a56
+b280d:
+        lda a56
         bpl b2838
         dec a53
         dec a53
@@ -4506,7 +4782,8 @@ b280d:   lda a56
 .label a281e =*+$01
         lda #$80
         sta a32
-b2821:   lda a53
+b2821:
+        lda a53
         clc 
         adc #$04
         sta a53
@@ -4517,9 +4794,11 @@ b2821:   lda a53
 .label a2831 =*+$01
         lda #$80
         sta a32
-b2834:   dec a53
+b2834:
         dec a53
-b2838:   rts 
+        dec a53
+b2838:
+        rts 
 
 //-------------------------------------------------------------------
 // playshipdeploymentsequence
@@ -4527,7 +4806,8 @@ b2838:   rts
 playshipdeploymentsequence:
         jsr checkinputduringdeploymentsequence
         ldx #$07
-b283e:  lda f3306,x
+b283e:
+        lda f3306,x
         sta srcloptr
         lda f3310,x
         sta srchiptr
@@ -4537,12 +4817,14 @@ b283e:  lda f3306,x
         bpl b283e
         lda #$10
         sta a59
-b2855:   jsr checkinputduringdeploymentsequence
+b2855:
+        jsr checkinputduringdeploymentsequence
         dec a59
         bne b2855
         lda #$06
         sta a91
-b2860:   lda #$06
+b2860:
+        lda #$06
         sta spriteindex
         jsr storespritecontentcolorandposition
         inc currentspritevalue
@@ -4561,7 +4843,8 @@ b2860:   lda #$06
         jsr updatespriteindicesandthenredrawsprites
         lda #$07
         sta a92
-b288f:   lda #$06
+b288f:
+        lda #$06
         sta spriteindex
         jsr storespritecontentcolorandposition
         inc currentspritexpos
@@ -4579,7 +4862,8 @@ b288f:   lda #$06
         sta a91
         sta a92
         sta a93
-b28b8:   lda #$80
+b28b8:
+        lda #$80
         clc 
         adc spritevalueloptr
         sta spritevalueloptr
@@ -4600,7 +4884,8 @@ b28b8:   lda #$80
 
         lda #$05
         sta spriteindex
-b28e0:   jsr storespritecontentcolorandposition
+b28e0:
+        jsr storespritecontentcolorandposition
         lda currentspritexpos
         clc 
         adc spritevaluehiptr
@@ -4638,7 +4923,8 @@ checkinputduringdeploymentsequence:
         jsr domorewithjoystickinput
         jsr maybechangetitledecal
         inc a62
-b292a:   lda shouldwaituntilready
+b292a:
+        lda shouldwaituntilready
         beq b292a
         rts 
 
@@ -4656,15 +4942,18 @@ maybefirebullets:
         bne b2942
         sta a48
         jsr firebullets
-b2942:   rts 
+b2942:
+        rts 
 
-b2943:   lda firepressed
+b2943:
+        lda firepressed
         beq b294d
         inc a48
         jsr firebullets
         rts 
 
-b294d:   lda a49
+b294d:
+        lda a49
         bmi b2942
         dec a49
         rts 
@@ -4705,7 +4994,8 @@ firebullets:
         jsr getfreeslotforbullets
         bcs b2993
         jsr updatebulletarrays
-b2993:   rts 
+b2993:
+        rts 
 
 //-------------------------------------------------------------------
 // getfreeslotforbullets
@@ -4718,7 +5008,8 @@ getfreeslotforbullets:
         bcc getfreeslotforbullets
         rts 
 
-b299f:   clc 
+b299f:
+        clc 
         rts 
 
 //-------------------------------------------------------------------
@@ -4741,7 +5032,8 @@ updatebulletarrays:
         cmp #$07
         bne b29c3
         lda #$06
-b29c3:   sta fa470,x
+b29c3:
+        sta fa470,x
         lda a0f
         lsr 
         lsr 
@@ -4756,7 +5048,8 @@ b29c3:   sta fa470,x
         sta a13
         jmp j2a0f
 
-b29df:   sta fa460,x
+b29df:
+        sta fa460,x
         clc 
         adc a52
         sta fa430,x
@@ -4767,7 +5060,8 @@ b29df:   sta fa460,x
         cmp #$07
         bne b29f5
         lda #$06
-b29f5:   sta fa470,x
+b29f5:
+        sta fa470,x
         lda a0f
         lsr 
         lsr 
@@ -4781,7 +5075,8 @@ b29f5:   sta fa470,x
         adc #$82
         sta fa440,x
         sta a13
-j2a0f:   ldy #$00
+j2a0f:
+        ldy #$00
         lda (p12),y
         sta fa450,x
         rts 
@@ -4792,7 +5087,8 @@ j2a0f:   ldy #$00
 s2a17:
         ldy #$00
         ldx #$05
-b2a1b:   lda fa460,x
+b2a1b:
+        lda fa460,x
         beq b2a2f
         lda fa430,x
         sta ramloptr
@@ -4800,11 +5096,13 @@ b2a1b:   lda fa460,x
         sta ramhiptr
         lda fa450,x
         sta (ramloptr),y
-b2a2f:   dex 
+b2a2f:
+        dex 
         bpl b2a1b
 
         inx 
-b2a33:   lda fa460,x
+b2a33:
+        lda fa460,x
         beq b2aa3
         jsr s2ac9
         sta fa440,x
@@ -4825,7 +5123,8 @@ b2a33:   lda fa460,x
         jsr s2ae9
         jmp b2abd
 
-b2a5e:   sta fa450,x
+b2a5e:
+        sta fa450,x
         sty a2a8a
         asl 
         rol a2a8a
@@ -4846,7 +5145,8 @@ b2a5e:   sta fa450,x
         ldy #$07
 .label a2a89   =*+$01
 .label a2a8a   =*+$02        
-b2a88:  lda surfacetexturecharacterset,y
+b2a88:
+        lda surfacetexturecharacterset,y
         sta (somedataloptr),y
         dey 
         bpl b2a88
@@ -4861,7 +5161,8 @@ b2a88:  lda surfacetexturecharacterset,y
 .label a2aa0 =*+$01
         ora #$10
         sta (ramloptr),y
-b2aa3:   inx 
+b2aa3:
+        inx 
         cpx #$06
         bcc b2a33
         lda a2a7f
@@ -4872,9 +5173,11 @@ b2aa3:   inx
         sta a2aa0
         rts 
 
-b2ab9:   lda #$21
+b2ab9:
+        lda #$21
         sta a91
-b2abd:   lda fa460,x
+b2abd:
+        lda fa460,x
         beq b2aa3
         lda #$00
         sta fa460,x
@@ -4894,7 +5197,8 @@ s2ac9:
         adc #$00
         rts 
 
-b2ada:   clc 
+b2ada:
+        clc 
         adc fa430,x
         sta fa430,x
         sta ramloptr
@@ -4924,8 +5228,10 @@ s2ae9:
         ldx a10
         lda #$1b
         sta a92
-j2b11:   ldy a11
-b2b13:   lda (srcloptr),y
+j2b11:
+        ldy a11
+b2b13:
+        lda (srcloptr),y
         cmp #$20
         bcc b2b33
         cmp #$f0
@@ -4933,7 +5239,8 @@ b2b13:   lda (srcloptr),y
         sec 
         sbc #$20
         sta (srcloptr),y
-b2b22:   dey 
+b2b22:
+        dey 
         bpl b2b13
         dec initialvalueofy
         bmi b2b30
@@ -4941,10 +5248,12 @@ b2b22:   dey
         inc srchiptr
         jmp j2b11
 
-b2b30:   ldy #$00
+b2b30:
+        ldy #$00
         rts 
 
-b2b33:   stx a10
+b2b33:
+        stx a10
         tax 
         lda #$00
         sta fa460,x
@@ -4965,14 +5274,16 @@ s2b40:
         lda a2a
         sbc #$ff
         sta a2a
-b2b53:   lda #$08
+b2b53:
+        lda #$08
         sec 
         sbc a29
         and #$07
         sta multicolormodeenabled
         rts 
 
-b2b5d:   lda a29
+b2b5d:
+        lda a29
         sec 
         sbc a2e
         sta a29
@@ -4996,7 +5307,8 @@ maybeshowpausescreen:
         sta a90
         lda #$03
         sta a5a
-b2b85:   ldy #$1c
+b2b85:
+        ldy #$1c
         jsr wastecyclesusingxandy
         jsr checkifpauseorfirehasbeenpressed
         lda a60
@@ -5006,7 +5318,8 @@ b2b85:   ldy #$1c
         sta a2b
         lda #$00
         sta a62
-j2b9b:   jsr checkifpauseorfirehasbeenpressed
+j2b9b:
+        jsr checkifpauseorfirehasbeenpressed
         lda a60
         and #$08
         beq b2bbf
@@ -5061,7 +5374,7 @@ exitpausescreen:
 //-------------------------------------------------------------------
 // scrollshipsurface
 //-------------------------------------------------------------------
-scrollshipsurface:   
+scrollshipsurface:
         lda a29
         clc 
         adc #$07
@@ -5088,10 +5401,12 @@ scrollshipsurface:
         sta a2c23
 
         ldx #$11
-b2c1d:   ldy #$26
+b2c1d:
+        ldy #$26
 .label a2c20 =*+$01
 .label a2c21 =*+$02
-b2c1f:   lda surfaceforcurrentlevel,y
+b2c1f:
+        lda surfaceforcurrentlevel,y
 .label a2c23 =*+$01
 .label a2c24 =*+$02
         sta screen_ram_hibank + $00f0,y
@@ -5109,7 +5424,8 @@ b2c1f:   lda surfaceforcurrentlevel,y
         inc a2c24
         jmp b2c1d
 
-b2c42:   lda a31
+b2c42:
+        lda a31
         clc 
         adc #$12
         sta a52
@@ -5148,7 +5464,8 @@ updatepositionofpointerstotexturedata:
         sty srchiptr
 
         ldx #$01
-b2c70:   ldy #$00
+b2c70:
+        ldy #$00
         sty newvalueofsrcloptr
         lda srcloptr
         sta anotherdataloptrarray,x
@@ -5160,7 +5477,8 @@ b2c70:   ldy #$00
         beq b2ca4
         sta initialvalueofy
         inc newvalueofsrcloptr
-b2c89:   ldy newvalueofsrcloptr
+b2c89:
+        ldy newvalueofsrcloptr
         lda (srcloptr),y
         sec 
         adc newvalueofsrcloptr
@@ -5175,7 +5493,8 @@ b2c89:   ldy newvalueofsrcloptr
         inc srchiptr
         jmp b2c70
 
-b2ca4:   rts 
+b2ca4:
+        rts 
 
 //-------------------------------------------------------------------
 // clearanotherdataptrarray
@@ -5183,7 +5502,8 @@ b2ca4:   rts
 clearanotherdataptrarray:
         lda #$00
         tay 
-b2ca8:  sta anotherdataloptrarray,y
+b2ca8:
+        sta anotherdataloptrarray,y
         sta anotherdatahiptrarray,y
         iny 
         bne b2ca8
@@ -5208,9 +5528,11 @@ updatetexturedataforcurrentship:
         sta somedatahiptr
         lda #<endofsurfacedataforcurrentlevel
         sta somedataloptr
-b2ccd:   ldy #$3f
+b2ccd:
+        ldy #$3f
         lda #$20
-b2cd1:   sta (somedataloptr),y
+b2cd1:
+        sta (somedataloptr),y
         dey 
         bpl b2cd1
         dec somedatahiptr
@@ -5223,7 +5545,8 @@ b2cd1:   sta (somedataloptr),y
         ldy #>pa240
         stx somedataloptr
         sty somedatahiptr
-b2ce8:   ldy #$00
+b2ce8:
+        ldy #$00
         lda (p12),y
         beq b2d57
         tax 
@@ -5237,10 +5560,12 @@ b2ce8:   ldy #$00
         sta a12
         bcc b2d04
         inc a13
-b2d04:   lda (srcloptr),y
+b2d04:
+        lda (srcloptr),y
         iny 
         sta initialvalueofy
-b2d09:   lda somedataloptr
+b2d09:
+        lda somedataloptr
         sta ramloptr
         lda somedatahiptr
         sta ramhiptr
@@ -5248,7 +5573,8 @@ b2d09:   lda somedataloptr
         iny 
         and #$1f
         tax 
-b2d17:   lda (srcloptr),y
+b2d17:
+        lda (srcloptr),y
         iny 
         sty a11
         ldy #$00
@@ -5260,7 +5586,8 @@ b2d17:   lda (srcloptr),y
         bne b2d17
 
         // clear more data down again with $20.
-j2d29:   lda ramhiptr
+j2d29:
+        lda ramhiptr
         cmp #>surfaceforcurrentlevel
         bcc b2d40
         sty a11
@@ -5272,33 +5599,38 @@ j2d29:   lda ramhiptr
         dec ramhiptr
         jmp j2d29
 
-b2d40:   clc 
+b2d40:
+        clc 
         lda somedataloptr
         adc #$01
         sta somedataloptr
         bcc b2d4b
         inc somedatahiptr
-b2d4b:   lda somedatahiptr
+b2d4b:
+        lda somedatahiptr
         cmp #$a4
         bcs b2d66
         dec initialvalueofy
         bne b2d09
         beq b2ce8
-b2d57:   lda aa401
+b2d57:
+        lda aa401
         sta srcloptr
         lda aa501
         sta srchiptr
         ldy #$00
         jmp b2d04
 
-b2d66:   ldy #$00
+b2d66:
+        ldy #$00
         clc 
         lda a12
         adc #$01
         sta a12
         bcc b2d73
         inc a13
-b2d73:   lda (p12),y
+b2d73:
+        lda (p12),y
         ora #$80
         and #$bf
         sta somedatahiptr
@@ -5321,11 +5653,13 @@ b2d73:   lda (p12),y
         sta a12
         bcc b2d9f
         inc a13
-b2d9f:   ldy #$00
+b2d9f:
+        ldy #$00
         lda (srcloptr),y
         iny 
         sta initialvalueofy
-b2da6:   lda somedataloptr
+b2da6:
+        lda somedataloptr
         sta ramloptr
         lda somedatahiptr
         sta ramhiptr
@@ -5335,14 +5669,16 @@ b2da6:   lda somedataloptr
         tax 
 
         // main loop for populating the surface data.
-b2db4:   lda (srcloptr),y
+b2db4:
+        lda (srcloptr),y
         iny 
         sty a11
         ldy #$00
         cmp #$20
         beq b2dc1
         sta (ramloptr),y
-b2dc1:   jsr s2de4
+b2dc1:
+        jsr s2de4
         ldy a11
         dec ramhiptr
         dec ramhiptr
@@ -5356,17 +5692,19 @@ b2dc1:   jsr s2de4
         sta somedataloptr
         bcc b2dda
         inc somedatahiptr
-b2dda:   dec initialvalueofy
+b2dda:
+        dec initialvalueofy
         bne b2da6
         ldy #$00
         jmp b2d73
 
-b2de3:   rts 
+b2de3:
+        rts 
 
 //-------------------------------------------------------------------
 // s2de4
 //-------------------------------------------------------------------
-s2de4:   
+s2de4:
         cmp #$59
         bcc b2e16
         cmp #$5c
@@ -5392,22 +5730,25 @@ s2de4:
         sta $0200,y
         lda #$ff
         sta $0240,y
-b2e16:   rts 
+b2e16:
+        rts 
 
 //-------------------------------------------------------------------
 // s2e17
 //-------------------------------------------------------------------
-s2e17:   
+s2e17:
         ldy #$18
         lda #$01
-b2e1b:   sta fa518,y
+b2e1b:
+        sta fa518,y
         dey 
         cpy #$14
         bcs b2e1b
         ldy #$0f
         lda #$00
         sta a10
-b2e29:   ldx a10
+b2e29:
+        ldx a10
         lda randomdatastorage,x
         inc a10
         and #$0f
@@ -5417,7 +5758,8 @@ b2e29:   ldx a10
         lda anotherdatahiptrarray,x
         beq b2e3e
         jsr s2ea5
-b2e3e:   lda screenlinehiptrarray,x
+b2e3e:
+        lda screenlinehiptrarray,x
         sta somedatahiptrarray,y
         lda screenlineloptrarray,x
         sta somedataloptrarray,y
@@ -5431,11 +5773,13 @@ b2e3e:   lda screenlinehiptrarray,x
         cmp #$14
         bcc b2e62
         adc #$04
-b2e62:   tax 
+b2e62:
+        tax 
         lda fa518,x
         beq b2e6b
         jsr s2ebe
-b2e6b:   inc fa518,x
+b2e6b:
+        inc fa518,x
         txa 
         clc 
         adc somedataloptrarray,y
@@ -5459,7 +5803,8 @@ b2e6b:   inc fa518,x
         bpl b2e29
         lda #$00
         ldy #$40
-b2e9e:   sta anotherdatahiptrarray,y
+b2e9e:
+        sta anotherdatahiptrarray,y
         dey 
         bpl b2e9e
         rts 
@@ -5471,18 +5816,21 @@ b2e9e:   sta anotherdatahiptrarray,y
 s2ea5:
         lda indextotexturesegment
         sta initialvalueofindextotexturesegment
-b2ea9:  txa 
+b2ea9:
+        txa 
         clc 
         adc #$07
         cmp #$17
         bcc b2eb3
         sbc #$10
-b2eb3:   tax 
+b2eb3:
+        tax 
         dec initialvalueofindextotexturesegment
         beq b2ebd
         lda anotherdatahiptrarray,x
         bne b2ea9
-b2ebd:   rts 
+b2ebd:
+        rts 
 
 //-------------------------------------------------------------------
 // s2ebe
@@ -5490,25 +5838,29 @@ b2ebd:   rts
 s2ebe:
         lda indextotexturesegment
         sta initialvalueofindextotexturesegment
-b2ec2:   txa 
+b2ec2:
+        txa 
         clc 
         adc #$07
         cmp #$27
         bcc b2ecc
         sbc #$27
-b2ecc:   tax 
+b2ecc:
+        tax 
         dec initialvalueofindextotexturesegment
         beq b2ed6
         lda fa518,x
         bne b2ec2
-b2ed6:   rts 
+b2ed6:
+        rts 
 
 //-------------------------------------------------------------------
 // s2ed7
 //-------------------------------------------------------------------
 s2ed7:
         ldx indextotexturesegment
-b2ed9:   lda somedatahiptrarray,x
+b2ed9:
+        lda somedatahiptrarray,x
         sta somedatahiptr
         lda somedataloptrarray,x
         sta somedataloptr
@@ -5521,7 +5873,8 @@ b2ed9:   lda somedatahiptrarray,x
         lda fa480,x
         sta somedatahiptr
         lda a58
-j2ef7:   sta (somedataloptr),y
+j2ef7:
+        sta (somedataloptr),y
         dex 
         bpl b2ed9
 
@@ -5532,7 +5885,8 @@ j2ef7:   sta (somedataloptr),y
         sta a7a1b
         rts 
 
-b2f0b:   lda fa480,x
+b2f0b:
+        lda fa480,x
         sta somedatahiptr
         lda a4d
         jmp j2ef7
@@ -5542,7 +5896,8 @@ b2f0b:   lda fa480,x
 //-------------------------------------------------------------------
 writestufftoscreen:
         ldy #$26
-b2f17:   ldx a10
+b2f17:
+        ldx a10
         lda randomdatastorage,x
         inc a10
         tax 
@@ -5553,7 +5908,8 @@ b2f17:   ldx a10
         cpx #$f8
         bcs b2f2d
         adc #$01
-b2f2d:   sta (ramloptr),y
+b2f2d:
+        sta (ramloptr),y
         dey 
         bpl b2f17
         rts 
@@ -5574,15 +5930,18 @@ updatescreencolors:
         lda $e030,y
         beq b2f5b
         sta initialvalueofy
-b2f4c:  clc 
+b2f4c:
+        clc 
         lda ramloptr
         adc #$05
         sta ramloptr
         bcc b2f57
         inc ramhiptr
-b2f57:   dec initialvalueofy
+b2f57:
+        dec initialvalueofy
         bne b2f4c
-b2f5b:   ldy #$04
+b2f5b:
+        ldy #$04
 b2f5d:
         lda (ramloptr),y
         sta .a f004b,y
@@ -5636,7 +5995,8 @@ checkifpauseorfirehasbeenpressed:
         ora #$f7
         and a60
         sta a60
-b2fc7:   rts 
+b2fc7:
+        rts 
 
 //-------------------------------------------------------------------
 // updatecolorsonscreen
@@ -5644,7 +6004,8 @@ b2fc7:   rts
 updatecolorsonscreen:
         ldx a54
         bmi b3000
-b2fcc:   ldy $0220,x
+b2fcc:
+        ldy $0220,x
         lda colorlinehiptrarray,y
         sta a1f
         lda screenlineloptrarray,y
@@ -5653,7 +6014,8 @@ b2fcc:   ldy $0220,x
         bmi b2fe2
         lda a4d
         sta (p1e),y
-b2fe2:   lda $0200,x
+b2fe2:
+        lda $0200,x
         cmp a50
         bcc b3001
         cmp a51
@@ -5666,11 +6028,13 @@ b2fe2:   lda $0200,x
         tay 
         lda currentcolorvalue
         sta (p1e),y
-b2ffd:   dex 
+b2ffd:
+        dex 
         bpl b2fcc
 b3000:   rts 
 
-b3001:   lda #$ff
+b3001:
+        lda #$ff
         sta $0240,x
         bne b2ffd
 
@@ -5685,7 +6049,8 @@ updateplayerdecalcolors:
         lda currentplayer
         cmp #$01
         beq b303c
-b3016:   lda #$f1
+b3016:
+        lda #$f1
         sta color_ram + $001e,x
         sta color_ram + $006e,x
         lda #$fe
@@ -5702,7 +6067,8 @@ b3016:   lda #$f1
         bpl b3016
         rts 
 
-b303c:   lda #$f1
+b303c:
+        lda #$f1
         sta color_ram + $0000,x
         sta color_ram + $0050,x
         lda #$fe
@@ -5719,7 +6085,8 @@ b303c:   lda #$f1
         bpl b303c
         rts 
 
-b3062:   lda #$f1
+b3062:
+        lda #$f1
         sta color_ram + $0000,x
         sta color_ram + $0050,x
         lda #$fe
@@ -5741,7 +6108,8 @@ b3062:   lda #$f1
 generaterandomdatafromrng:
         ldx #$00
         stx a10
-b308a:  lda $d41b    // random number generator
+b308a:
+        lda $d41b    // random number generator
         ldx a10
         eor randomdatastorage,x
         sta randomdatastorage,x
@@ -5766,11 +6134,13 @@ copydatafrommaincharactersettop7400:
 
         lda #$80
         sta initialvalueofy
-b30b4:   ldx #$07
+b30b4:
+        ldx #$07
         stx a10
 
         ldy #$07
-b30ba:   lda #$00
+b30ba:
+        lda #$00
         sta (somedataloptr),y
         dey 
         sty a11
@@ -5789,7 +6159,8 @@ b30ba:   lda #$00
         sta somedatahiptr
 
         ldy #$07
-b30d8:   lda #$00
+b30d8:
+        lda #$00
         sta (somedataloptr),y
         dey 
         sty a11
@@ -5818,7 +6189,8 @@ b30d8:   lda #$00
 
         bcc b3105
         inc a13
-b3105:   dec initialvalueofy
+b3105:
+        dec initialvalueofy
         bne b30b4
 
         rts 
@@ -5843,10 +6215,12 @@ b3105:   dec initialvalueofy
 //         .cdef "xz", $21
 //         .cdef "09", $00
 
-f310a:   .byte $00,$90,$98,$a0,$a8,$b0,$b8,$c0
+f310a:
+        .byte $00,$90,$98,$a0,$a8,$b0,$b8,$c0
         .byte $c4,$c8,$cc,$d0,$d4,$d8,$dc,$e0
         .byte $e4,$e8,$ec,$f0
-f311e:   .byte $fe,$fd,$fb,$f7,$ef,$df,$bf,$7f
+f311e:
+        .byte $fe,$fd,$fb,$f7,$ef,$df,$bf,$7f
 
 player1text:
         .byte $00,$01
@@ -5856,15 +6230,17 @@ player1text:
 player2text:
         .byte $00,$1f
 //        .text "player2"
-       .byte $49,$15,$0a,$22,$0e,$1b,$02
+        .byte $49,$15,$0a,$22,$0e,$1b,$02
         .byte $ff
 oneuptext:
         .byte $00,$01
 //        .text "1up "
         .byte $01,$1e,$19,$30
         .byte $7a, $7b
-a3142:   .byte $30
-a3143:   .byte $03,$ff
+a3142:
+        .byte $30
+a3143:
+        .byte $03,$ff
 
 .label a3149 =*+$04
 .label a314a =*+$05
@@ -5885,19 +6261,19 @@ landnowtext:
         .byte $45,$0a,$17,$0d,$30,$17,$18,$54,$25
         .byte $ff
 
-playerlinescolorscheme1:   
+playerlinescolorscheme1:
         .byte ltblue,ltblue,ltblue,ltblue,ltblue,ltblue,ltblue,ltblue
         .byte ltblue,ltblue,ltred,ltred,ltred,ltred,ltred,ltred
         .byte ltred,ltred,ltred,ltred,ltred,ltred,ltred,ltred
         .byte ltred,ltred,ltred,ltred,ltred,ltred,ltblue,ltblue
         .byte ltblue,ltblue,ltblue,ltblue,ltblue,ltblue,ltblue,ltblue
-playerlinescolorscheme2:   
+playerlinescolorscheme2:
         .byte ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen
         .byte ltgreen,ltgreen,white,white,white,white,white,white
         .byte white,white,white,white,white,white,white,white
         .byte white,white,white,white,white,white,ltgreen,ltgreen
         .byte ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen,ltgreen
-playerlinescolorscheme3:   
+playerlinescolorscheme3:
         .byte green,green,green,green,green,green,green,green
         .byte green,green,yellow,yellow,yellow,yellow,yellow,yellow
         .byte yellow,yellow,yellow,yellow,yellow,yellow,yellow,yellow
@@ -5921,36 +6297,51 @@ playerlinescolorscheme3:
         .byte $d8,$10,$59,$58,$57,$56,$55,$54
         .byte $53,$52,$51,$50,$5f,$5e,$5d,$5c
         .byte $5b,$5a,$00,$01
-spritevalueoffsetloptrarray:   .byte $00,$00,$00,$00,$00,$32,$00,$00
+spritevalueoffsetloptrarray:
+        .byte $00,$00,$00,$00,$00,$32,$00,$00
         .byte $00,$40,$00,$00,$24,$53,$2b,$00
         .byte $00,$00,$00,$00,$00,$39
-spritevalueoffsethiptrarray:   .byte $00,$00,$00,$00,$00,$32,$00,$00
+spritevalueoffsethiptrarray:
+        .byte $00,$00,$00,$00,$00,$32,$00,$00
         .byte $00,$32,$00,$00,$32,$32,$32,$00
         .byte $00,$00,$00,$00,$00,$32
-spritevalueloptrarray:   .byte $00,$f0,$00,$00,$00,$00,$00,$00
+spritevalueloptrarray:
+        .byte $00,$f0,$00,$00,$00,$00,$00,$00
         .byte $e2,$11,$e9,$00,$00,$fe,$00,$00
         .byte $00,$f7
-spritevaluehiptrarray:   .byte $00,$31,$00,$00,$00,$00,$00,$00
+spritevaluehiptrarray:
+        .byte $00,$31,$00,$00,$00,$00,$00,$00
         .byte $31,$32,$31,$00,$00,$31,$00,$00
         .byte $00,$31,$06,$70,$00,$98,$ff,$00
         .byte $00,$ff,$00,$f0,$59
-p32c1:   .byte $06,$aa,$00,$98,$ff,$00,$00,$ff
+p32c1:
+        .byte $06,$aa,$00,$98,$ff,$00,$00,$ff
         .byte $00,$f0,$59
-p32cc:   .byte $06,$a0,$00,$ae,$ff,$00,$00,$ff
+p32cc:
+        .byte $06,$a0,$00,$ae,$ff,$00,$00,$ff
         .byte $00,$f0,$41,$07,$ba,$00,$a8,$ff
         .byte $00,$ff,$00,$00,$fb,$89
-p32e2:   .byte $07,$aa,$00,$00,$ff,$00,$00,$ff
+p32e2:
+        .byte $07,$aa,$00,$00,$ff,$00,$00,$ff
         .byte $00,$f7,$30
-f32ed:   .byte $fd,$03,$f8,$08,$b0,$40,$50,$c0
-f32f5:   .byte $00,$00,$ff,$fe,$fd,$fd,$fe,$fe
+f32ed:
+        .byte $fd,$03,$f8,$08,$b0,$40,$50,$c0
+f32f5:
+        .byte $00,$00,$ff,$fe,$fd,$fd,$fe,$fe
         .byte $ff,$00,$01,$02,$03,$03,$02,$02
         .byte $01
-f3306:   .byte $1a,$25,$30,$3b,$46,$51,$5c,$67
-a330e:   .byte $b6
-a330f:   .byte $d7
-f3310:   .byte $33,$33,$33,$33,$33,$33,$33,$33
-a3318:   .byte $32
-a3319:   .byte $32,$00,$82,$00,$8d,$ff,$00,$00
+f3306:
+        .byte $1a,$25,$30,$3b,$46,$51,$5c,$67
+a330e:
+        .byte $b6
+a330f:
+        .byte $d7
+f3310:
+        .byte $33,$33,$33,$33,$33,$33,$33,$33
+a3318:
+        .byte $32
+a3319:
+        .byte $32,$00,$82,$00,$8d,$ff,$00,$00
         .byte $ff,$00,$fc,$00,$01,$6a,$00,$8d
         .byte $ff,$00,$00,$ff,$00,$fc,$01,$02
         .byte $52,$00,$8d,$ff,$00,$00,$ff,$00
@@ -5962,26 +6353,33 @@ a3319:   .byte $32,$00,$82,$00,$8d,$ff,$00,$00
         .byte $ff,$00,$00,$00,$fb,$07,$07,$82
         .byte $00,$8e,$ff,$ff,$00,$ff,$00,$fe
         .byte $06
-p3372:   .byte $fb
-f3373:   .byte $ff,$f8,$fc,$fb,$f0,$fb,$fe,$fa
+p3372:
+        .byte $fb
+f3373:
+        .byte $ff,$f8,$fc,$fb,$f0,$fb,$fe,$fa
         .byte $f2,$f0,$fc,$fa,$fe,$f6,$f5,$fd
         .byte $f8,$fe,$f6,$f2,$fa,$f8,$f7,$f8
         .byte $fb,$fc,$fc,$fa,$f2,$f6,$fe,$f8
         .byte $fd,$f5,$f8,$f7,$f8,$fc,$f0,$fb
         .byte $f3,$fd,$fa,$f2,$f9,$f8
-f33a1:   .byte $f8,$fd,$f5,$fb,$ff,$f8,$f7,$f8
+f33a1:
+        .byte $f8,$fd,$f5,$fb,$ff,$f8,$f7,$f8
         .byte $f6,$f3,$f8,$fc,$fb,$fb,$ff,$f8
         .byte $fe,$f6,$04,$02,$03,$06,$07,$08
         .byte $08,$06,$05,$02,$03,$06,$08,$0b
         .byte $07,$06,$05,$02,$03
-f33c6:   .byte $06,$08,$0b,$07,$06,$04,$02,$03
+f33c6:
+        .byte $06,$08,$0b,$07,$06,$04,$02,$03
         .byte $06,$07,$08,$08,$06,$00,$00,$00
-f33d6:   .byte $00,$00,$00,$00,$00,$00,$00,$00
+f33d6:
+        .byte $00,$00,$00,$00,$00,$00,$00,$00
         .byte $00,$00,$00,$10,$11,$0f,$0d,$0c
-f33e6:   .byte $00,$0b
+f33e6:
+        .byte $00,$0b
 f33e8:  .byte $0d,$10,$11,$0e,$0d,$0b,$00,$0c
         .byte $0d,$10,$11,$0e,$0d,$0b
-f33f6:   .byte $00,$0c,$0d,$10,$11,$0f,$0d,$0c
+f33f6:
+        .byte $00,$0c,$0d,$10,$11,$0f,$0d,$0c
         .byte $00,$0b,$0d,$00,$00,$00,$00,$00
         .byte $00,$00,$00,$00,$00,$00,$00,$00
         .byte $00
@@ -6003,10 +6401,14 @@ colorlinehiptrarray:
         .byte $02,$02,$02,$02,$00,$00,$00,$02
         .byte $02,$02,$02,$04,$04,$04,$04,$04
         .byte $04,$04,$04,$04,$01,$01,$01
-f3496:   .byte $00,$00,$00,$00,$00,$03
-a349c:   .byte $01
-a349d:   .byte $01,$00
-f349f:  .byte $4e,$1b,$12,$0d,$12,$1e,$42,$30
+f3496:
+        .byte $00,$00,$00,$00,$00,$03
+a349c:
+        .byte $01
+a349d:
+        .byte $01,$00
+f349f:
+        .byte $4e,$1b,$12,$0d,$12,$1e,$42,$30   //scroll text
         .byte $0b,$22,$30,$3a,$17,$0d,$1b,$0e
         .byte $54,$30,$3b,$1b,$0a,$22,$0b,$1b
         .byte $18,$18,$14,$28,$30,$41,$12,$10
@@ -6014,7 +6416,7 @@ f349f:  .byte $4e,$1b,$12,$0d,$12,$1e,$42,$30
 .label f34c3 =*+$01
 hiscoreforscrollingbanner:
 //        .text " 12000 aeb"
-        .byte $30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
+        .byte $30,$01,$02,$00,$00,$00,$30,$42,$12,$14
         .byte $ff, $ff, $ff, $ff
 player1symbol:
         .byte $00,$0f
@@ -6068,6 +6470,7 @@ ingamebanner:
         .byte $02,$0a
 //        .text "     12000 aeb   "
         .byte $30,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b,$30,$30,$30
+
         .byte $ff
 //        .text "2c    "
 //        .text " "
@@ -6088,8 +6491,10 @@ ingamebanner:
 //        .text "       "
         .byte $30,$30,$30,$30,$30,$30,$30
         .byte $56, $ff
-scrollingtitlescreendataloptrarray:   .byte $3a,$4b,$5e//$3570
-scrollingtitlescreendatahiptrarray:   .byte $35,$35,$35
+scrollingtitlescreendataloptrarray:
+        .byte $3a,$4b,$5e//$3570
+scrollingtitlescreendatahiptrarray:
+        .byte $35,$35,$35
 
 hewson:
         .byte $06,$0e
@@ -6111,16 +6516,17 @@ graftgoldltd:
         .byte $59
 //        .text " graftgold ltd. 1986."
         .byte $30,$40,$1b,$0a,$0f,$1d,$10,$18,$15,$0d,$30,$45,$1d,$0d,$28,$30,$01,$09,$08,$06,$28
+
         .byte $ff
 designedandprogrammedby:
         .byte $12,$05
-//        .text "designed and programmed by"
+//        .text "Designed and programmed by"
         .byte $3d, $0e, $1c, $12, $10, $17, $0e, $0d, $30, $0a, $17
         .byte $0d, $30, $19, $1b, $18, $10, $1b, $0a, $42, $42, $0e, $0d, $30, $0b, $22
         .byte $ff
 andrewbraybrook:
         .byte $15,$0b
-//        .text "andrew braybrook."
+//        .text "Andrew Braybrook."
         .byte $3a, $17, $0d, $1b, $0e, $54, $30, $3b
         .byte $1b, $0a, $22, $0b, $1b, $18, $18, $14, $28
         .byte $ff
@@ -6134,25 +6540,25 @@ halloffame://$35E1
 firstinhalloffame:
         .byte $09,$0b
 //        .text "1.    12000 aeb"
-        .byte $01,$28,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
+        .byte $01,$28,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$42,$12,$14
         .byte $ff
         .byte $00,$01,$20,$00
 secondinhalloffame:
         .byte $0b,$0b
 //        .text "2.    11000    "
-        .byte $02,$28,$30,$30,$30,$30,$01,$01,$00,$00,$00,$30,$30,$30,$30
+        .byte $02,$28,$30,$30,$30,$30,$01,$01,$00,$00,$00,$30,$4c,$4d,$49
         .byte $ff
         .byte $00,$01,$10,$00
 thirdinhalloffame:
         .byte $0d,$0b
 //        .text "3.    10000    "
-        .byte $03,$28,$30,$30,$30,$30,$01,$00,$00,$00,$00,$30,$30,$30,$30
+        .byte $03,$28,$30,$30,$30,$30,$01,$00,$00,$00,$00,$30,$48,$4c,$44
         .byte $ff
         .byte $00,$01,$00,$00
 fourthinhalloffame:
         .byte $0f,$0b
 //        .text "4.     9000    "
-        .byte $04,$28,$30,$30,$30,$30,$30,$09,$00,$00,$00,$30,$30,$30,$30
+        .byte $04,$28,$30,$30,$30,$30,$30,$09,$00,$00,$00,$30,$4c,$41,$3a
         .byte $ff
         .byte $00,$00,$90,$00
 fifthinhalloffame:
@@ -6194,17 +6600,22 @@ demolabel:
 //        .text "  demo   "
         .byte $30,$30,$3d, $0e, $42, $18, $30, $30, $30
         .byte $ff
-currentcolorvaluearray:  .byte m_ltblue,m_gray2,m_gray1,m_ltgreen,m_gray3,m_ltgreen,m_gray1,m_gray2
+currentcolorvaluearray:
+        .byte m_ltblue,m_gray2,m_gray1,m_ltgreen,m_gray3,m_ltgreen,m_gray1,m_gray2
 
 
-screenwritejumptableloptr:   .byte <maybechangetitledecal,<updateanddisplaysomesprites,<updateplayerscore,<maybeshowpausescreen
-                            .byte <returnearly,<maybelaunchmine,<updatecurrentcolorvalue,<maybeshowpausescreen
-screenwritejumptablehiptr:  .byte >maybechangetitledecal,>updateanddisplaysomesprites,>updateplayerscore,>maybeshowpausescreen
-                            .byte >returnearly,>maybelaunchmine,>updatecurrentcolorvalue,>maybeshowpausescreen
+screenwritejumptableloptr: 
+        .byte <maybechangetitledecal,<updateanddisplaysomesprites,<updateplayerscore,<maybeshowpausescreen
+        .byte <returnearly,<maybelaunchmine,<updatecurrentcolorvalue,<maybeshowpausescreen
+screenwritejumptablehiptr:
+        .byte >maybechangetitledecal,>updateanddisplaysomesprites,>updateplayerscore,>maybeshowpausescreen
+        .byte >returnearly,>maybelaunchmine,>updatecurrentcolorvalue,>maybeshowpausescreen
 
 
-f36dd:   .byte $d3,$7f,$b5,$42
-f36e1:   .byte $22,$1f,$23,$23
+f36dd:
+        .byte $d3,$7f,$b5,$42
+f36e1:
+        .byte $22,$1f,$23,$23
 
 functionptrarray:
         .byte <returnearly,>returnearly,<performdetailedupdateforsprite,>performdetailedupdateforsprite
@@ -6212,48 +6623,74 @@ functionptrarray:
         .byte <updatespritepositionvalueandfunctionptrindex,>updatespritepositionvalueandfunctionptrindex
         .byte <maybeanimateminecreation,>maybeanimateminecreation,<maybemineexplodes,>maybemineexplodes
         .byte <returnearly,>returnearly
-f36f3:  .byte $a0,$80,$80,$60,$a0,$a0,$c0,$b0
+f36f3:
+        .byte $a0,$80,$80,$60,$a0,$a0,$c0,$b0
         .byte $a0,$40,$70,$60,$80,$90,$70,$80
-f3703:  .byte $61,$61,$81,$71,$81,$91,$81,$91
+f3703:
+        .byte $61,$61,$81,$71,$81,$91,$81,$91
         .byte $b1,$21,$61,$51,$41,$71,$61,$41
-f3713:   .byte $10,$10,$14,$18,$1c,$0c,$18,$1c
+f3713:
+        .byte $10,$10,$14,$18,$1c,$0c,$18,$1c
         .byte $0c,$0a,$18,$10,$0c,$14,$0e,$18
-f3723:   .byte $0d,$12,$0d,$0c,$12,$0d,$0e,$0d
+f3723:
+        .byte $0d,$12,$0d,$0c,$12,$0d,$0e,$0d
         .byte $10,$0f,$0c,$0c,$0e,$0d,$0d,$0c
-f3733:   .byte $06,$05,$06,$07,$07,$05,$09,$08
+f3733:
+        .byte $06,$05,$06,$07,$07,$05,$09,$08
         .byte $04,$04,$08,$06,$04,$06,$05,$07
-f3743:   .byte $05,$04,$06,$07
-f3747:   .byte $06,$04,$06,$06,$04,$05,$06,$06
-f374f:   .byte $05,$06,$06,$07,$00,$02,$05,$09
+f3743:
+        .byte $05,$04,$06,$07
+f3747:
+        .byte $06,$04,$06,$06,$04,$05,$06,$06
+f374f:
+        .byte $05,$06,$06,$07,$00,$02,$05,$09
         .byte $09,$09,$02,$00,$14,$12,$0f,$0c
         .byte $0c,$0c,$12,$00
-p3763:   .byte m_ltgreen,m_green,m_green,m_cyan,m_cyan,m_ltblue,m_ltblue,m_purple
+p3763:
+        .byte m_ltgreen,m_green,m_green,m_cyan,m_cyan,m_ltblue,m_ltblue,m_purple
         .byte m_purple,m_red,m_red,m_orange,m_orange,m_yellow,m_yellow,m_white
         .byte m_black,m_ltgreen,m_green,m_black,m_black
-colorsforsomething1:   .byte m_ltblue,m_ltblue,m_cyan,m_ltblue,m_black,m_ltblue,m_blue,m_black
+colorsforsomething1:
+        .byte m_ltblue,m_ltblue,m_cyan,m_ltblue,m_black,m_ltblue,m_blue,m_black
         .byte m_blue,m_purple,m_black,m_purple,m_red,m_black,m_red,m_orange
         .byte m_black,m_orange,m_yellow,m_black,m_black
-p378d:   .byte m_ltblue,m_ltblue,m_ltblue,m_ltblue,m_yellow,m_green,m_black,m_green
+p378d:
+        .byte m_ltblue,m_ltblue,m_ltblue,m_ltblue,m_yellow,m_green,m_black,m_green
         .byte m_ltgreen,m_black,m_ltgreen,m_cyan,m_black,m_cyan,m_ltblue,m_black
         .byte m_ltblue,m_blue,m_black,m_black,m_black
-a37a2:   .byte m_white
-a37a3:   .byte m_white,m_black
-a37a5:   .byte m_white
-a37a6:   .byte m_white,m_black
-a37a8:   .byte m_white
-a37a9:   .byte m_white,m_black
-a37ab:   .byte m_white
-a37ac:   .byte m_white,m_black,m_black,m_black,m_black,m_black,m_black
-f37b3:   .byte m_yellow
-f37b4:   .byte m_orange
-f37b5:   .byte m_red
-f37b6:   .byte m_purple
-f37b7:   .byte m_ltblue,m_cyan,m_ltgreen,m_green,m_yellow,m_orange,m_red,m_purple
+a37a2:
+        .byte m_white
+a37a3:
+        .byte m_white,m_black
+a37a5:
+        .byte m_white
+a37a6:
+        .byte m_white,m_black
+a37a8:
+        .byte m_white
+a37a9:
+        .byte m_white,m_black
+a37ab:
+        .byte m_white
+a37ac:
+        .byte m_white,m_black,m_black,m_black,m_black,m_black,m_black
+f37b3:
+        .byte m_yellow
+f37b4:
+        .byte m_orange
+f37b5:
+        .byte m_red
+f37b6:
+        .byte m_purple
+f37b7:
+        .byte m_ltblue,m_cyan,m_ltgreen,m_green,m_yellow,m_orange,m_red,m_purple
 
-p37bf:   .byte m_gray3,m_white,m_black,m_white,m_gray3,m_black,m_gray3,m_gray2
+p37bf:
+        .byte m_gray3,m_white,m_black,m_white,m_gray3,m_black,m_gray3,m_gray2
         .byte m_black,m_black,m_black,m_black,m_black,m_black
 
-p37cd:   .byte m_cyan,m_ltgreen,m_black,m_ltgreen,m_green,m_black,m_black,m_black
+p37cd:
+        .byte m_cyan,m_ltgreen,m_black,m_ltgreen,m_green,m_black,m_black,m_black
         .byte m_black,m_black,m_black
 
 player1:
@@ -6330,31 +6767,51 @@ initialsinputfield:
 //        .text "a..   "
         .byte $3a,$28,$28,$30,$30,$30
         .byte $ff
-f38c3:   .byte $3a,$3b,$3c,$3d,$3e,$3f,$40,$41
+f38c3:
+        .byte $3a,$3b,$3c,$3d,$3e,$3f,$40,$41
         .byte $16,$43,$44,$45,$46,$47,$48,$49
         .byte $4a,$4b,$4c,$4d,$4e,$4f,$50,$51
         .byte $52,$53,$30
-f38de:   .byte $f1,$ff,$fc,$fb,$f0
-f38e3:   .byte $ff,$fc,$fb,$f0,$f0
-f38e8:   .byte $fb,$fb,$f0,$f0,$f0
-f38ed:   .byte $00,$00,$00,$00,$01,$01,$02,$05
+f38de:
+        .byte $f1,$ff,$fc,$fb,$f0
+f38e3:
+        .byte $ff,$fc,$fb,$f0,$f0
+f38e8:
+        .byte $fb,$fb,$f0,$f0,$f0
+f38ed:
+        .byte $00,$00,$00,$00,$01,$01,$02,$05
         .byte $07,$10,$20,$50
-f38f9:   .byte $00,$10,$25,$50,$00,$50,$50,$00
+f38f9:
+        .byte $00,$10,$25,$50,$00,$50,$50,$00
         .byte $50,$00,$00,$00
-f3905:   .byte $04,$06,$09,$0c,$0f,$12,$15
-f390c:   .byte $04,$0d,$0b,$09,$07,$05,$03
-f3913:   .byte $04,$06,$09,$0c,$0f,$12,$15
-f391a:   .byte $04,$17,$19,$1b,$1d,$1f,$21
-f3921:   .byte $03
-a3922:   .byte $05
-a3923:   .byte $07
-a3924:   .byte $09
-a3925:   .byte $0c
-a3926:   .byte $10,$16
-a3928:   .byte $80
-a3929:   .byte $80,$80,$80
-f392c:   .byte $a0,$a1,$a2,$a3
-f3930:   .byte $f2,$f2,$f7,$f6,$f4,$f3,$f5
+f3905:
+        .byte $04,$06,$09,$0c,$0f,$12,$15
+f390c:
+        .byte $04,$0d,$0b,$09,$07,$05,$03
+f3913:
+        .byte $04,$06,$09,$0c,$0f,$12,$15
+f391a:
+        .byte $04,$17,$19,$1b,$1d,$1f,$21
+f3921:
+        .byte $03
+a3922:
+        .byte $05
+a3923:
+        .byte $07
+a3924:
+        .byte $09
+a3925:
+        .byte $0c
+a3926:
+        .byte $10,$16
+a3928:
+        .byte $80
+a3929:
+        .byte $80,$80,$80
+f392c:
+        .byte $a0,$a1,$a2,$a3
+f3930:
+        .byte $f2,$f2,$f7,$f6,$f4,$f3,$f5
 
 #import "game_data.asm"
 
@@ -6402,7 +6859,8 @@ irqinterrupt3:
         pha 
         sec 
         lda #$06
-b3f3c:   sbc #$01
+b3f3c:
+        sbc #$01
         bne b3f3c
 
         // turn on charset multi-color mode if enabled
@@ -6460,7 +6918,8 @@ irqinterrupt1:
         pha 
         lda #$07
         sec 
-b3f97:  sbc #$01
+b3f97:
+        sbc #$01
         bne b3f97
 
         // switch charset to maincharacterset
@@ -6498,8 +6957,10 @@ b3f97:  sbc #$01
         tay 
         pla 
         tax 
-b3fd5:   pla 
-p3fd6:   rti 
+b3fd5:
+        pla 
+p3fd6:
+        rti 
 
         .byte $00,$ff,$00,$ff,$00,$ff,$00,$ff
         .byte $00,$ff,$00,$ff,$00,$ff,$00,$ff
@@ -6536,19 +6997,23 @@ ja909:
 //--------------------------------------------------------------------
 // ba910   
 //--------------------------------------------------------------------
-ba910:  ldx #$00
-ba912:   lda firstinhalloffame,x
+ba910:
+        ldx #$00
+ba912:
+        lda firstinhalloffame,x
         sta fca00,x
         inx 
         cpx #$ac
         bne ba912
         ldx #$13
-ba91f:   lda ingamebanner,x
+ba91f:
+        lda ingamebanner,x
         sta fcaac,x
         dex 
         bpl ba91f
         ldx #$0d
-ba92a:   lda hiscoreforscrollingbanner,x
+ba92a:
+        lda hiscoreforscrollingbanner,x
         sta fcac0,x
         dex 
         bpl ba92a
@@ -6577,7 +7042,8 @@ ba935:
         ldx #$00
         stx $02a1
         txa 
-ba95b:   sta f90,x
+ba95b:
+        sta f90,x
         inx 
         cpx #$70
         bne ba95b
@@ -6604,7 +7070,8 @@ ba95b:   sta f90,x
         lda #$35
         sta a01
         ldx #$6f
-ba989:   lda screen_ram + $0000,x
+ba989:
+        lda screen_ram + $0000,x
         sta f90,x
         dex 
         bpl ba989
@@ -6647,18 +7114,22 @@ sa9d2:
         lda #$7f
         sta $dc00    //cia1: data port register a
         lda $dc01    //cia1: data port register b
-aa9e3:  lda #$df
+aa9e3:
+        lda #$df
         beq ba9f1
-aa9e7:   lda #$bf
+aa9e7:
+        lda #$bf
         beq ba9f7
         lda #$ff
         sta $dc00    //cia1: data port register a
         rts 
 
-ba9f1:   jsr incrementtwovalues
+ba9f1:
+        jsr incrementtwovalues
         jmp jc9eb
 
-ba9f7:   lda #$01
+ba9f7: 
+        lda #$01
         sta a85
         jmp jc9eb
 
@@ -6703,19 +7174,25 @@ getjoystickinput:
         beq bb03b
         jmp jb03d
 
-bb037:   dec a17
+bb037:
+        dec a17
         bne jb03d
-bb03b:   inc a17
-jb03d:   bit msbforspritearray
+bb03b:
+        inc a17
+jb03d:
+        bit msbforspritearray
         beq bb04a
         bit msbforspritearray + $01
         beq bb04e
         jmp jb050
 
-bb04a:  dec a16
+bb04a:
+        dec a16
         bne jb050
-bb04e:  inc a16
-jb050:   and #$10
+bb04e:
+        inc a16
+jb050:
+        and #$10
         sta firepressed
         rts 
 
@@ -6744,7 +7221,8 @@ storespritecontentcolorandposition:
         and currentspritemsb
         beq bb088
         lda #$ff
-bb088:   sta a06
+bb088:
+        sta a06
         lda $d015    //sprite display enable
         and currentspritemsb
         sta currentspritedisplayenable
@@ -6774,7 +7252,8 @@ storeshipspritestate:
         and currentspritemsb
         beq bb0bd
         lda #$ff
-bb0bd:   sta a06
+bb0bd:
+        sta a06
         lda $d015    //sprite display enable
         and currentspritemsb
         sta currentspritedisplayenable
@@ -6808,33 +7287,41 @@ updatespritesizecolorandpriority:
         lda currentspritemsb
         ora $d01c    //sprites multi-color mode select
         bne bb103
-bb0fe:  lda $d01c    //sprites multi-color mode select
+bb0fe:
+        lda $d01c    //sprites multi-color mode select
         and a03
-bb103:   sta $d01c    //sprites multi-color mode select
+bb103:
+        sta $d01c    //sprites multi-color mode select
         lda currentspriteexpandvertical
         beq bb111
         lda currentspritemsb
         ora $d017    //sprites expand 2x vertical (y)
         bne bb116
-bb111:   lda $d017    //sprites expand 2x vertical (y)
+bb111:
+        lda $d017    //sprites expand 2x vertical (y)
         and a03
-bb116:   sta $d017    //sprites expand 2x vertical (y)
+bb116:
+        sta $d017    //sprites expand 2x vertical (y)
         lda currentspriteexpandhorizontal
         beq bb124
         lda currentspritemsb
         ora $d01d    //sprites expand 2x horizontal (x)
         bne bb129
-bb124:  lda $d01d    //sprites expand 2x horizontal (x)
+bb124:
+        lda $d01d    //sprites expand 2x horizontal (x)
         and a03
-bb129:   sta $d01d    //sprites expand 2x horizontal (x)
+bb129:
+        sta $d01d    //sprites expand 2x horizontal (x)
         lda currentspritebackgrounddisplaypriority
         beq bb137
         lda currentspritemsb
         ora $d01b    //sprite to background display priority
         bne bb13c
-bb137:   lda $d01b    //sprite to background display priority
+bb137:
+        lda $d01b    //sprite to background display priority
         and a03
-bb13c:   sta $d01b    //sprite to background display priority
+bb13c:
+        sta $d01b    //sprite to background display priority
 
 //-------------------------------------------------------------------
 // updatespritecontentandposition
@@ -6862,17 +7349,21 @@ updatespritecontentandposition:
         lda currentspritemsb
         ora $d010    //sprites 0-7 msb of x coordinate
         bne bb172
-bb16d:   lda $d010    //sprites 0-7 msb of x coordinate
+bb16d:
+        lda $d010    //sprites 0-7 msb of x coordinate
         and a03
-bb172:   sta $d010    //sprites 0-7 msb of x coordinate
+bb172:
+        sta $d010    //sprites 0-7 msb of x coordinate
         lda currentspritedisplayenable
         beq bb180
         lda currentspritemsb
         ora $d015    //sprite display enable
         bne bb185
-bb180:   lda $d015    //sprite display enable
+bb180:
+        lda $d015    //sprite display enable
         and a03
-bb185:  sta $d015    //sprite display enable
+bb185:
+        sta $d015    //sprite display enable
         rts 
 
 //-------------------------------------------------------------------
@@ -6880,8 +7371,10 @@ bb185:  sta $d015    //sprite display enable
 //-------------------------------------------------------------------
 writetoram:
         sta currentspritecolor
-jb18b:   ldy #$00
-bb18d:   sta (ramloptr),y
+jb18b:
+        ldy #$00
+bb18d:
+        sta (ramloptr),y
         iny 
         cpy #$28
         bcc bb18d
@@ -6893,17 +7386,20 @@ bb18d:   sta (ramloptr),y
         sta ramloptr
         bcc bb1a2
         inc ramhiptr
-bb1a2:   lda currentspritecolor
+bb1a2:
+        lda currentspritecolor
         jmp jb18b
 
-bb1a7:   clc 
+bb1a7:
+        clc 
         clc 
         lda ramloptr
         adc #$28
         sta ramloptr
         bcc bb1b3
         inc ramhiptr
-bb1b3:   rts 
+bb1b3:
+        rts 
 
 //-------------------------------------------------------------------
 // updateplayerscore
@@ -6918,14 +7414,16 @@ updateplayerscore:
         stx a10
         lda #$30
         sta a0f
-bb1c4:  lda playerscore,x
+bb1c4:
+        lda playerscore,x
         lsr 
         lsr 
         lsr 
         lsr 
         bne bb1ef
         lda a0f
-jb1ce:   sta chartowrite
+jb1ce:
+        sta chartowrite
         jsr writecharactertoscreen
         ldx a10
         lda playerscore,x
@@ -6934,7 +7432,8 @@ jb1ce:   sta chartowrite
         cpx #$03
         beq bb1f6
         lda a0f
-jb1e1:   sta chartowrite
+jb1e1:
+        sta chartowrite
         jsr writecharactertoscreen
         inc a10
         ldx a10
@@ -6942,18 +7441,20 @@ jb1e1:   sta chartowrite
         bne bb1c4
         rts 
 
-bb1ef:   ldy #$00
+bb1ef:
+        ldy #$00
         sty a0f
         jmp jb1ce
 
-bb1f6:  ldy #$00
+bb1f6:
+        ldy #$00
         sty a0f
         jmp jb1e1
 
 //-------------------------------------------------------------------
 // domorewithjoystickinput
 //-------------------------------------------------------------------
-domorewithjoystickinput:   
+domorewithjoystickinput:
         lda #$ff
         sta $dc02    //cia1: data direction register a
         lda #$00
@@ -6977,7 +7478,8 @@ domorewithjoystickinput:
         lda a19
         and #$7f
         sta a19
-bb233:  lda #$ff
+bb233:
+        lda #$ff
         sta $dc00    //cia1: data port register a
         lda $dc01    //cia1: data port register b
         ora #$e0
@@ -7007,9 +7509,11 @@ sb24b:
         ora #$20
         sta a01
         sta a94
-bb259:   rts 
+bb259:
+        rts 
 
-bb25a:   lda a94
+bb25a:
+        lda a94
         beq bb259
         lda a01
         and #$df
@@ -7027,7 +7531,8 @@ pausetext:
 spinwaitingforjoystickinput:
         lda #$08
         sta initialvalueofy
-bb276:   jsr getjoystickinput
+bb276:
+        jsr getjoystickinput
         ldy #$08
         jsr wastecyclesusingxandy
         lda firepressed
@@ -7041,7 +7546,8 @@ bb276:   jsr getjoystickinput
 //-------------------------------------------------------------------
 updatespriteindicesandthenredrawsprites:
         ldy #$0a
-bb289:   lda (srcloptr),y
+bb289:
+        lda (srcloptr),y
         sta .a spriteindex,y
         dey 
         bpl bb289
@@ -7056,7 +7562,8 @@ writetoscreen:
         sty datahiptr
 
         //get the y pos from the first byte
-bb299:   ldy #$00
+bb299:
+        ldy #$00
         lda (dataloptr),y
         sta currentcharypos
 .label bb2a0 =*+$01
@@ -7081,7 +7588,8 @@ bb299:   ldy #$00
 writecharsloop:
         ldy aba
         lda (dataloptr),y
-jb2b4:   iny 
+jb2b4:
+        iny 
         sty aba
 
         // stop writing if the leftmost bit is set on aba. this means
@@ -7096,7 +7604,8 @@ jb2b4:   iny
         jsr writecharactertoscreen
         jmp writecharsloop
 
-bb2c5:  rts 
+bb2c5:
+        rts 
 
 //-------------------------------------------------------------------
 // writecharactertoscreen
@@ -7145,7 +7654,8 @@ writecharactertoscreen:
         sta (temploptrcopyto),y
 
         inc currentcharxpos
-bb301:   rts 
+bb301:
+        rts 
 
 //-------------------------------------------------------------------
 // copydatauntilxiszero
@@ -7189,19 +7699,23 @@ updatevolumesetting:
         inc a95
         jmp bb33e
 
-bb336:   lda a95
+bb336:
+        lda a95
         cmp #$00
         beq bb33e
         dec a95
-bb33e:   lda a95
+bb33e:
+        lda a95
         cmp #$0a
         bcc bb34b
         sbc #$0a
         ldy #$01
         jmp jb34d
 
-bb34b:   ldy #$30
-jb34d:   sty volumetens
+bb34b:
+        ldy #$30
+jb34d:
+        sty volumetens
         sta volumeones
         lda a95
         sta aef
@@ -7209,7 +7723,8 @@ jb34d:   sty volumetens
         ldx #<volumetext
         ldy #>volumetext
         jsr writetoscreen
-bb35f:   rts 
+bb35f:
+        rts 
 
 
 *=$c1b8 "C1B8"
@@ -7229,20 +7744,23 @@ notthedreadnoughdestructionsequence:
         sta $d021    //background color 0
         sta $0291
 
-jc1cb:   lda #>pc800
+jc1cb:
+        lda #>pc800
         sta dreadnoughthiptr
         ldx #<pc800
         stx dreadnoughtloptr
 
         txa 
-bc1d4:   sta color_ram + $0000,x
+bc1d4:
+        sta color_ram + $0000,x
         sta color_ram + $0100,x
         sta color_ram + $0200,x
         sta color_ram + $0300,x
         inx 
         bne bc1d4
 
-bc1e3:   lda #$0b
+bc1e3:
+        lda #$0b
         sta $d011    //vic control register 1
 bc1e8:   lda $d011    //vic control register 1
         bpl bc1e8
@@ -7252,28 +7770,32 @@ bc1e8:   lda $d011    //vic control register 1
         sta a01
 
         ldy #$00
-bc1f4:   lda (dreadnoughtloptr),y
+bc1f4:
+        lda (dreadnoughtloptr),y
         eor #$80
         sta screen_ram + $0000,y
         iny 
         bne bc1f4
 
         inc dreadnoughthiptr
-bc200:   lda (dreadnoughtloptr),y
+bc200:
+        lda (dreadnoughtloptr),y
         eor #$80
         sta screen_ram + $0100,y
         iny 
         bne bc200
 
         inc dreadnoughthiptr
-bc20c:   lda (dreadnoughtloptr),y
+bc20c:
+        lda (dreadnoughtloptr),y
         eor #$80
         sta screen_ram + $0200,y
         iny 
         bne bc20c
 
         inc dreadnoughthiptr
-bc218:  lda (dreadnoughtloptr),y
+bc218:
+        lda (dreadnoughtloptr),y
         eor #$80
         sta screen_ram + $0300,y
         iny 
@@ -7289,13 +7811,15 @@ bc218:  lda (dreadnoughtloptr),y
         lda dreadnoughthiptr
         adc #$00
         sta dreadnoughthiptr
-bc236:   lda $d011    //vic control register 1
+bc236:
+        lda $d011    //vic control register 1
         bpl bc236
         lda #$1b
         sta $d011    //vic control register 1
         ldx #$00
         jsr flashbackgroundduringdreadnoughtdestruction
-bc245:   lda $dc01    //cia1: data port register b
+bc245:
+        lda $dc01    //cia1: data port register b
         cmp #$7f
         beq bc2a2
         cmp #$ef
@@ -7315,17 +7839,20 @@ bc245:   lda $dc01    //cia1: data port register b
 //-------------------------------------------------------------------
 flashbackgroundduringdreadnoughtdestruction:
         ldy #$00
-bc266:   sty currentspritemsb
+bc266:
+        sty currentspritemsb
         stx a03
         ldx #$10
         ldy #$00
-bc26e:   dey 
+bc26e:
+        dey 
         bne bc26e
         dex 
         bne bc26e
         ldx a03
         ldy currentspritemsb
-bc278:  lda $d011    //vic control register 1
+bc278:
+        lda $d011    //vic control register 1
         bpl bc278
         lda backgroundcolors,x
         sta $d021    //background color 0
@@ -7362,7 +7889,8 @@ jc2b9:
         sei 
         lda #$0b
         sta $d011    //vic control register 1
-bc2bf:   lda $d011    //vic control register 1
+bc2bf:
+        lda $d011    //vic control register 1
         bpl bc2bf
         lda #$00
         sta $d021    //background color 0
@@ -7378,7 +7906,8 @@ bc2bf:   lda $d011    //vic control register 1
         sta $d018    //vic memory control register
 
         ldx #$00
-bc2da:   lda fa900,x
+bc2da:
+        lda fa900,x
         sta sc900,x
         lda #$00
         sta fca00,x
@@ -7388,12 +7917,14 @@ bc2da:   lda fa900,x
         sta a01
         cli 
         ldx #$1f
-bc2ef:   lda $fd30,x
+bc2ef:
+        lda $fd30,x
         sta $0314,x  //irq
         dex 
         bpl bc2ef
         ldx #$27
-bc2fa:   lda #$0e
+bc2fa:
+        lda #$0e
         sta color_ram + $0000,x
         lda #$06
         sta color_ram + $0028,x
@@ -7402,39 +7933,46 @@ bc2fa:   lda #$0e
         dex 
         bpl bc2fa
         ldx #$77
-bc30e:   lda pc000,x
+bc30e:
+        lda pc000,x
         sta screen_ram + $0000,x
         dex 
         bpl bc30e
         lda #$1b
         sta $d011    //vic control register 1
-bc31c:   jsr $ffe4 // - get a byte from channel          
+bc31c:
+        jsr $ffe4 // - get a byte from channel          
         cmp #$54
         beq bc32a
         cmp #$48
         bne bc31c
         jmp jc455
 
-bc32a:   lda #$01
+bc32a:
+        lda #$01
         sta aa904
         ldx #$27
-bc331:   lda fc078,x
+bc331:
+        lda fc078,x
         sta screen_ram + $0050,x
         dex 
         bpl bc331
-bc33a:   jsr $ffe4 //- get a byte from channel          
+bc33a:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq bc34a
         cmp #$59
         bne bc33a
         lda #$00
         sta a0d7c
-bc34a:   ldx #$27
+bc34a:
+        ldx #$27
 bc34c:   lda fc0a0,x
         sta screen_ram + $0050,x
         dex 
         bpl bc34c
-bc355:   jsr $ffe4 //- get a byte from channel          
+bc355:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq bc37c
         cmp #$59
@@ -7449,24 +7987,30 @@ bc355:   jsr $ffe4 //- get a byte from channel
         sta a280a
         sta a281e
         sta a2831
-bc37c:   ldx #$27
-bc37e:   lda fc0c8,x
+bc37c:
+        ldx #$27
+bc37e:
+        lda fc0c8,x
         sta screen_ram + $0050,x
         dex 
         bpl bc37e
-bc387:   jsr $ffe4 //- get a byte from channel          
+bc387:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq bc397
         cmp #$59
         bne bc387
         lda #$60
         sta a134b
-bc397:   ldx #$27
-bc399:   lda fc0f0,x
+bc397:
+        ldx #$27
+bc399:
+        lda fc0f0,x
         sta screen_ram + $0050,x
         dex 
         bpl bc399
-bc3a2:  jsr $ffe4 //- get a byte from channel          
+bc3a2:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq bc3be
         cmp #$59
@@ -7477,24 +8021,30 @@ bc3a2:  jsr $ffe4 //- get a byte from channel
         sta a3924
         sta a3925
         sta a3926
-bc3be:   ldx #$27
-bc3c0:  lda fc118,x
+bc3be:
+        ldx #$27
+bc3c0:
+        lda fc118,x
         sta screen_ram + $0050,x
         dex 
         bpl bc3c0
-bc3c9:   jsr $ffe4 //- get a byte from channel          
+bc3c9:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq bc3d9
         cmp #$59
         bne bc3c9
         lda #$c9
         sta aa9e7
-bc3d9:   ldx #$27
-bc3db:   lda fc140,x
+bc3d9:
+        ldx #$27
+bc3db:
+        lda fc140,x
         sta screen_ram + $0050,x
         dex 
         bpl bc3db
-bc3e4:   jsr $ffe4 //- get a byte from channel          
+bc3e4:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$0d
         beq bc434
         cmp #$11
@@ -7511,12 +8061,15 @@ bc3e4:   jsr $ffe4 //- get a byte from channel
         inc screen_ram + $0061
         jmp bc3e4
 
-bc40a:   inc screen_ram + $0060
+bc40a:
+        inc screen_ram + $0060
         lda #$30
-jc40f:   sta screen_ram + $0061
+jc40f:
+        sta screen_ram + $0061
         jmp bc3e4
 
-bc415:   lda a349c
+bc415:
+        lda a349c
         cmp #$01
         beq bc3e4
         dec a349c
@@ -7526,32 +8079,39 @@ bc415:   lda a349c
         dec screen_ram + $0061
         jmp bc3e4
 
-bc42c:   dec screen_ram + $0060
+bc42c:
+        dec screen_ram + $0060
         lda #$39
         jmp jc40f
 
-bc434:   lda a349c
+bc434:
+        lda a349c
         sta a349d
         ldx #$27
-bc43c:   lda fc168,x
+bc43c:
+        lda fc168,x
         sta screen_ram + $0050,x
         dex 
         bpl bc43c
-bc445:   jsr $ffe4 //- get a byte from channel          
+bc445:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$4e
         beq jc455
         cmp #$59
         bne bc445
         lda #$c9
         sta aa9e3
-jc455:   ldx #$27
-bc457:   lda fc190,x
+jc455:
+        ldx #$27
+bc457:
+        lda fc190,x
         sta screen_ram + $0050,x
         dex 
         bpl bc457
         lda #$00
         sta a9d
-bc464:  jsr $ffe4 //- get a byte from channel          
+bc464:
+        jsr $ffe4 //- get a byte from channel          
         cmp #$52
         beq bc4b4
         cmp #$4c
@@ -7571,24 +8131,28 @@ bc464:  jsr $ffe4 //- get a byte from channel
         ldy #$ca
         jsr $ffd5// - load after call setlfs,setnam    
         ldx #$00
-bc490:   lda fca00,x
+bc490:
+        lda fca00,x
         sta firstinhalloffame,x
         inx 
         cpx #$ac
         bne bc490
         ldx #$13
-bc49d:   lda fcaac,x
+bc49d:
+        lda fcaac,x
         sta ingamebanner,x
         dex 
         bpl bc49d
         ldx #$0d
-bc4a8:   lda fcac0,x
+bc4a8:
+        lda fcac0,x
         sta hiscoreforscrollingbanner,x
         dex 
         bpl bc4a8
         jmp launchuridium
 
-bc4b4:   jsr $e544
+bc4b4:
+        jsr $e544
         jsr sc4c5
         lda #$60
         sta ac982
@@ -7613,7 +8177,8 @@ jc4cd:
         sta $fffb    //nmi
         jmp $e000
 
-pc4da:   rti 
+pc4da:
+        rti 
 
 
 
@@ -7642,22 +8207,26 @@ jc909:
 //--------------------------------------------------------------------
 jc910:
         ldx #$00
-bc912:   lda firstinhalloffame,x
+bc912:
+        lda firstinhalloffame,x
         sta fca00,x
         inx 
         cpx #$ac
         bne bc912
         ldx #$13
-bc91f:  lda ingamebanner,x
+bc91f:
+        lda ingamebanner,x
         sta fcaac,x
         dex 
         bpl bc91f
         ldx #$0d
-bc92a:   lda hiscoreforscrollingbanner,x
+bc92a:
+        lda hiscoreforscrollingbanner,x
         sta fcac0,x
         dex 
         bpl bc92a
-ac933:   rts 
+ac933:
+        rts 
 
         .byte $6f
 
@@ -7707,12 +8276,14 @@ sc962:
         ldx #$ce
         lda #$fb
         jsr $ffd8 //- save after call setlfs,setnam    
-ac982:  rts 
+ac982:
+        rts 
 
         lda #$35
         sta a01
         ldx #$6f
-bc989:   lda screen_ram + $0000,x
+bc989:
+        lda screen_ram + $0000,x
         sta f90,x
         dex 
         bpl bc989
@@ -7732,7 +8303,8 @@ bc989:   lda screen_ram + $0000,x
         sta $dc0d    //cia1: cia interrupt control register
         sta $dd0d    //cia2: cia interrupt control register
         cli 
-jc9b1:   lda #$01
+jc9b1:
+        lda #$01
         sta ac90a
         sta a349c
         sta a349d
@@ -7757,14 +8329,17 @@ checklandnowwarning:
         lda #$bf
         beq bc9f7
 .label ac9ec =*+$01
-jc9eb:   lda #$ff
+jc9eb:
+        lda #$ff
         sta $dc00    //cia1: data port register a
         rts 
 
-bc9f1:   jsr incrementtwovalues
+bc9f1:
+        jsr incrementtwovalues
         jmp jc9eb
 
-bc9f7:   lda #$01
+bc9f7:
+        lda #$01
         sta a85
         jmp jc9eb
 
