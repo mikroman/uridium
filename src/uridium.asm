@@ -770,9 +770,9 @@ b0e49:   jsr playsound
         sta aef
         lda #$01
         sta af2
-        lda #<$ffba
+        lda #00
         sta a3e99
-        lda #>$ffba
+        lda #>fe
         sta a3e9a
         rts 
 
