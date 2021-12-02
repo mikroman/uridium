@@ -798,9 +798,9 @@ b0e49:
         sta aef
         lda #$01
         sta af2
-        lda #<$ffba
+        lda #$00
         sta a3e99
-        lda #>$ffba
+        lda #$fe
         sta a3e9a
         rts 
 
@@ -7100,7 +7100,7 @@ ba989:
         rti 
 
 fa9c0:
-//.enc "none"
+//.enc "none" another scratch?
         .text "s:uridium high/rem"
 //.enc "petscii"
 
@@ -8312,7 +8312,7 @@ jc9b1:
 
         rti 
 
-//.enc "none"
+//.enc "none" scratch high?
         .text "s:uridium high/rem"
 //-------------------------------------------------------------------
 // checklandnowwarning
