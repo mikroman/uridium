@@ -1,3 +1,4 @@
+
 //          KICKASS version of Uridium converted by mikroman.
 // Original Comments follow:
 // this is the reverse-engineered source code for the game 'uridium'
@@ -19,6 +20,7 @@
 BasicUpstart2(launchuridium)
 
 #import "labels.asm"
+#import "c64-asm-labels.asm"
 #import "constants.asm"
 
 *=$0900 "0900"
@@ -29,11 +31,11 @@ launchuridium:
         sei 
 
         lda #$0b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
 
         lda #$f0
-        sta $d021    //background color 0
-        sta $d020    //border color
+        sta BGCOL0    //background color 0
+        sta EXTCOL    //border color
 
         lda #$24
         sta a01
@@ -50,8 +52,8 @@ b091c:
         ldy #>p8000
         stx temploptrcopyfrom
         sty temphiptrcopyfrom
-        ldx #<$e000
-        ldy #>$e000
+        ldx #<pe000
+        ldy #>pe000
         stx temploptrcopyto
         sty temphiptrcopyto
         ldx #$20
@@ -125,13 +127,13 @@ drawtitlescreen:
         sta a01
 
         // switch bank to bank 1 ($4000)
-        lda $dd02    //cia2: data direction register a
+        lda C2DDRA    //cia2: data direction register a
         ora #$03
-        sta $dd02    //cia2: data direction register a
-        lda $dd00    //cia2: data port register a
+        sta C2DDRA    //cia2: data direction register a
+        lda CI2PRA    //cia2: data port register a
         and #$fc
         ora #$02
-        sta $dd00    //cia2: data port register a
+        sta CI2PRA    //cia2: data port register a
 
         jsr initializesomepointers
         ldx #<irqinterrupt1
@@ -151,14 +153,14 @@ drawtitlescreen:
         stx $fffa    //nmi
         sty $fffb    //nmi
         lda #$01
-        sta $d01a    //vic interrupt mask register (imr)
+        sta IRQMSK    //vic interrupt mask register (imr)
         lda #$80
-        sta $d012    //raster position
+        sta RASTER    //raster position
         lda #$7f
-        sta $dc0d    //cia1: cia interrupt control register
-        sta $dd0d    //cia2: cia interrupt control register
-        lda $dc0d    //cia1: cia interrupt control register
-        lda $dd0d    //cia2: cia interrupt control register
+        sta CIAICR    //cia1: cia interrupt control register
+        sta CI2ICR    //cia2: cia interrupt control register
+        lda CIAICR    //cia1: cia interrupt control register
+        lda CI2ICR    //cia2: cia interrupt control register
         jsr copyshipspritestop5c00
 
         // write 4 zeroes to the top left?
@@ -191,12 +193,12 @@ preparetitlescreen:
         sta a4a
 
         // store pointers to joysticks 1 and 2
-        ldx #<$dc00
-        ldy #>$dc00
+        ldx #<CIAPRA
+        ldy #>CIAPRA
         stx joystick1loptr
         sty joystick1hiptr
-        ldx #<$dc01
-        ldy #>$dc01
+        ldx #<CIAPRB
+        ldy #>CIAPRB
         stx joystick2loptr
         sty joystick2hiptr
 
@@ -233,7 +235,7 @@ titlescreenloop:
         jsr setinterrupttoirqinterrupt1
 
         lda #$00
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         sta a5a
         sta a28
 
@@ -446,15 +448,15 @@ b0bf2:
         lda currentplayer
         cmp #$01
         beq b0c09
-        ldx #<$dc00
-        ldy #>$dc00
+        ldx #<CIAPRA
+        ldy #>CIAPRA
         stx joystick1loptr
         sty joystick1hiptr
         jmp j0c13
 
 b0c09:
-        ldx #<$dc01
-        ldy #>$dc01
+        ldx #<CIAPRB
+        ldy #>CIAPRB
         stx joystick1loptr
         sty joystick1hiptr
 j0c13:
@@ -472,7 +474,7 @@ enternewlevel:
         jsr updateoneuportwouptext
         jsr updateplayerdecalcolors
         lda #$00
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         lda #$30
         jsr write21linesofaccumulatorvaltoscreen
 
@@ -523,9 +525,9 @@ b0c71:
         ldy #>uridiumdecal
         jsr writetoscreen
         lda #$f1
-        sta $d026    //sprite multi-color register 1
+        sta SPMC1    //sprite multi-color register 1
         lda #$fe
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         ldx #<p32cc
         ldy #>p32cc
         stx srcloptr
@@ -574,7 +576,7 @@ b0cd7:
         jsr playshipdeploymentsequence
 
         lda a4b
-        sta $d02e    //sprite 7 color
+        sta SP7COL    //sprite 7 color
         ldy #$07
 b0cf0:
         lda f32ed,y
@@ -966,7 +968,7 @@ playsomeofthetitletune:
         lda aef
 .label a0f5f =*+$01
         ora #$80
-        sta $d418    //select filter mode and volume
+        sta SIGVOL    //select filter mode and volume
         ldy #$00
         sty a9f
 b0f67:
@@ -1002,20 +1004,20 @@ b0f98:
         adc fc2,x
         sta fc0,x
         ldy soundptr
-        sta $d400,y  //voice 1: frequency control - low-byte
+        sta FRELO1,y  //voice 1: frequency control - low-byte
         lda fc1,x
         adc fc3,x
         sta fc1,x
-        sta $d401,y  //voice 1: frequency control - high-byte
+        sta FREHI1,y  //voice 1: frequency control - high-byte
         lda fc7,x
         clc 
         adc fc9,x
         sta fc7,x
-        sta $d402,y  //voice 1: pulse waveform width - low-byte
+        sta PWLO1,y  //voice 1: pulse waveform width - low-byte
         lda fc8,x
         adc fca,x
         sta fc8,x
-        sta $d403,y  //voice 1: pulse waveform width - high-nybble
+        sta PWHI1,y  //voice 1: pulse waveform width - high-nybble
         beq b0fc6
         cmp #$0f
         bcc b0fd7
@@ -1040,7 +1042,7 @@ b0fd7:
         lda f9c,x
         and #$fe
         ldy soundptr
-        sta $d404,y  //voice 1: control register
+        sta VCREG1,y  //voice 1: control register
 b0fed:
         ldx aa0
         ldy fc4,x
@@ -1163,12 +1165,12 @@ b10a4:
 updatesoundsettings:
         ldy soundptr
         lda #$00
-        sta $d406,y  //voice 1: sustain / release cycle control
-        sta $d405,y  //voice 1: attack / decay cycle control
+        sta SUREL1,y  //voice 1: sustain / release cycle control
+        sta ATDCY1,y  //voice 1: attack / decay cycle control
         lda #$08
-        sta $d404,y  //voice 1: control register
+        sta VCREG1,y  //voice 1: control register
         lda #$00
-        sta $d404,y  //voice 1: control register
+        sta VCREG1,y  //voice 1: control register
         rts 
 
 //-------------------------------------------------------------------
@@ -1183,7 +1185,7 @@ playsomesound:
         ldy soundptr
 b10c5:
         lda f114a,x
-        sta $d400,y  //voice 1: frequency control - low-byte
+        sta FRELO1,y  //voice 1: frequency control - low-byte
         iny 
         dex 
         bpl b10c5
@@ -1194,7 +1196,7 @@ b10d3:
         lda f3947,y
         inc aa0
         ldy soundptr
-        sta $d400,y  //voice 1: frequency control - low-byte
+        sta FRELO1,y  //voice 1: frequency control - low-byte
         inc soundptr
         dex 
         bne b10d3
@@ -1212,7 +1214,7 @@ b10d3:
         dey 
         dey 
         dey 
-        sta $d400,y  //voice 1: frequency control - low-byte
+        sta FRELO1,y  //voice 1: frequency control - low-byte
         rts 
 
 //-------------------------------------------------------------------
@@ -1233,7 +1235,7 @@ playsound:
         ldy #$18
         lda #$00
 b1110:
-        sta $d400,y  //voice 1: frequency control - low-byte
+        sta FRELO1,y  //voice 1: frequency control - low-byte
         dey 
         bpl b1110
         sta a96
@@ -1252,13 +1254,13 @@ b1110:
 //-------------------------------------------------------------------
 playnote:
         lda #$ff
-        sta $d40e    //voice 3: frequency control - low-byte
-        sta $d40f    //voice 3: frequency control - high-byte
+        sta FRELO3    //voice 3: frequency control - low-byte
+        sta FREHI3    //voice 3: frequency control - high-byte
         lda #$00
-        sta $d413    //voice 3: attack / decay cycle control
-        sta $d414    //voice 3: sustain / release cycle control
+        sta ATDCY3    //voice 3: attack / decay cycle control
+        sta SUREL3    //voice 3: sustain / release cycle control
         lda #$81
-        sta $d412    //voice 3: control register
+        sta VCREG3    //voice 3: control register
         rts 
 
 f1141:
@@ -1275,9 +1277,9 @@ f114a:
 destructsequenceminigame:
         lda #$f0
         sta a4a
-        sta $d021    //background color 0
-        sta $d022    //background color 1, multi-color register 0
-        sta $d023    //background color 2, multi-color register 1
+        sta BGCOL0    //background color 0
+        sta BGCOL1    //background color 1, multi-color register 0
+        sta BGCOL2    //background color 2, multi-color register 1
         ldx #<pa6a0
         ldy #>pa6a0
         stx temploptrcopyfrom
@@ -1325,9 +1327,9 @@ b11a4:
         lda f38de,y
         sta a4a
         lda f38e3,y
-        sta $d022    //background color 1, multi-color register 0
+        sta BGCOL1    //background color 1, multi-color register 0
         lda f38e8,y
-        sta $d023    //background color 2, multi-color register 1
+        sta BGCOL2    //background color 2, multi-color register 1
         dec initialvalueofy
         bpl b11a0
         ldy #$00
@@ -1354,7 +1356,7 @@ b11a4:
 //--------------------------------------------------------------------
 destructsequenceminigameloop:
         jsr spinwaitingforjoystickinput
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$01
         sta randomnumberbetween0and1
         lda aa8
@@ -1362,7 +1364,7 @@ destructsequenceminigameloop:
         adc aad
         sta aaa
         jsr updatesomedataforminigame
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$01
         sta anotherrandomnumberbetween0and1
         lda #$01
@@ -1710,10 +1712,10 @@ b1451:
         jsr s2713
         lda a62
         bne b1451
-        lda $d015    //sprite display enable
+        lda SPENA    //sprite display enable
         sta a85
         lda #$00
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         lda #$1f
         sta a0f
         lda #$14
@@ -1805,7 +1807,7 @@ b150f:
         jsr updatescreencolors
         jsr setinterruptoirqinterrupt2
         lda #$c0
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         lda #<p2322
         sta a91
         lda #>p2322
@@ -1855,7 +1857,7 @@ shipdestructsequence:
         bcs b1582
         jsr s16d2
 b1582:
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$3f
         bne b1593
         lda a45
@@ -1873,7 +1875,7 @@ b1593:
         sta a2d
         sta a5f
 b15a3:
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         cmp #$f0
         bcc b15b2
         and #$01
@@ -1904,7 +1906,7 @@ refreshdisplayandreturn:
         jsr updatescreencolors
         jsr scrollshipsurface
         lda #$c0
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
 a15d1:
         inc a32
         rts 
@@ -2098,7 +2100,7 @@ b16e6:
         lda (p12),y
         cmp #$20
         beq b16f9
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$01
         clc 
         adc #$f9
@@ -2108,7 +2110,7 @@ b16f9:
         lda (p12),y
         cmp #$20
         beq b170a
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$01
         clc 
         adc #$fb
@@ -2118,7 +2120,7 @@ b170a:
         lda (p12),y
         cmp #$20
         beq b171b
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$01
         clc 
         adc #$fd
@@ -2157,7 +2159,7 @@ s173b:
         lda #$08
         sta a0f
 b1749:
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         cmp #$55
         bcc b1765
         cmp #$aa
@@ -2240,7 +2242,7 @@ setinterrupttoirqinterrupt1:
         lda shouldwaituntilready
         bne setinterrupttoirqinterrupt1
         lda #$f0
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         sei 
         ldx #<irqinterrupt1
         ldy #>irqinterrupt1
@@ -2256,7 +2258,7 @@ setinterruptoirqinterrupt2:
         lda shouldwaituntilready
         bne setinterruptoirqinterrupt2
         lda #$fc
-        sta $d012    //raster position
+        sta RASTER    //raster position
         sei 
         ldx #<irqinterrupt2
         ldy #>irqinterrupt2
@@ -2696,7 +2698,7 @@ b1a98:
         lda (p6d),y
         cmp #$ff
         bne b1ab9
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$03
         clc 
         adc #$12
@@ -2767,7 +2769,7 @@ j1abf:
         beq b1b45
         cmp #$ff
         beq b1b36
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         bpl b1b45
 b1b36:
         lda a2e
@@ -3136,7 +3138,7 @@ j1db0:
         bne j1dcb
         lda a69
         beq j1dcb
-        cmp $d41b    // random number generator
+        cmp RANDOM    // random number generator
         bcc j1dcb
         jsr maybefireenemyshipbullet
 j1dcb:
@@ -3422,7 +3424,7 @@ maybelaunchmine:
         beq b1f9a
         lsr 
         lsr 
-        cmp $d41b    // random number generator
+        cmp RANDOM    // random number generator
         bcc b1f9a
         ldx a54
         bmi b1f9a
@@ -3659,7 +3661,7 @@ setupscreenforscrolling:
         jsr s2ed7
         jsr generatestarfield
         lda #$fb
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         lda #$00
         sta a34
         sta a2e
@@ -3683,7 +3685,7 @@ setupscreenforscrolling:
         lda a2936
         sta a49
         lda a4b
-        sta $d02e    //sprite 7 color
+        sta SP7COL    //sprite 7 color
         lda #$2f
         sta a3f4a
         jsr setinterruptoirqinterrupt2
@@ -3784,9 +3786,9 @@ enterdemomodeuntildeadorplayerpressesfire:
         sta srcloptr
         jsr updatespriteindicesandthenredrawsprites
         lda a4e
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         lda a4b
-        sta $d02e    //sprite 7 color
+        sta SP7COL    //sprite 7 color
         lda #$ff
         sta currentcolorvalue
         ldy #$07
@@ -3856,7 +3858,7 @@ b227c:
 randomlymanipulatejoystick:
         lda a8e
         sta firepressed
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         cmp #$be
         bcc b229a
         lda firepressed
@@ -3866,7 +3868,7 @@ randomlymanipulatejoystick:
 b229a:
         lda a5e
         sta a16
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         cmp #$b4
         bcc b22b6
         ldy #$00
@@ -3883,7 +3885,7 @@ b22b2:
 b22b6:
         lda a5f
         sta a17
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         cmp #$b4
         bcc b22d2
         ldy #$00
@@ -3968,8 +3970,8 @@ b232d:
 
 b2335:
         ldy indextocurrentleveltexturedata
-        ldx $e050,y
-        lda $e060,y
+        ldx fe050,y
+        lda fe060,y
         tay 
         jsr writetoscreen
         rts 
@@ -3988,12 +3990,12 @@ updateplayerandjoystickdisplay:
         rts 
 
 b2351:
-        ldx #<$dc00
-        ldy #>$dc00
+        ldx #<CIAPRA
+        ldy #>CIAPRA
         stx joystick1loptr
         sty joystick1hiptr
-        ldx #<$dc01
-        ldy #>$dc01
+        ldx #<CIAPRB
+        ldy #>CIAPRB
         stx joystick2loptr
         sty joystick2hiptr
         lda a19
@@ -4163,7 +4165,7 @@ b2453:
 //-------------------------------------------------------------------
 shiphasbeenhit:
         lda #$00
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         sta a3f
         lda #$06
         sta a59
@@ -4171,9 +4173,9 @@ shiphasbeenhit:
         sta a91
         sta a92
         lda #$f8
-        sta $d026    //sprite multi-color register 1
+        sta SPMC1    //sprite multi-color register 1
         lda #$f0
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         ldx #<p32e2
         ldy #>p32e2
         stx srcloptr
@@ -4195,7 +4197,7 @@ b2490:
         jsr storeshipspritestate
         lda a59
         sta spriteindex
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$0f
         sec 
         sbc #$08
@@ -4204,7 +4206,7 @@ b2490:
         sta currentspritexpos
         lda #$30
         sta currentspritevalue
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         and #$0f
         sbc #$08
         clc 
@@ -4902,14 +4904,14 @@ b28e0:
         cmp #$84
         bcc b28b8
         lda #$40
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         lda a3319
         sta srchiptr
         lda a330f
         sta srcloptr
         jsr updatespriteindicesandthenredrawsprites
         lda a4e
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         rts 
 
 //-------------------------------------------------------------------
@@ -5518,9 +5520,9 @@ updatetexturedataforcurrentship:
         lda indextocurrentleveltexturedata
         and #$0f
         tay 
-        lda $e010,y
+        lda fe010,y
         sta a12
-        lda $e020,y
+        lda fe020,y
         sta a13
         
         // clear down the surface data first.
@@ -5927,7 +5929,7 @@ updatescreencolors:
         lda monochromenabled
         bne b2f5b
         ldy indextocurrentleveltexturedata
-        lda $e030,y
+        lda fe030,y
         beq b2f5b
         sta initialvalueofy
 b2f4c:
@@ -5948,13 +5950,13 @@ b2f5d:
         dey 
         bpl b2f5d
         lda a4b
-        sta $d023    //background color 2, multi-color register 1
+        sta BGCOL2    //background color 2, multi-color register 1
         lda a4c
-        sta $d022    //background color 1, multi-color register 0
+        sta BGCOL1    //background color 1, multi-color register 0
         lda a4e
-        sta $d025    //sprite multi-color register 0
+        sta SPMC0    //sprite multi-color register 0
         lda #$f1
-        sta $d026    //sprite multi-color register 1
+        sta SPMC1    //sprite multi-color register 1
         lda a4d
         and #$f7
         sta a58
@@ -5979,19 +5981,19 @@ b2f5d:
 checkifpauseorfirehasbeenpressed:
         lda #$ff
         sta a60
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         and #$08
         cmp #$08
         bne b2fc7
         lda #$7f
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         ora #$7f
         sta a60
         lda #$bf
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         ora #$f7
         and a60
         sta a60
@@ -6109,7 +6111,7 @@ generaterandomdatafromrng:
         ldx #$00
         stx a10
 b308a:
-        lda $d41b    // random number generator
+        lda RANDOM    // random number generator
         ldx a10
         eor randomdatastorage,x
         sta randomdatastorage,x
@@ -6822,19 +6824,19 @@ f3930:
 irqinterrupt2:
         pha 
         lda #$c0
-        sta $d016    //vic control register 2
+        sta SCROLX    //vic control register 2
 
         // switch charset to maincharacterset
         lda #$2d
-        sta $d018    //vic memory control register
+        sta VMCSB    //vic memory control register
         lda #$01
-        sta $d019    //vic interrupt request register (irr)
+        sta VICIRQ    //vic interrupt request register (irr)
         lda #$52
-        sta $d012    //raster position
+        sta RASTER    //raster position
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         lda #$f0
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         inc shouldwaituntilready
         lda #<irqinterrupt3
         sta $fffe    //irq
@@ -6867,21 +6869,21 @@ b3f3c:
         lda multicolormodeenabled
         and #$07
         ora #$d0
-        sta $d016    //vic control register 2
+        sta SCROLX    //vic control register 2
 
         // switch charset to surfacetexturecharacterset
 .label a3f4a =*+$01
         lda #$2f
-        sta $d018    //vic memory control register
+        sta VMCSB    //vic memory control register
 
         lda a4a
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         lda #$01
-        sta $d019    //vic interrupt request register (irr)
+        sta VICIRQ    //vic interrupt request register (irr)
         lda #$61
-        sta $d012    //raster position
+        sta RASTER    //raster position
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         inc shouldwaituntilready
         lda #<irqinterrupt4
         sta $fffe    //irq
@@ -6897,11 +6899,11 @@ b3f3c:
 irqinterrupt4:
         pha 
         lda #$01
-        sta $d019    //vic interrupt request register (irr)
+        sta VICIRQ    //vic interrupt request register (irr)
         lda #$fc
-        sta $d012    //raster position
+        sta RASTER    //raster position
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         lda #$00
         sta shouldwaituntilready
         lda #<irqinterrupt2
@@ -6924,23 +6926,23 @@ b3f97:
 
         // switch charset to maincharacterset
         lda #$2d
-        sta $d018    //vic memory control register
+        sta VMCSB    //vic memory control register
         lda #$f0
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         lda #$c8
-        sta $d016    //vic control register 2
+        sta SCROLX    //vic control register 2
         
 .label a3fb0 =*+$01
         lda #$00
         sta shouldwaituntilready
 
         lda #$01
-        sta $d019    //vic interrupt request register (irr)
+        sta VICIRQ    //vic interrupt request register (irr)
 
         lda a3fb0
-        sta $d012    //raster position
+        sta RASTER    //raster position
 
         eor #$80
         sta a3fb0
@@ -7030,11 +7032,11 @@ ba935:
         bpl ba935
         sei 
         lda #$f0
-        sta $d01a    //vic interrupt mask register (imr)
+        sta IRQMSK    //vic interrupt mask register (imr)
         lda #$00
-        sta $dc0d    //cia1: cia interrupt control register
+        sta CIAICR    //cia1: cia interrupt control register
         lda #$0b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         lda #$37
         sta a01
         jsr $fda3 //(jmp) - initialize cia & irq             
@@ -7077,19 +7079,19 @@ ba989:
         bpl ba989
 
         // switch bank to bank 1 ($4000)
-        lda $dd02    //cia2: data direction register a
+        lda C2DDRA    //cia2: data direction register a
         ora #$03
-        sta $dd02    //cia2: data direction register a
-        lda $dd00    //cia2: data port register a
+        sta C2DDRA    //cia2: data direction register a
+        lda CI2PRA    //cia2: data port register a
         and #$fc
         ora #$02
-        sta $dd00    //cia2: data port register a
+        sta CI2PRA    //cia2: data port register a
 
         lda #$01
-        sta $d01a    //vic interrupt mask register (imr)
+        sta IRQMSK    //vic interrupt mask register (imr)
         lda #$7f
-        sta $dc0d    //cia1: cia interrupt control register
-        sta $dd0d    //cia2: cia interrupt control register
+        sta CIAICR    //cia1: cia interrupt control register
+        sta CI2ICR    //cia2: cia interrupt control register
         cli 
         lda #$01
         sta ac90a
@@ -7109,11 +7111,11 @@ fa9c0:
 //--------------------------------------------------------------------
 sa9d2:
         jsr maybedisplaylandnowwarning
-        lda $dc00    //cia1: data port register a
+        lda CIAPRA    //cia1: data port register a
         sta ac9ec
         lda #$7f
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
 aa9e3:
         lda #$df
         beq ba9f1
@@ -7121,7 +7123,7 @@ aa9e7:
         lda #$bf
         beq ba9f7
         lda #$ff
-        sta $dc00    //cia1: data port register a
+        sta CIAPRA    //cia1: data port register a
         rts 
 
 ba9f1:
@@ -7161,13 +7163,13 @@ getjoystickinput:
         sta a16
         sta a17
         lda #$ff
-        sta $dc00    //cia1: data port register a
+        sta CIAPRA    //cia1: data port register a
 .label joystick1loptr =*+$01
 .label joystick1hiptr =*+$02
-        lda $dc00    //cia1: data port register a
+        lda CIAPRA    //cia1: data port register a
 .label joystick2loptr =*+$01
 .label joystick2hiptr =*+$02
-        and $dc01    //cia1: data port register b
+        and CIAPRB    //cia1: data port register b
         bit msbforspritearray + $02
         beq bb037
         bit msbforspritearray + $03
@@ -7206,24 +7208,24 @@ storespritecontentcolorandposition:
         sta currentspritemsb
         eor #$ff
         sta a03
-        lda $d027,y  //sprite 0 color
+        lda SP0COL,y  //sprite 0 color
         sta currentspritecolor
         lda sprite0ptr,y
         sta currentspritevalue
         tya 
         asl 
         tay 
-        lda $d000,y  //sprite 0 x pos
+        lda SP0X,y  //sprite 0 x pos
         sta currentspritexpos
-        lda $d001,y  //sprite 0 y pos
+        lda SP0Y,y  //sprite 0 y pos
         sta currentspriteypos
-        lda $d010    //sprites 0-7 msb of x coordinate
+        lda MSIGX    //sprites 0-7 msb of x coordinate
         and currentspritemsb
         beq bb088
         lda #$ff
 bb088:
         sta a06
-        lda $d015    //sprite display enable
+        lda SPENA    //sprite display enable
         and currentspritemsb
         sta currentspritedisplayenable
         rts 
@@ -7237,36 +7239,36 @@ storeshipspritestate:
         sta currentspritemsb
         eor #$ff
         sta a03
-        lda $d027,y  //sprite 0 color
+        lda SP0COL,y  //sprite 0 color
         sta currentspritecolor
         lda sprite0ptr,y
         sta currentspritevalue
         tya 
         asl 
         tay 
-        lda $d000,y  //sprite 0 x pos
+        lda SP0X,y  //sprite 0 x pos
         sta currentspritexpos
-        lda $d001,y  //sprite 0 y pos
+        lda SP0Y,y  //sprite 0 y pos
         sta currentspriteypos
-        lda $d010    //sprites 0-7 msb of x coordinate
+        lda MSIGX    //sprites 0-7 msb of x coordinate
         and currentspritemsb
         beq bb0bd
         lda #$ff
 bb0bd:
         sta a06
-        lda $d015    //sprite display enable
+        lda SPENA    //sprite display enable
         and currentspritemsb
         sta currentspritedisplayenable
-        lda $d017    //sprites expand 2x vertical (y)
+        lda YXPAND    //sprites expand 2x vertical (y)
         and currentspritemsb
         sta currentspriteexpandvertical
-        lda $d01b    //sprite to background display priority
+        lda SPBGPR    //sprite to background display priority
         and currentspritemsb
         sta currentspritebackgrounddisplaypriority
-        lda $d01c    //sprites multi-color mode select
+        lda SPMC    //sprites multi-color mode select
         and currentspritemsb
         sta currentspritemulticolormode
-        lda $d01d    //sprites expand 2x horizontal (x)
+        lda XXPAND    //sprites expand 2x horizontal (x)
         and currentspritemsb
         sta currentspriteexpandhorizontal
         rts 
@@ -7281,47 +7283,47 @@ updatespritesizecolorandpriority:
         eor #$ff
         sta a03
         lda currentspritecolor
-        sta $d027,y  //sprite 0 color
+        sta SP0COL,y  //sprite 0 color
         lda currentspritemulticolormode
         beq bb0fe
         lda currentspritemsb
-        ora $d01c    //sprites multi-color mode select
+        ora SPMC    //sprites multi-color mode select
         bne bb103
 bb0fe:
-        lda $d01c    //sprites multi-color mode select
+        lda SPMC    //sprites multi-color mode select
         and a03
 bb103:
-        sta $d01c    //sprites multi-color mode select
+        sta SPMC    //sprites multi-color mode select
         lda currentspriteexpandvertical
         beq bb111
         lda currentspritemsb
-        ora $d017    //sprites expand 2x vertical (y)
+        ora YXPAND    //sprites expand 2x vertical (y)
         bne bb116
 bb111:
-        lda $d017    //sprites expand 2x vertical (y)
+        lda YXPAND    //sprites expand 2x vertical (y)
         and a03
 bb116:
-        sta $d017    //sprites expand 2x vertical (y)
+        sta YXPAND    //sprites expand 2x vertical (y)
         lda currentspriteexpandhorizontal
         beq bb124
         lda currentspritemsb
-        ora $d01d    //sprites expand 2x horizontal (x)
+        ora XXPAND    //sprites expand 2x horizontal (x)
         bne bb129
 bb124:
-        lda $d01d    //sprites expand 2x horizontal (x)
+        lda XXPAND    //sprites expand 2x horizontal (x)
         and a03
 bb129:
-        sta $d01d    //sprites expand 2x horizontal (x)
+        sta XXPAND    //sprites expand 2x horizontal (x)
         lda currentspritebackgrounddisplaypriority
         beq bb137
         lda currentspritemsb
-        ora $d01b    //sprite to background display priority
+        ora SPBGPR    //sprite to background display priority
         bne bb13c
 bb137:
-        lda $d01b    //sprite to background display priority
+        lda SPBGPR    //sprite to background display priority
         and a03
 bb13c:
-        sta $d01b    //sprite to background display priority
+        sta SPBGPR    //sprite to background display priority
 
 //-------------------------------------------------------------------
 // updatespritecontentandposition
@@ -7338,32 +7340,32 @@ updatespritecontentandposition:
         asl 
         tay 
         lda currentspritexpos
-        sta $d000,y  //sprite 0 x pos
+        sta SP0X,y  //sprite 0 x pos
         lda currentspriteypos
-        sta $d001,y  //sprite 0 y pos
+        sta SP0Y,y  //sprite 0 y pos
         lda a06
         and #$01
         sta a06
         lda a06
         beq bb16d
         lda currentspritemsb
-        ora $d010    //sprites 0-7 msb of x coordinate
+        ora MSIGX    //sprites 0-7 msb of x coordinate
         bne bb172
 bb16d:
-        lda $d010    //sprites 0-7 msb of x coordinate
+        lda MSIGX    //sprites 0-7 msb of x coordinate
         and a03
 bb172:
-        sta $d010    //sprites 0-7 msb of x coordinate
+        sta MSIGX    //sprites 0-7 msb of x coordinate
         lda currentspritedisplayenable
         beq bb180
         lda currentspritemsb
-        ora $d015    //sprite display enable
+        ora SPENA    //sprite display enable
         bne bb185
 bb180:
-        lda $d015    //sprite display enable
+        lda SPENA    //sprite display enable
         and a03
 bb185:
-        sta $d015    //sprite display enable
+        sta SPENA    //sprite display enable
         rts 
 
 //-------------------------------------------------------------------
@@ -7456,23 +7458,23 @@ bb1f6:
 //-------------------------------------------------------------------
 domorewithjoystickinput:
         lda #$ff
-        sta $dc02    //cia1: data direction register a
+        sta CIDDRA    //cia1: data direction register a
         lda #$00
-        sta $dc03    //cia1: data direction register b
+        sta CIDDRB    //cia1: data direction register b
         lda #$fe
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         and #$78
         sta a19
         lda #$fd
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         and #$80
         ora a19
         sta a19
         lda #$bf
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         and #$10
         bne bb233
         lda a19
@@ -7480,8 +7482,8 @@ domorewithjoystickinput:
         sta a19
 bb233:
         lda #$ff
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         ora #$e0
         eor #$ff
         ora a19
@@ -7738,10 +7740,10 @@ notthedreadnoughdestructionsequence:
         jsr $e544
         // switch charset to $1800?
         lda #$16
-        sta $d018    //vic memory control register
+        sta VMCSB    //vic memory control register
         lda #$80
-        sta $d020    //border color
-        sta $d021    //background color 0
+        sta EXTCOL    //border color
+        sta BGCOL0    //background color 0
         sta $0291
 
 jc1cb:
@@ -7761,8 +7763,9 @@ bc1d4:
 
 bc1e3:
         lda #$0b
-        sta $d011    //vic control register 1
-bc1e8:   lda $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
+bc1e8:
+        lda SCROLY    //vic control register 1
         bpl bc1e8
 
         sei 
@@ -7812,14 +7815,14 @@ bc218:
         adc #$00
         sta dreadnoughthiptr
 bc236:
-        lda $d011    //vic control register 1
+        lda SCROLY    //vic control register 1
         bpl bc236
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         ldx #$00
         jsr flashbackgroundduringdreadnoughtdestruction
 bc245:
-        lda $dc01    //cia1: data port register b
+        lda CIAPRB    //cia1: data port register b
         cmp #$7f
         beq bc2a2
         cmp #$ef
@@ -7852,10 +7855,10 @@ bc26e:
         ldx a03
         ldy currentspritemsb
 bc278:
-        lda $d011    //vic control register 1
+        lda SCROLY    //vic control register 1
         bpl bc278
         lda backgroundcolors,x
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         inx 
         iny 
         cpy #$0c
@@ -7875,7 +7878,7 @@ bc2a2:
         jsr flashbackgroundduringdreadnoughtdestruction
         lda #$00
         sta currentspritemsb
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         jsr $e544
         sei 
         lda #$35
@@ -7888,22 +7891,22 @@ bc2a2:
 jc2b9:
         sei 
         lda #$0b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
 bc2bf:
-        lda $d011    //vic control register 1
+        lda SCROLY    //vic control register 1
         bpl bc2bf
         lda #$00
-        sta $d021    //background color 0
+        sta BGCOL0    //background color 0
         lda #$c8
-        sta $d016    //vic control register 2
+        sta SCROLX    //vic control register 2
 
         // switch bank to $0000
         lda #$97
-        sta $dd00    //cia2: data port register a
+        sta CI2PRA    //cia2: data port register a
 
         // switch charset to $1800?
         lda #$16
-        sta $d018    //vic memory control register
+        sta VMCSB    //vic memory control register
 
         ldx #$00
 bc2da:
@@ -7939,7 +7942,7 @@ bc30e:
         dex 
         bpl bc30e
         lda #$1b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
 bc31c:
         jsr $ffe4 // - get a byte from channel          
         cmp #$54
@@ -8240,11 +8243,11 @@ bc935:
         bpl bc935
         sei 
         lda #$f0
-        sta $d01a    //vic interrupt mask register (imr)
+        sta IRQMSK    //vic interrupt mask register (imr)
         lda #$00
-        sta $dc0d    //cia1: cia interrupt control register
+        sta CIAICR    //cia1: cia interrupt control register
         lda #$0b
-        sta $d011    //vic control register 1
+        sta SCROLY    //vic control register 1
         lda #$37
         sta a01
         jsr $fda3 //(jmp) - initialize cia & irq             
@@ -8289,19 +8292,19 @@ bc989:
         bpl bc989
 
         // switch bank to bank 1 ($4000)
-        lda $dd02    //cia2: data direction register a
+        lda C2DDRA    //cia2: data direction register a
         ora #$03
-        sta $dd02    //cia2: data direction register a
-        lda $dd00    //cia2: data port register a
+        sta C2DDRA    //cia2: data direction register a
+        lda CI2PRA    //cia2: data port register a
         and #$fc
         ora #$02
-        sta $dd00    //cia2: data port register a
+        sta CI2PRA    //cia2: data port register a
 
         lda #$01
-        sta $d01a    //vic interrupt mask register (imr)
+        sta IRQMSK    //vic interrupt mask register (imr)
         lda #$7f
-        sta $dc0d    //cia1: cia interrupt control register
-        sta $dd0d    //cia2: cia interrupt control register
+        sta CIAICR    //cia1: cia interrupt control register
+        sta CI2ICR    //cia2: cia interrupt control register
         cli 
 jc9b1:
         lda #$01
@@ -8319,11 +8322,11 @@ jc9b1:
 //-------------------------------------------------------------------
 checklandnowwarning:
         jsr maybedisplaylandnowwarning
-        lda $dc00    //cia1: data port register a
+        lda CIAPRA    //cia1: data port register a
         sta ac9ec
         lda #$7f
-        sta $dc00    //cia1: data port register a
-        lda $dc01    //cia1: data port register b
+        sta CIAPRA    //cia1: data port register a
+        lda CIAPRB    //cia1: data port register b
         lda #$df
         beq bc9f1
         lda #$bf
@@ -8331,7 +8334,7 @@ checklandnowwarning:
 .label ac9ec =*+$01
 jc9eb:
         lda #$ff
-        sta $dc00    //cia1: data port register a
+        sta CIAPRA    //cia1: data port register a
         rts 
 
 bc9f1:
