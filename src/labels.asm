@@ -52,6 +52,7 @@
 .label a0f = $0f
 .label a10 = $10
 .label a11 = $11
+.label newvalueofsrcloptr = $11
 .label a12 = $12
 .label a13 = $13
 .label somedataloptr = $14
@@ -243,3 +244,10 @@
 .label screen_ram = $0400
 .label screen_ram_hibank = $4800
 .label sprite0ptr = screen_ram_hibank + $03f8
+//
+// **** internal labels ****
+//
+.label anotherdataloptrarray = somedatahiptrarray
+.label initialvalueofindextotexturesegment = initialvalueofy
+.label dreadnoughtloptr = spriteindex
+.label dreadnoughthiptr = currentspritexpos

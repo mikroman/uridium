@@ -27,6 +27,7 @@ BasicUpstart2(launchuridium)
 //-------------------------------------------------------------------
 // launchuridium
 //-------------------------------------------------------------------
+
 launchuridium:
         sei 
 
@@ -64,7 +65,7 @@ b091c:
         stx temploptrcopyto
         sty temphiptrcopyto
         ldx #$10
-        jsr copydatauntilxiszero
+       jsr copydatauntilxiszero
 
         ldx #<p7c00
         ldy #>p7c00
@@ -116,6 +117,7 @@ b091c:
 
         jsr copydatafrommaincharactersettop7400
         jsr copydatawithin71007800
+
 
 //-------------------------------------------------------------------
 // drawtitlescreen
@@ -195,12 +197,12 @@ preparetitlescreen:
         // store pointers to joysticks 1 and 2
         ldx #<CIAPRA
         ldy #>CIAPRA
-        stx joystick1loptr
-        sty joystick1hiptr
+        stx joystick1ptr
+        sty joystick1ptr + 1
         ldx #<CIAPRB
         ldy #>CIAPRB
-        stx joystick2loptr
-        sty joystick2hiptr
+        stx joystick2ptr
+        sty joystick2ptr + 1
 
         ldy #$26
 b0a3d:
@@ -450,18 +452,18 @@ b0bf2:
         beq b0c09
         ldx #<CIAPRA
         ldy #>CIAPRA
-        stx joystick1loptr
-        sty joystick1hiptr
+        stx joystick1ptr
+        sty joystick1ptr + 1
         jmp j0c13
 
 b0c09:
         ldx #<CIAPRB
         ldy #>CIAPRB
-        stx joystick1loptr
-        sty joystick1hiptr
+        stx joystick1ptr
+        sty joystick1ptr + 1
 j0c13:
-        stx joystick2loptr
-        sty joystick2hiptr
+        stx joystick2ptr
+        sty joystick2ptr + 1
 
 //--------------------------------------------------------------------
 // enternewlevel   
@@ -604,12 +606,15 @@ maingameloop:
         and #$07
         tay 
         lda screenwritejumptablehiptr,y
-        sta a0d27
+//        sta a0d27
+        sta maybechangetitledecaladdress1 + 1
         lda screenwritejumptableloptr,y
-        sta a0d26
-.label a0d26   =*+$01
-.label a0d27   =*+$02   
-        jsr maybechangetitledecal
+//        sta a0d26
+        sta maybechangetitledecaladdress1
+//.label a0d26   =*+$01
+//.label a0d27   =*+$02   
+//        jsr maybechangetitledecal
+        jsr maybechangetitledecaladdress1:$BEEF
 
         jsr maybefirebullets
         jsr s2576
@@ -662,8 +667,8 @@ b0d75:
         sed 
         sec 
         lda a25
-.label a0d7c =*+$01
-        sbc #$01
+//.label a0d7c =*+$01
+        sbc a0d7c:#$01
         sta a25
         cld 
         bne b0de8
@@ -966,8 +971,8 @@ j0f51:
 //--------------------------------------------------------------------
 playsomeofthetitletune:
         lda aef
-.label a0f5f =*+$01
-        ora #$80
+//.label a0f5f =*+$01
+        ora a0f5f:#$80
         sta SIGVOL    //select filter mode and volume
         ldy #$00
         sty a9f
@@ -1808,9 +1813,9 @@ b150f:
         jsr setinterruptoirqinterrupt2
         lda #$c0
         sta SPENA    //sprite display enable
-        lda #<p2322
+        lda #<writetoscreenaddress
         sta a91
-        lda #>p2322
+        lda #>writetoscreenaddress
         sta a92
         jsr processgameframe
         jsr s2713
@@ -2903,14 +2908,14 @@ b1c0e:
         // run a function for the sprite.
         tax 
         lda functionptrarray,x
-        sta functionhiptr
+        sta performdetailedupdateforspriteaddress
         lda functionptrarray + $01,x
-        sta functionloptr
+        sta performdetailedupdateforspriteaddress + 1
         jsr storespritecontentcolorandposition
         ldy a11
-.label functionhiptr =*+$01
-.label functionloptr =*+$02
-        jsr performdetailedupdateforsprite
+//.label functionhiptr =*+$01
+//.label functionloptr =*+$02
+        jsr performdetailedupdateforspriteaddress:performdetailedupdateforsprite
 
 b1c2e:
         dec a10
@@ -3051,8 +3056,9 @@ j1cfd:
 b1d17:
         lda a6f
         and #$08
-.label p1d1c =*+$01
-        beq b1d2e
+// .label p1d1c =*+$01
+//         beq b1d2e
+        beq p1d1c:b1d2e
         lda fa4c8,y
         clc 
 
@@ -3819,14 +3825,14 @@ b2216:
         and #$03
         tay 
         lda f36dd,y
-        sta a2254
+        sta maybechangetitledecaladdress2
         lda f36e1,y
-        sta a2255
+        sta maybechangetitledecaladdress2 + 1
 
-.label a2254 =*+$01
-.label a2255 =*+$02
+// .label a2254 =*+$01
+// .label a2255 =*+$02
 
-        jsr maybechangetitledecal
+        jsr maybechangetitledecaladdress2:maybechangetitledecal
         jsr randomlymanipulatejoystick
         jsr maybefirebullets
         jsr s2576
@@ -3952,8 +3958,8 @@ b231c:
 b231d:
         ldx #$f9
         ldy #$34
-.label p2322 =*+$01
-        jsr writetoscreen
+//.label p2322 =*+$01
+        jsr writetoscreenaddress:writetoscreen
         rts 
 
 b2325:
@@ -3992,12 +3998,12 @@ updateplayerandjoystickdisplay:
 b2351:
         ldx #<CIAPRA
         ldy #>CIAPRA
-        stx joystick1loptr
-        sty joystick1hiptr
+        stx joystick1ptr
+        sty joystick1ptr + 1
         ldx #<CIAPRB
         ldy #>CIAPRB
-        stx joystick2loptr
-        sty joystick2hiptr
+        stx joystick2ptr
+        sty joystick2ptr + 1
         lda a19
         bmi b2389
         lda #$02
@@ -4750,8 +4756,8 @@ s27d5:
         bpl b27ef
         cmp #$90
         bcs b27ef
-.label a27ec =*+$01
-        lda #$80
+//.label a27ec =*+$01
+        lda a27ec:#$80
         sta a32
 b27ef:
         ldy #$02
@@ -4759,8 +4765,8 @@ b27ef:
         bpl b27fd
         cmp #$90
         bcs b27fd
-.label a27fa =*+$01
-        lda #$80
+//.label a27fa =*+$01
+        lda a27fa:#$80
         sta a32
 b27fd:
         ldy #$01
@@ -4769,8 +4775,8 @@ b27fd:
         bpl b280d
         cmp #$90
         bcs b280d
-.label a280a =*+$01
-        lda #$80
+//.label a280a =*+$01
+        lda a280a:#$80
         sta a32
 b280d:
         lda a56
@@ -4781,8 +4787,8 @@ b280d:
         bpl b2821
         cmp #$90
         bcs b2821
-.label a281e =*+$01
-        lda #$80
+//.label a281e =*+$01
+        lda a281e:#$80
         sta a32
 b2821:
         lda a53
@@ -4793,8 +4799,8 @@ b2821:
         bpl b2834
         cmp #$90
         bcs b2834
-.label a2831 =*+$01
-        lda #$80
+//.label a2831 =*+$01
+        lda a2831:#$80
         sta a32
 b2834:
         dec a53
@@ -4937,8 +4943,8 @@ maybefirebullets:
         lda a48
         bmi b2954
         beq b2943
-.label a2936 =*+$01
-        lda #$07
+//.label a2936 =*+$01
+        lda a2936:#$07
         sta a49
         lda firepressed
         bne b2942
@@ -5127,28 +5133,28 @@ b2a33:
 
 b2a5e:
         sta fa450,x
-        sty a2a8a
+        sty surfacetexturecharactersetadress + 1
         asl 
-        rol a2a8a
+        rol surfacetexturecharactersetadress + 1
         asl 
-        rol a2a8a
+        rol surfacetexturecharactersetadress + 1
         asl 
-        rol a2a8a
-        sta a2a89
-        lda a2a8a
+        rol surfacetexturecharactersetadress + 1
+        sta surfacetexturecharactersetadress
+        lda surfacetexturecharactersetadress + 1
         adc #$78
-        sta a2a8a
+        sta surfacetexturecharactersetadress + 1
         lda f3937,x
-.label a2a7f =*+$01
-        ora #$80
+//.label a2a7f =*+$01
+        ora a2a7f:#$80
         sta somedataloptr
         lda #$78
         sta somedatahiptr
         ldy #$07
-.label a2a89   =*+$01
-.label a2a8a   =*+$02        
+// .label a2a89   =*+$01
+// .label a2a8a   =*+$02        
 b2a88:
-        lda surfacetexturecharacterset,y
+        lda surfacetexturecharactersetadress:surfacetexturecharacterset,y
         sta (somedataloptr),y
         dey 
         bpl b2a88
@@ -5160,8 +5166,8 @@ b2a88:
         sta (somedataloptr),y
         ldy #$00
         txa 
-.label a2aa0 =*+$01
-        ora #$10
+//.label a2aa0 =*+$01
+        ora a2aa0:#$10
         sta (ramloptr),y
 b2aa3:
         inx 
@@ -5394,36 +5400,36 @@ scrollshipsurface:
         lda #>surfaceforcurrentlevel
         ora a0f
         sta a30
-        sta a2c21
+        sta surfaceforcurrentleveladdress + 1
         lda a31
-        sta a2c20
+        sta surfaceforcurrentleveladdress
         lda #>screen_ram_hibank + $00f0
-        sta a2c24
+        sta screen_ram_hibankaddress + 1
         lda #<screen_ram_hibank + $00f0
-        sta a2c23
+        sta screen_ram_hibankaddress
 
         ldx #$11
 b2c1d:
         ldy #$26
-.label a2c20 =*+$01
-.label a2c21 =*+$02
+//.label a2c20 =*+$01
+//.label a2c21 =*+$02
 b2c1f:
-        lda surfaceforcurrentlevel,y
-.label a2c23 =*+$01
-.label a2c24 =*+$02
-        sta screen_ram_hibank + $00f0,y
+        lda surfaceforcurrentleveladdress:surfaceforcurrentlevel,y
+//.label a2c23 =*+$01
+//.label a2c24 =*+$02
+        sta screen_ram_hibankaddress:screen_ram_hibank + $00f0,y
         dey 
         bpl b2c1f
         dex 
         beq b2c42
-        inc a2c21
-        inc a2c21
-        lda a2c23
+        inc surfaceforcurrentleveladdress + 1
+        inc surfaceforcurrentleveladdress + 1
+        lda screen_ram_hibankaddress
         clc 
         adc #$28
-        sta a2c23
+        sta screen_ram_hibankaddress
         bcc b2c1d
-        inc a2c24
+        inc screen_ram_hibankaddress + 1
         jmp b2c1d
 
 b2c42:
@@ -5452,8 +5458,6 @@ b2c42:
         rts 
 
 //.label pe100 = $e100
-.label anotherdataloptrarray = somedatahiptrarray
-.label newvalueofsrcloptr = $11
 //-------------------------------------------------------------------
 // updatepositionofpointerstotexturedata
 // updates the position of srcloptr and srchiptr to the right spot
@@ -5811,7 +5815,6 @@ b2e9e:
         bpl b2e9e
         rts 
 
-.label initialvalueofindextotexturesegment = initialvalueofy
 //-------------------------------------------------------------------
 // s2ea5
 //-------------------------------------------------------------------
@@ -6418,7 +6421,7 @@ f349f:
 .label f34c3 =*+$01
 hiscoreforscrollingbanner:
 //        .text " 12000 aeb"
-        .byte $30,$01,$02,$00,$00,$00,$30,$42,$12,$14
+        .byte $30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
         .byte $ff, $ff, $ff, $ff
 player1symbol:
         .byte $00,$0f
@@ -6542,25 +6545,25 @@ halloffame://$35E1
 firstinhalloffame:
         .byte $09,$0b
 //        .text "1.    12000 aeb"
-        .byte $01,$28,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$42,$12,$14
+        .byte $01,$28,$30,$30,$30,$30,$01,$02,$00,$00,$00,$30,$3a,$3e,$3b
         .byte $ff
         .byte $00,$01,$20,$00
 secondinhalloffame:
         .byte $0b,$0b
 //        .text "2.    11000    "
-        .byte $02,$28,$30,$30,$30,$30,$01,$01,$00,$00,$00,$30,$4c,$4d,$49
+        .byte $02,$28,$30,$30,$30,$30,$01,$01,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$01,$10,$00
 thirdinhalloffame:
         .byte $0d,$0b
 //        .text "3.    10000    "
-        .byte $03,$28,$30,$30,$30,$30,$01,$00,$00,$00,$00,$30,$48,$4c,$44
+        .byte $03,$28,$30,$30,$30,$30,$01,$00,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$01,$00,$00
 fourthinhalloffame:
         .byte $0f,$0b
 //        .text "4.     9000    "
-        .byte $04,$28,$30,$30,$30,$30,$30,$09,$00,$00,$00,$30,$4c,$41,$3a
+        .byte $04,$28,$30,$30,$30,$30,$30,$09,$00,$00,$00,$30,$30,$30,$30
         .byte $ff
         .byte $00,$00,$90,$00
 fifthinhalloffame:
@@ -6872,8 +6875,8 @@ b3f3c:
         sta SCROLX    //vic control register 2
 
         // switch charset to surfacetexturecharacterset
-.label a3f4a =*+$01
-        lda #$2f
+//.label a3f4a =*+$01
+        lda a3f4a:#$2f
         sta VMCSB    //vic memory control register
 
         lda a4a
@@ -6934,8 +6937,8 @@ b3f97:
         lda #$c8
         sta SCROLX    //vic control register 2
         
-.label a3fb0 =*+$01
-        lda #$00
+//.label a3fb0 =*+$01
+        lda a3fb0:#$00
         sta shouldwaituntilready
 
         lda #$01
@@ -6983,13 +6986,13 @@ fa900:
 //--------------------------------------------------------------------
 sa900:
         sta initial3
-.label aa904 =*+$01
-        lda #$01
+//.label aa904 =*+$01
+        lda aa904:#$01
         sta ac90a
         rts 
 
 //--------------------------------------------------------------------
-// ja909   jc909
+// ja909
 //--------------------------------------------------------------------
 ja909:
         lda #$01
@@ -7164,12 +7167,14 @@ getjoystickinput:
         sta a17
         lda #$ff
         sta CIAPRA    //cia1: data port register a
-.label joystick1loptr =*+$01
-.label joystick1hiptr =*+$02
-        lda CIAPRA    //cia1: data port register a
-.label joystick2loptr =*+$01
-.label joystick2hiptr =*+$02
-        and CIAPRB    //cia1: data port register b
+// .label joystick1loptr =*+$01
+// .label joystick1hiptr =*+$02
+//         lda CIAPRA    //cia1: data port register a
+// .label joystick2loptr =*+$01
+// .label joystick2hiptr =*+$02
+//         and CIAPRB    //cia1: data port register b
+        lda joystick1ptr:CIAPRA    //cia1: data port register a
+        and joystick2ptr:CIAPRB    //cia1: data port register b
         bit msbforspritearray + $02
         beq bb037
         bit msbforspritearray + $03
@@ -7409,8 +7414,8 @@ bb1b3:
 updateplayerscore:
         lda #$02
         sta currentcharypos
-.label ab1b9 =*+$01
-        lda #$02
+//.label ab1b9 =*+$01
+        lda ab1b9:#$02
         sta currentcharxpos
         ldx #$00
         stx a10
@@ -7568,9 +7573,9 @@ bb299:
         ldy #$00
         lda (dataloptr),y
         sta currentcharypos
-.label bb2a0 =*+$01
+//.label bb2a0 =*+$01
         // return early if the y pos is invalid
-        cmp #$18
+        cmp bb2a0:#$18
         bcs bb2c5
 
         // get the x pos from the second byte
@@ -7731,8 +7736,6 @@ bb35f:
 
 *=$c1b8 "C1B8"
 
-.label dreadnoughtloptr = spriteindex
-.label dreadnoughthiptr = currentspritexpos
 //-------------------------------------------------------------------
 // notthedreadnoughdestructionsequence   
 //-------------------------------------------------------------------
@@ -8200,8 +8203,8 @@ sc900:
 //--------------------------------------------------------------------
 jc909:
 
-.label ac90a =*+$01
-        lda #$01
+//.label ac90a =*+$01
+        lda ac90a:#$01
         beq jc910
         jmp jc9b1
 
@@ -8331,9 +8334,9 @@ checklandnowwarning:
         beq bc9f1
         lda #$bf
         beq bc9f7
-.label ac9ec =*+$01
+//.label ac9ec =*+$01
 jc9eb:
-        lda #$ff
+        lda ac9ec:#$ff
         sta CIAPRA    //cia1: data port register a
         rts 
 
