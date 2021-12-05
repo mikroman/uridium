@@ -210,6 +210,19 @@
 .label afc = $fc
 .label afe = $fe
 .label aff = $ff
+.label NMI = $fffa
+.label RESET = $fffc
+.label IRQ = $fffe
+.label GETIN = $ffe4
+.label SETLFS = $ffba
+.label SETNAM = $ffbd
+.label LOAD = $ffd5
+.label SAVE = $ffd8
+.label initializeSidCiaIRQ = $fda3
+.label KernalROM = $e000
+.label ClearScreen = $e544
+.label KernalVectors = $fd30
+
 //
 // **** zp pointers **** 
 //
@@ -247,7 +260,6 @@
 //
 // **** internal labels ****
 //
-.label anotherdataloptrarray = somedatahiptrarray
 .label initialvalueofindextotexturesegment = initialvalueofy
 .label dreadnoughtloptr = spriteindex
 .label dreadnoughthiptr = currentspritexpos
