@@ -42,14 +42,14 @@ launchuridium:
         lda #$24
         sta a01
 
-        ldy #$fe
+        ldy #$fe        //clear page zero
         lda #$00
 b0916:
         sta .a f0001,y
         dey 
         bne b0916
 
-b091c:
+b091c:                  //copy from $8000-$9FFF into $E000
         ldx #<p8000
         ldy #>p8000
         stx temploptrcopyfrom
@@ -58,16 +58,19 @@ b091c:
         ldy #>pe000
         stx temploptrcopyto
         sty temphiptrcopyto
-        ldx #$20
+        ldx #$20        //$20 pages moved
         jsr copydatauntilxiszero
 
+        //templo-hicopyfrom now points to $A000
+        //copy from $A000-$AFFF into $C000
         ldx #<pc000
         ldy #>pc000
         stx temploptrcopyto
         sty temphiptrcopyto
-        ldx #$10
+        ldx #$10        //$10 pages moved
        jsr copydatauntilxiszero
 
+        //copy from $7C00-$7DFF into $D200
         ldx #<p7c00
         ldy #>p7c00
         stx temploptrcopyfrom
@@ -76,16 +79,19 @@ b091c:
         ldy #>$d200
         stx temploptrcopyto
         sty temphiptrcopyto
-        ldx #$02
+        ldx #$02        //$02 pages moved
         jsr copydatauntilxiszero
 
+        //templo-hicopyto now points to $D400
+        //copy from $5C00-$67FF into $D400
         ldx #<p5c00
         ldy #>p5c00
         stx temploptrcopyfrom
         sty temphiptrcopyfrom
-        ldx #$0c
+        ldx #$0c        //$0C pages moved
         jsr copydatauntilxiszero
 
+        //copy from $4800-$4BFF into $D400
         ldx #<screen_ram_hibank + $0000
         ldy #>screen_ram_hibank + $0000
         stx temploptrcopyfrom
@@ -94,30 +100,32 @@ b091c:
         ldy #>pa600
         stx temploptrcopyto
         sty temphiptrcopyto
-        ldx #$04
+        ldx #$04        //$04 pages moved
         jsr copydatauntilxiszero
 
+        //templo-hicopyto now points to $AA00
+        //copy from $7400-$77FF into $AA00
         ldx #<p7400
         ldy #>p7400
         stx temploptrcopyfrom
         sty temphiptrcopyfrom
-        ldx #$04
+        ldx #$04        //$04 pages moved
         jsr copydatauntilxiszero
 
-        // copy code from p1000 to updatesoundptr to randomdatastorage to launchuridium.
+        // copy code from $1000-$10FF to $0800 to launchuridium.
         ldx #<p1000
         ldy #>p1000
         stx temploptrcopyfrom
         sty temphiptrcopyfrom
-        ldx #<randomdatastorage
+        ldx #<randomdatastorage //$0800
         ldy #>randomdatastorage
         stx temploptrcopyto
         sty temphiptrcopyto
-        ldy #$00
+        ldy #$00        //move a single page
         jsr copydatauntilyiszero
 
-        jsr copydatafrommaincharactersettop7400
-        jsr copydatawithin71007800
+        jsr copydatafrommaincharactersettop7400 //copy $7400-77FF to $7000
+        jsr copydatawithin71007800      //two small copies in same range
 
 
 //-------------------------------------------------------------------
@@ -141,13 +149,13 @@ drawtitlescreen:
         jsr initializesomepointers
         ldx #<irqinterrupt1
         ldy #>irqinterrupt1
-        stx IRQ         //irq
-        sty IRQ  + 1    //irq
+        stx IRQ         //set up our IRQ vector
+        sty IRQ  + 1
         ldx #<drawtitlescreen
         ldy #>drawtitlescreen
-        stx p8000
+        stx p8000       //coldstart entry point
         sty a8001
-        stx a8002
+        stx a8002       //warmstart entry point
         sty a8003
         stx RESET       //hardware reset
         sty RESET + 1   //hardware reset
@@ -166,7 +174,7 @@ drawtitlescreen:
         lda CI2ICR      //cia2: cia interrupt control register
         jsr copyshipspritestop5c00
 
-        // write 4 zeroes to the top left?
+        // prepare blank area on screen
         ldx #<screen_ram_hibank
         ldy #>screen_ram_hibank
         stx ramloptr
@@ -176,14 +184,14 @@ drawtitlescreen:
         jsr writetoram
 
         lda #$1f
-        sta ab1b9
+        sta PrintAtX
         jsr updateplayerscore
         lda #$01
-        sta ab1b9
+        sta PrintAtX
         jsr updateplayerscore
 
         lda #$01
-        sta a5c
+        sta numberofplayers
         cli 
 
 //--------------------------------------------------------------------
@@ -193,7 +201,7 @@ preparetitlescreen:
         ldx #$ff
         txs 
         lda #$f0
-        sta a4a
+        sta backgroundcolour
 
         // store pointers to joysticks 1 and 2
         ldx #<CIAPRA
@@ -206,7 +214,7 @@ preparetitlescreen:
         sty joystick2ptr + 1
 
         ldy #$26
-b0a3d:
+b0a3d:  //set up colourscheme for each player
         lda playerlinescolorscheme1,y
         sta color_ram + $0000,y
         and #$f7
@@ -391,10 +399,10 @@ b0b67:
         lda #$09
         sta indextotexturesegment
         lda #$1f
-        sta ab1b9
+        sta PrintAtX
         jsr updateplayerscore
         lda #$01
-        sta ab1b9
+        sta PrintAtX
         jsr updateplayerscore
 
 //--------------------------------------------------------------------
@@ -402,7 +410,7 @@ b0b67:
 //--------------------------------------------------------------------
 restartlevel:
         ldx #$08
-        lda a5c
+        lda numberofplayers
         cmp #$01
         beq b0bcc
         lda currentplayer
@@ -414,7 +422,7 @@ b0baf:
         dex 
         bpl b0baf
         lda #$1f
-        sta ab1b9
+        sta PrintAtX
         lda a25
         bne b0bf2
         ldx #$08
@@ -429,11 +437,11 @@ b0bcc:
         dex 
         bpl b0bcc
         lda #$01
-        sta ab1b9
+        sta PrintAtX
         lda a25
         bne b0bf2
         ldx #$08
-        lda a5c
+        lda numberofplayers
         cmp #$01
         bne b0be8
         jmp jc909
@@ -445,7 +453,7 @@ b0be8:
         jmp jc909
 
 b0bf2:
-        lda a5c
+        lda numberofplayers
         bne enternewlevel
         lda currentplayer
         cmp #$01
@@ -745,7 +753,7 @@ b0e02:
         sta $0250,x
         dex 
         bpl b0e02
-        lda a5c
+        lda numberofplayers
         sta currentplayer
         cmp #$01
         beq b0e16
@@ -1273,7 +1281,7 @@ f114a:
 //-------------------------------------------------------------------
 destructsequenceminigame:
         lda #$f0
-        sta a4a
+        sta backgroundcolour
         sta BGCOL0      //background color 0
         sta BGCOL1      //background color 1, multi-color register 0
         sta BGCOL2      //background color 2, multi-color register 1
@@ -1322,7 +1330,7 @@ b11a4:
         jsr maybeshowpausescreen
         ldy initialvalueofy
         lda f38de,y
-        sta a4a
+        sta backgroundcolour
         lda f38e3,y
         sta BGCOL1      //background color 1, multi-color register 0
         lda f38e8,y
@@ -3640,7 +3648,7 @@ setupscreenforscrolling:
         lda #$40
         sta a29
         lda #$f1
-        sta a4a
+        sta backgroundcolour
         lda #$00
         sta a2a
         jsr updatetexturedataforcurrentship
@@ -3914,7 +3922,7 @@ maybechangetitledecal:
         cmp #$02
         beq b2335
 b22fc:
-        lda a5c
+        lda numberofplayers
         tay 
         lda scrollingtitlescreendatahiptrarray,y
         ldx scrollingtitlescreendataloptrarray,y
@@ -3986,7 +3994,7 @@ b2351:
         lda a19
         bmi b2389
         lda #$02
-        sta a5c
+        sta numberofplayers
         ldx #<player1symbol
         ldy #>player1symbol
         jsr writetoscreen
@@ -3998,7 +4006,7 @@ j2374:
 
 b237b:
         lda #$00
-        sta a5c
+        sta numberofplayers
         ldx #<player2symbol
         ldy #>player2symbol
         jsr writetoscreen
@@ -4006,7 +4014,7 @@ b237b:
 
 b2389:
         lda #$01
-        sta a5c
+        sta numberofplayers
         ldx #<playerandjoysticksymbol
         ldy #>playerandjoysticksymbol
         jsr writetoscreen
@@ -6010,7 +6018,7 @@ b3001:
 //-------------------------------------------------------------------
 updateplayerdecalcolors:
         ldx #$09
-        lda a5c
+        lda numberofplayers
         cmp #$01
         beq b3062
         lda currentplayer
@@ -6821,7 +6829,7 @@ b3f3c:
         lda a3f4a:#$2f
         sta VMCSB       //vic memory control register
 
-        lda a4a
+        lda backgroundcolour
         sta BGCOL0      //background color 0
         lda #$01
         sta VICIRQ      //vic interrupt request register (irr)
@@ -7308,7 +7316,7 @@ bb185:
 //-------------------------------------------------------------------
 // writetoram
 //-------------------------------------------------------------------
-writetoram:
+writetoram:     //put A into RAM X number of loops
         sta currentspritecolor
 jb18b:
         ldy #$00
@@ -7346,7 +7354,7 @@ bb1b3:
 updateplayerscore:
         lda #$02
         sta currentcharypos
-        lda ab1b9:#$02
+        lda PrintAtX:#$02
         sta currentcharxpos
         ldx #$00
         stx a10
